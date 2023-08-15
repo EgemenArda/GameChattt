@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'widgets/custom_drawer.dart';
 import '../providers/game_room_provider.dart';
 import 'create_room_screen.dart';
 
@@ -16,10 +16,19 @@ class _GameRoomsState extends State<GameRooms> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (context) => CircleAvatar(
+            backgroundImage: NetworkImage('https://picsum.photos/250?image=9'),
+            child: TextButton(
+              child: const Text(''),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
+        ),
         centerTitle: true,
         title: Text(widget.gameName),
       ),
-      drawer: Drawer(),
+      drawer: CustomDrawer(),
       body: Consumer<GameRoomProvider>(
         builder: (context, provider, child) {
           return SingleChildScrollView(
