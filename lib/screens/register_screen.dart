@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:game_chat/providers/auth_provider.dart';
-import 'package:game_chat/screens/login_screen.dart';
-import 'package:game_chat/screens/widgets/user_image_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/auth_provider.dart';
+import 'login_screen.dart';
 
 final _firebase = FirebaseAuth.instance;
 

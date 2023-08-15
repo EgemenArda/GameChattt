@@ -1,0 +1,20 @@
+{
+  "games": [
+    {
+      "name": "League of Legends",
+      "genre": "MOBA"
+    },
+    {
+      "name": "Valorant",
+      "genre": "FPS"
+    },
+    {
+      "name": "Counter-Strike: Global Offensive",
+      "genre": "FPS"
+    },
+    {
+      "name": "Minecraft",
+      "genre": "Sandbox"
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:game_chat/providers/homepage_provider.dart';
-import 'package:game_chat/screens/game_rooms.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/homepage_provider.dart';
+import 'game_rooms.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

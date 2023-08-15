@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_chat/screens/widgets/wavy_text.dart';
+import 'package:game_chat_1/screens/widgets/wavy_text.dart';
 import 'package:kartal/kartal.dart';
 
 class SplashScreen extends StatelessWidget {

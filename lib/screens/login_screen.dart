@@ -1,10 +1,9 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:game_chat/providers/auth_provider.dart';
-import 'package:game_chat/screens/register_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:game_chat_1/screens/register_screen.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/auth_provider.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -110,7 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (!provider.isAuthenticating)
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const AuthScreen()));
+                                    Navigator.of(context).pop(MaterialPageRoute(
+                                        builder: (ctx) => const AuthScreen()));
                                   },
                                   child: const Text(
                                     "Create an account.",

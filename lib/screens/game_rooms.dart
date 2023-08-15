@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:game_chat/providers/game_room_provider.dart';
-import 'package:game_chat/screens/create_room_screen.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/game_room_provider.dart';
+import 'create_room_screen.dart';
 
 class GameRooms extends StatefulWidget {
   const GameRooms({super.key, required this.gameName});
@@ -18,6 +19,7 @@ class _GameRoomsState extends State<GameRooms> {
         centerTitle: true,
         title: Text(widget.gameName),
       ),
+      drawer: Drawer(),
       body: Consumer<GameRoomProvider>(
         builder: (context, provider, child) {
           return SingleChildScrollView(
@@ -27,8 +29,8 @@ class _GameRoomsState extends State<GameRooms> {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (ctx) => CreateRoomScreen(
-                              gameName: widget.gameName,
-                            )));
+                          gameName: widget.gameName,
+                        )));
                   },
                   child: const Text("Create room"),
                 ),

@@ -22,21 +22,12 @@ class AuthProvider extends ChangeNotifier {
     try {
       final userCredential = await _firebase.createUserWithEmailAndPassword(
           email: enteredEmail, password: enteredPassword);
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('user-images')
-          .child('${userCredential.user!.uid}.jpg');
-
-      await storageRef.putFile(selectedImage!);
-      final imageUrl = await storageRef.getDownloadURL();
-
       FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
           .set({
         'username': enteredUsername,
         'email': enteredEmail,
-        'image_url': imageUrl,
       });
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
