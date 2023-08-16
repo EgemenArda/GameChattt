@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/CustomFormField.dart';
@@ -12,9 +13,17 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  void _validateForm() {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+  Future<void> _validateForm() async {
     if (_formKey.currentState!.validate()) {
-      print(_usernameController.text);
+      User? user = _auth.currentUser;
+      return users
+          .doc(user!.uid)
+          .update({'username': _usernameController.text})
+          .then((value) => print('User updated'))
+          .catchError((error) => print('Failed to update user $error'));
     }
   }
 
@@ -22,7 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController _emailController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
