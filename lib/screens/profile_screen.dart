@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/CustomFormField.dart';
 
@@ -11,7 +12,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   void _validateForm() {
     if (_formKey.currentState!.validate()) {
       print(_usernameController.text);
@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 50,
                     backgroundImage:
                         NetworkImage('https://picsum.photos/250?image=9'),
@@ -54,9 +54,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
-                        shape: CircleBorder(),
+                        shape: const CircleBorder(),
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.edit,
                         color: Colors.white,
                       ),
@@ -65,31 +65,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 15),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 200,
-                    child: EditableTextForm(
-                      initialValue: 'Egemen',
-                      title: 'Username',
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Username cannot be empty';
-                        }
-                        if (value.length < 5) {
-                          return 'Username must be at least 5 characters';
-                        }
-                        return null;
-                      },
-                      controller: _usernameController,
-                    ),
+              const SizedBox(height: 15),
+              Expanded(
+                child: SizedBox(
+                  width: 200,
+                  child: EditableTextForm(
+                    initialValue: widget.Username,
+                    title: 'Username',
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Username cannot be empty';
+                      }
+                      if (value.length < 5) {
+                        return 'Username must be at least 5 characters';
+                      }
+                      return null;
+                    },
+                    controller: _usernameController,
                   ),
-                ],
+                ),
               ),
               ElevatedButton(
                 onPressed: _validateForm,
-                child: Text('Save Changes'),
+                child: const Text('Save Changes'),
               ),
             ],
           ),

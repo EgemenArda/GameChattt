@@ -27,12 +27,17 @@ class _EditableTextFormState extends State<EditableTextForm> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autocorrect: false,
       controller: widget.controller,
       decoration: InputDecoration(
+        labelText: widget.title,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
         hintText: 'Enter ${widget.title}',
       ),
       validator: (value) {
-        return widget.validator(value ?? ''); // Pass an empty string if null
+        return widget.validator(value ?? '');
       },
     );
   }
