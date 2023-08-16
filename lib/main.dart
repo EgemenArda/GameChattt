@@ -5,6 +5,7 @@ import 'package:game_chat_1/providers/auth_provider.dart';
 import 'package:game_chat_1/providers/create_room_provider.dart';
 import 'package:game_chat_1/providers/game_room_provider.dart';
 import 'package:game_chat_1/providers/homepage_provider.dart';
+import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/home_screen.dart';
 import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:game_chat_1/screens/splash_screen.dart';
@@ -23,6 +24,7 @@ void main() async {
       ListenableProvider<AuthProvider>(create: (_) => AuthProvider()),
       ListenableProvider<CreateRoomProvider>(create: (_) => CreateRoomProvider()),
       ListenableProvider<GameRoomProvider>(create: (_) => GameRoomProvider()),
+      ListenableProvider<ProfileScreenProvider>(create: (_) => ProfileScreenProvider()),
 
     ],
     child: MyApp(),

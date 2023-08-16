@@ -48,6 +48,7 @@ class AuthProvider extends ChangeNotifier {
       final userCredential = _firebase.signInWithEmailAndPassword(
           email: enteredEmail, password: enteredPassword);
       print(userCredential);
+      
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
       print(error.message);

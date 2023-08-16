@@ -11,50 +11,49 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: Icon(
-                Icons.exit_to_app,
-                color: Theme.of(context).colorScheme.primary,
-              ))
-        ],
-      ),
-      body: Consumer<HomePageProvider>(
-        builder: (context, provider, child) {
-          return SingleChildScrollView(
-            child: SizedBox(
-              child: GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 18,
-                    mainAxisSpacing: 18,
-                  ),
-                  itemCount: provider.games.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return GameRooms(
-                              gameName: provider.games[index].name,
-                            );
-                          },
-                        ));
-                      },
-                      child: Card(
-                        color: Colors.amber,
-                        child: Center(child: Text(provider.games[index].name)),
-                      ),
-                    );
-                  }),
-            ),
-          );
-        },
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: RadialGradient(
+          colors: [Color(0xff2e2e2e), Color(0xff171717)],
+          stops: [0, 1],
+          center: Alignment.topLeft,
+        )),
+        child: Consumer<HomePageProvider>(
+          builder: (context, provider, child) {
+            return SingleChildScrollView(
+              child: SizedBox(
+                child: GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                    ),
+                    itemCount: provider.games.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) {
+                              return GameRooms(
+                                gameName: provider.games[index].name,
+                              );
+                            },
+                          ));
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Stack(
+                            children: [
+                              Image.network(provider.games[index].image),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

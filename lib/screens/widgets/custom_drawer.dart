@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/profile_screen.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -48,8 +50,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(height: 25),
-          const CircleAvatar(
-            backgroundImage: NetworkImage('https://picsum.photos/250?image=9'),
+          CircleAvatar(
+            backgroundImage: NetworkImage(
+                Provider.of<ProfileScreenProvider>(context).userImage),
             radius: 50,
           ),
           const SizedBox(height: 10),
@@ -73,16 +76,39 @@ class _CustomDrawerState extends State<CustomDrawer> {
               return InkWell(
                 onTap: () {
                   if (index == 2) {
-                    Navigator.push(context, MaterialPageRoute(builder: (ctx) => ProfileScreen(Username: Username)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) =>
+                                ProfileScreen(Username: Username)));
                   }
                 },
                 child: ListTile(
-                  leading: index == 0 ? const Icon(Icons.settings) : index == 1 ? const Icon(Icons.notifications) : index == 2 ? const Icon(Icons.person) : index == 3 ? const Icon(Icons.home) : const Icon(Icons.home),
-                  title: index == 0 ? const Text('Setting') : index == 1 ? const Text('Notifications') : index == 2 ? const Text('Profile') : index == 3 ? const Text('My Rooms') : const Text('My Rooms'),
+                  leading: index == 0
+                      ? const Icon(Icons.settings)
+                      : index == 1
+                          ? const Icon(Icons.notifications)
+                          : index == 2
+                              ? const Icon(Icons.person)
+                              : index == 3
+                                  ? const Icon(Icons.home)
+                                  : const Icon(Icons.home),
+                  title: index == 0
+                      ? const Text('Setting')
+                      : index == 1
+                          ? const Text('Notifications')
+                          : index == 2
+                              ? const Text('Profile')
+                              : index == 3
+                                  ? const Text('My Rooms')
+                                  : const Text('My Rooms'),
                 ),
               );
             },
           ),
+         TextButton.icon(onPressed:(){
+          FirebaseAuth.instance.signOut();
+         } , icon: Icon(Icons.exit_to_app, color: Theme.of(context).colorScheme.primary,), label: Text("Sign Out"))
         ],
       ),
     );

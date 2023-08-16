@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/widgets/CustomFormField.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key, required this.Username});
@@ -13,25 +15,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-  Future<void> _validateForm() async {
-    if (_formKey.currentState!.validate()) {
-      User? user = _auth.currentUser;
-      return users
-          .doc(user!.uid)
-          .update({'username': _usernameController.text})
-          .then((value) => print('User updated'))
-          .catchError((error) => print('Failed to update user $error'));
-    }
-  }
-
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,64 +26,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: Alignment.bottomRight,
+      body: Consumer<ProfileScreenProvider>(
+        builder: (context, provider, child) {
+          return Form(
+            key: provider.formKey,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        NetworkImage('https://picsum.photos/250?image=9'),
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(provider.userImage),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: -10,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            shape: const CircleBorder(),
+                          ),
+                          child: const Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => print('editing pp'),
+                        ),
+                      ),
+                    ],
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: -10,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        shape: const CircleBorder(),
+                  const SizedBox(height: 15),
+                  Expanded(
+                    child: SizedBox(
+                      width: 200,
+                      child: EditableTextForm(
+                        initialValue: widget.Username,
+                        title: 'Username',
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Username cannot be empty';
+                          }
+                          if (value.length < 5) {
+                            return 'Username must be at least 5 characters';
+                          }
+                          return null;
+                        },
+                        controller: provider.usernameController,
                       ),
-                      child: const Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                      onPressed: () => print('editing pp'),
                     ),
+                  ),
+                  ElevatedButton(
+                    onPressed: provider.validateForm,
+                    child: const Text('Save Changes'),
                   ),
                 ],
               ),
-              const SizedBox(height: 15),
-              Expanded(
-                child: SizedBox(
-                  width: 200,
-                  child: EditableTextForm(
-                    initialValue: widget.Username,
-                    title: 'Username',
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Username cannot be empty';
-                      }
-                      if (value.length < 5) {
-                        return 'Username must be at least 5 characters';
-                      }
-                      return null;
-                    },
-                    controller: _usernameController,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: _validateForm,
-                child: const Text('Save Changes'),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

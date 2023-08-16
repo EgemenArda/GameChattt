@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:provider/provider.dart';
 import 'widgets/custom_drawer.dart';
 import '../providers/game_room_provider.dart';
@@ -18,7 +19,7 @@ class _GameRoomsState extends State<GameRooms> {
       appBar: AppBar(
         leading: Builder(
           builder: (context) => CircleAvatar(
-            backgroundImage: NetworkImage('https://picsum.photos/250?image=9'),
+            backgroundImage: NetworkImage(Provider.of<ProfileScreenProvider>(context).userImage),
             child: TextButton(
               child: const Text(''),
               onPressed: () => Scaffold.of(context).openDrawer(),
@@ -31,54 +32,52 @@ class _GameRoomsState extends State<GameRooms> {
       drawer: CustomDrawer(),
       body: Consumer<GameRoomProvider>(
         builder: (context, provider, child) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => CreateRoomScreen(
-                              gameName: widget.gameName,
-                            )));
-                  },
-                  child: const Text("Create room"),
-                ),
-                FutureBuilder(
-                  future: provider.fetchProducts(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No rooms found.'));
-                    } else {
-                      final rooms = snapshot.data;
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: rooms!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return InkWell(
-                            onTap: () {
-                              provider.showAlertDialog(
-                                  context,
-                                  rooms[index].roomName,
-                                  rooms[index].documentId);
-                            },
-                            child: ListTile(
-                              leading: Text(rooms[index].roomCreator),
-                              title: Text(rooms[index].roomName),
-                              subtitle: Text(rooms[index].roomDescription),
-                              trailing: Text("1/${rooms[index].roomSize}"),
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
+          return Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => CreateRoomScreen(
+                            gameName: widget.gameName,
+                          )));
+                },
+                child: const Text("Create room"),
+              ),
+              FutureBuilder(
+                future: provider.fetchRooms(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No rooms found.'));
+                  } else {
+                    final rooms = snapshot.data;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: rooms!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          onTap: () {
+                            provider.showAlertDialog(
+                                context,
+                                rooms[index].roomName,
+                                rooms[index].documentId);
+                          },
+                          child: ListTile(
+                            leading: Text(rooms[index].roomCreator),
+                            title: Text(rooms[index].roomName),
+                            subtitle: Text(rooms[index].roomDescription),
+                            trailing: Text("1/${rooms[index].roomSize}"),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ],
           );
         },
       ),

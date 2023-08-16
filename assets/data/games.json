@@ -2,19 +2,23 @@
   "games": [
     {
       "name": "League of Legends",
-      "genre": "MOBA"
+      "genre": "MOBA",
+      "image": "https://firebasestorage.googleapis.com/v0/b/game-chat-b80b7.appspot.com/o/homepage_games_image%2Fhome_valorant_image.png?alt=media&token=be08f188-8d24-465c-b5ea-b651802d7776"
     },
     {
       "name": "Valorant",
-      "genre": "FPS"
+      "genre": "FPS",
+      "image": "https://firebasestorage.googleapis.com/v0/b/game-chat-b80b7.appspot.com/o/homepage_games_image%2Fhome_valorant_image.png?alt=media&token=be08f188-8d24-465c-b5ea-b651802d7776"
     },
     {
       "name": "Counter-Strike: Global Offensive",
-      "genre": "FPS"
+      "genre": "FPS",
+      "image": "https://firebasestorage.googleapis.com/v0/b/game-chat-b80b7.appspot.com/o/homepage_games_image%2Fhome_valorant_image.png?alt=media&token=be08f188-8d24-465c-b5ea-b651802d7776"
     },
     {
       "name": "Minecraft",
-      "genre": "Sandbox"
+      "genre": "Sandbox",
+      "image": "https://firebasestorage.googleapis.com/v0/b/game-chat-b80b7.appspot.com/o/homepage_games_image%2Fhome_valorant_image.png?alt=media&token=be08f188-8d24-465c-b5ea-b651802d7776"
     }
   ]
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/create_room_provider.dart';
+import 'package:game_chat_1/screens/game_rooms.dart';
 
 import 'package:provider/provider.dart';
 
@@ -71,8 +72,14 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                     ElevatedButton(
                       onPressed: () {
                         provider.setGameName(widget.gameName);
-
                         provider.createRoom();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => GameRooms(
+                              gameName: widget.gameName,
+                            ),
+                          ),
+                        );
                       },
                       child: const Text("Create Room"),
                     )

@@ -6,15 +6,15 @@ import 'package:game_chat_1/models/room_model.dart';
 import 'package:game_chat_1/screens/chat_screen.dart';
 
 class GameRoomProvider extends ChangeNotifier {
-  Future<List<Rooms>> fetchProducts() async {
+  Future<List<Rooms>> fetchRooms() async {
     final QuerySnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection('rooms').get();
-    final List<Rooms> products = snapshot.docs.map((doc) {
+    final List<Rooms> rooms = snapshot.docs.map((doc) {
       return Rooms.fromSnapshot(doc);
     }).toList();
-    return products;
-  }
-
+    return rooms;
+  } 
+ 
   Future<void> showAlertDialog(context, roomName, roomId) async {
     return showDialog<void>(
       context: context,
