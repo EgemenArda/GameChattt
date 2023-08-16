@@ -38,8 +38,8 @@ class _GameRoomsState extends State<GameRooms> {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (ctx) => CreateRoomScreen(
-                          gameName: widget.gameName,
-                        )));
+                              gameName: widget.gameName,
+                            )));
                   },
                   child: const Text("Create room"),
                 ),
@@ -59,9 +59,17 @@ class _GameRoomsState extends State<GameRooms> {
                         itemCount: rooms!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
+                            onTap: () {
+                              provider.showAlertDialog(
+                                  context,
+                                  rooms[index].roomName,
+                                  rooms[index].documentId);
+                            },
                             child: ListTile(
+                              leading: Text(rooms[index].roomCreator),
                               title: Text(rooms[index].roomName),
                               subtitle: Text(rooms[index].roomDescription),
+                              trailing: Text("1/${rooms[index].roomSize}"),
                             ),
                           );
                         },

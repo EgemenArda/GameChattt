@@ -22,6 +22,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final userCredential = await _firebase.createUserWithEmailAndPassword(
           email: enteredEmail, password: enteredPassword);
+
       FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)

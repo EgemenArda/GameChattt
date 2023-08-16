@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import '../models/game_model.dart';
+import 'package:game_chat_1/models/game_model.dart';
 
 class HomePageProvider extends ChangeNotifier {
   HomePageProvider() {

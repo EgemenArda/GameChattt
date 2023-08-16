@@ -32,11 +32,11 @@ class CreateRoomProvider extends ChangeNotifier {
 
   Future<String> getUsernameFromUserId(String userId) async {
     DocumentSnapshot userSnapshot =
-    await FirebaseFirestore.instance.collection('users').doc(userId).get();
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (userSnapshot.exists) {
       Map<String, dynamic>? userData =
-      userSnapshot.data() as Map<String, dynamic>?;
+          userSnapshot.data() as Map<String, dynamic>?;
       if (userData != null && userData.containsKey('username')) {
         return userData['username'];
       } else {
