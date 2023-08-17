@@ -34,6 +34,7 @@ class AuthProvider extends ChangeNotifier {
           .set({
         'username': enteredUsername,
         'email': enteredEmail,
+        'emailVerified': false,
       });
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
