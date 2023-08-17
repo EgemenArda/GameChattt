@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
+import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:game_chat_1/screens/profile_screen.dart';
+import 'package:game_chat_1/screens/register_screen.dart';
 import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -23,7 +25,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
     if (user != null) {
       DocumentSnapshot userSnapshot =
-          await _firestore.collection('users').doc(user.uid).get();
+      await _firestore.collection('users').doc(user.uid).get();
 
       if (userSnapshot.exists) {
         var userName = userSnapshot['username'];
@@ -41,6 +43,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   void initState() {
     _getUserName();
+  }
+
+  void signOut(context) async{
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const AuthScreen()));
+    } catch (error) {
+      print('error geldi $error');
+    }
   }
 
   @override
@@ -76,6 +87,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               return InkWell(
                 onTap: () {
                   if (index == 2) {
+                    Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -87,28 +99,28 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   leading: index == 0
                       ? const Icon(Icons.settings)
                       : index == 1
-                          ? const Icon(Icons.notifications)
-                          : index == 2
-                              ? const Icon(Icons.person)
-                              : index == 3
-                                  ? const Icon(Icons.home)
-                                  : const Icon(Icons.home),
+                      ? const Icon(Icons.notifications)
+                      : index == 2
+                      ? const Icon(Icons.person)
+                      : index == 3
+                      ? const Icon(Icons.home)
+                      : const Icon(Icons.home),
                   title: index == 0
                       ? const Text('Setting')
                       : index == 1
-                          ? const Text('Notifications')
-                          : index == 2
-                              ? const Text('Profile')
-                              : index == 3
-                                  ? const Text('My Rooms')
-                                  : const Text('My Rooms'),
+                      ? const Text('Notifications')
+                      : index == 2
+                      ? const Text('Profile')
+                      : index == 3
+                      ? const Text('My Rooms')
+                      : const Text('My Rooms'),
                 ),
               );
             },
           ),
-         TextButton.icon(onPressed:(){
-          FirebaseAuth.instance.signOut();
-         } , icon: Icon(Icons.exit_to_app, color: Theme.of(context).colorScheme.primary,), label: Text("Sign Out"))
+          TextButton.icon(onPressed:(){
+            signOut(context);
+          } , icon: Icon(Icons.exit_to_app, color: Theme.of(context).colorScheme.primary,), label: Text("Sign Out"))
         ],
       ),
     );

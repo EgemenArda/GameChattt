@@ -15,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,45 +48,36 @@ class _LoginScreenState extends State<LoginScreen> {
                                   labelText: 'Email Address',
                                 ),
                                 keyboardType: TextInputType.emailAddress,
+                                controller: emailController,
                                 autocorrect: false,
                                 textCapitalization: TextCapitalization.none,
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
                                 validator: (value) {
-                                  if (value == null ||
-                                      value.trim().isEmpty ||
-                                      !value.contains('@')) {
-                                    return 'Please enter a valid email address.';
+                                  if (value!.isEmpty ||
+                                      !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                          .hasMatch(value)) {
+                                    //allow upper and lower case alphabets and space
+                                    return "Please enter a valid Email address";
+                                  } else {
+                                    return null;
                                   }
-                                  return null;
                                 },
                                 onSaved: (value) {
                                   provider.enteredEmail = value!;
                                 },
                               ),
-                              // TextFormField(
-                              //   validator: (value) {
-                              //     if (value == null ||
-                              //         value.isEmpty ||
-                              //         value.trim().length < 4) {
-                              //       return 'Please enter at least 4 characters';
-                              //     }
-                              //   },
-                              //   decoration: const InputDecoration(
-                              //     labelText: "Username",
-                              //   ),
-                              //   enableSuggestions: false,
-                              //   onSaved: (value) {
-                              //     provider.enteredUsername = value!;
-                              //   },
-                              // ),
                               TextFormField(
                                 decoration: const InputDecoration(
                                   labelText: 'Password',
                                 ),
+                                controller: passController,
                                 obscureText: true,
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
                                 validator: (value) {
                                   if (value == null ||
-                                      value.trim().length < 6) {
-                                    return 'Password must be at least 6 characters long.';
+                                      value.trim().length < 6 ||
+                                      value.trim().length > 20) {
+                                    return 'Password must be between 6-20 characters';
                                   }
                                   return null;
                                 },
@@ -98,7 +91,27 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (!provider.isAuthenticating)
                                 ElevatedButton(
                                   onPressed: () {
-                                    provider.login(context);
+                                    if (emailController.text.isEmpty || passController.text.isEmpty) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: const Text('Login error!'),
+                                          content: const Text('Please dont leave fields empty!'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Navigator.of(ctx).pop(),
+                                              child: Container(
+                                                color: Colors.green,
+                                                padding: const EdgeInsets.all(14),
+                                                child: const Text('Okay'),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      provider.login(context);
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Theme.of(context)
@@ -109,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (!provider.isAuthenticating)
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
                                         builder: (ctx) => const AuthScreen()));
                                   },
                                   child: const Text(
