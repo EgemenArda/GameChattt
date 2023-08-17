@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 validator: (value) {
                                   if (value == null ||
-                                      value.trim().length <= 6 ||
+                                      value.trim().length < 6 ||
                                       value.trim().length > 20) {
                                     return 'Password must be between 6-20 characters';
                                   }
@@ -122,8 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (!provider.isAuthenticating)
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).push(MaterialPageRoute(
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
                                         builder: (ctx) => const AuthScreen()));
                                   },
                                   child: const Text(

@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) {
                               return GameRooms(
                                 gameName: provider.games[index].name,

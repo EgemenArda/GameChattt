@@ -10,8 +10,8 @@ class AuthProvider extends ChangeNotifier {
   final _firebase = FirebaseAuth.instance;
 
   TextEditingController phoneController = TextEditingController();
-  final formKeyRegister = GlobalKey<FormState>();
-  final formKeyLogin = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyRegister = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
   var isLogin = true;
   var isAuthenticating = false;
   var enteredEmail = '';
@@ -35,7 +35,7 @@ class AuthProvider extends ChangeNotifier {
         'username': enteredUsername,
         'email': enteredEmail,
       });
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
       showDialog(
         context: context,
@@ -64,6 +64,7 @@ class AuthProvider extends ChangeNotifier {
       final userCredential = await _firebase.signInWithEmailAndPassword(
           email: enteredEmail, password: enteredPassword);
       print('User logged in: ${userCredential.user?.email}');
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
 
       showDialog(
