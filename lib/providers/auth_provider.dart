@@ -29,6 +29,7 @@ class AuthProvider extends ChangeNotifier {
           .set({
         'username': enteredUsername,
         'email': enteredEmail,
+        'image_url': "https://picsum.photos/200/300"
       });
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();

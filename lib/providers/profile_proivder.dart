@@ -35,11 +35,7 @@ class ProfileScreenProvider extends ChangeNotifier {
     if (userSnapshot.exists) {
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
-      if (userData != null && userData.containsKey('image_url')) {
-        userImage = userData["image_url"];
-      } else {
-        userImage = "https://picsum.photos/250?image=9";
-      }
+      userImage = userData!["image_url"];
     }
     notifyListeners();
   }

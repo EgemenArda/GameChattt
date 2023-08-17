@@ -13,7 +13,17 @@ class GameRoomProvider extends ChangeNotifier {
         }).toList());
   }
 
-  Future<void> showAlertDialog(context, roomName, roomId, roomSize) async {
+  Stream<int> getRoomUserCountStream(String roomId) {
+    return FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('roomUser')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.length);
+  }
+
+  Future<void> showAlertDialog(
+      context, roomName, roomId, roomSize, roomUsers) async {
     String user = FirebaseAuth.instance.currentUser!.uid;
 
     String currentUsername = await getUsernameFromUserId(user);
@@ -42,18 +52,38 @@ class GameRoomProvider extends ChangeNotifier {
             TextButton(
               child: const Text('Yes'),
               onPressed: () {
-                var roomUser = FirebaseFirestore.instance
-                    .collection("rooms")
-                    .doc(roomId)
-                    .collection("roomUser")
-                    .add({'username': currentUsername});
+                if (roomUsers >= roomSize) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Error!!"),
+                        content: Text("this room is full!"),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  FirebaseFirestore.instance
+                      .collection("rooms")
+                      .doc(roomId)
+                      .collection("roomUser")
+                      .add({'username': currentUsername});
 
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => ChatScreen(
-                    roomId: roomId, // Oda belgesinin ID'sini geçir
-                    roomName: roomName,
-                  ),
-                ));
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => ChatScreen(
+                      roomId: roomId, // Oda belgesinin ID'sini geçir
+                      roomName: roomName,
+                    ),
+                  ));
+                }
               },
             ),
           ],
