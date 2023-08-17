@@ -23,7 +23,12 @@ class GameRoomProvider extends ChangeNotifier {
   }
 
   Future<void> showAlertDialog(
-      context, roomName, roomId, roomSize, roomUsers) async {
+    context,
+    roomName,
+    roomId,
+    roomSize,
+    roomUsers,
+  ) async {
     String user = FirebaseAuth.instance.currentUser!.uid;
 
     String currentUsername = await getUsernameFromUserId(user);
@@ -51,51 +56,72 @@ class GameRoomProvider extends ChangeNotifier {
             ),
             TextButton(
               child: const Text('Yes'),
-              onPressed: () {
-                if (roomUsers >= roomSize) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text("Error!!"),
-                        content: Text("this room is full!"),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text("OK"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                } else {
-                  FirebaseFirestore.instance
-                      .collection("rooms")
-                      .doc(roomId)
-                      .collection("roomUser")
-                      .add({'username': currentUsername});
-
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => ChatScreen(
-                      roomId: roomId, // Oda belgesinin ID'sini geçir
-                      roomName: roomName,
-                    ),
-                  ));
-                }
-                var roomUser = FirebaseFirestore.instance
-                    .collection("rooms")
+              onPressed: () async {
+                var querySnapshot = await FirebaseFirestore.instance
+                    .collection('rooms')
                     .doc(roomId)
-                    .collection("roomUser")
-                    .add({'username': currentUsername});
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => ChatScreen(
-                    roomId: roomId, // Oda belgesinin ID'sini geçir
-                    roomName: roomName,
-                  ),
-                ));
+                    .collection('roomUser')
+                    .get();
+                List<String> usernames = [];
+                if (querySnapshot.docs.isNotEmpty) {
+                  querySnapshot.docs.forEach((doc) {
+                    Map<String, dynamic> data =
+                        doc.data() as Map<String, dynamic>;
+                    String username = data[
+                        'username']; // Varsayılan alan adını kullanarak ayarlayın
+
+                    usernames.add(username);
+                  });
+
+                  print("Usernames in the room: $usernames");
+                } else {
+                  print("No usernames found in the room.");
+                }
+                print(usernames);
+                if (usernames.contains(currentUsername)) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => ChatScreen(
+                        roomId: roomId, // Oda belgesinin ID'sini geçir
+                        roomName: roomName,
+                      ),
+                    ));
+                } else {
+                  if (roomUsers.length >= roomSize) {
+                    // ignore: use_build_context_synchronously
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Error!!"),
+                          content: Text("this room is full!"),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    FirebaseFirestore.instance
+                        .collection("rooms")
+                        .doc(roomId)
+                        .collection("roomUser")
+                        .add({'username': currentUsername});
+
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => ChatScreen(
+                        roomId: roomId, // Oda belgesinin ID'sini geçir
+                        roomName: roomName,
+                      ),
+                    ));
+                  }
+                }
               },
             ),
           ],

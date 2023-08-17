@@ -72,14 +72,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                     ElevatedButton(
                       onPressed: () {
                         provider.setGameName(widget.gameName);
-                        provider.createRoom();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (ctx) => GameRooms(
-                              gameName: widget.gameName,
-                            ),
-                          ),
-                        );
+                        provider.createRoom(context);
                       },
                       child: const Text("Create Room"),
                     )
