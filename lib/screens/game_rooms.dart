@@ -63,7 +63,7 @@ class _GameRoomsState extends State<GameRooms> {
                         return InkWell(
                           onTap: () {
                             provider.showAlertDialog(context,
-                                rooms[index].roomName, rooms[index].documentId, rooms[index].roomSize);
+                                rooms[index].roomName, rooms[index].documentId,rooms[index].roomSize);
                           },
                           child: ListTile(
                             leading: Text(rooms[index].roomCreator),

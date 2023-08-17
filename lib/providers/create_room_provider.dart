@@ -16,17 +16,21 @@ class CreateRoomProvider extends ChangeNotifier {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      // Kullanıcının mevcut oturum bilgisi varsa
       String creatorUserId = user.uid;
       String creatorUsername = await getUsernameFromUserId(creatorUserId);
 
-      FirebaseFirestore.instance.collection('rooms').doc().set({
+      DocumentReference roomRef =
+          FirebaseFirestore.instance.collection('rooms').doc();
+
+      await roomRef.set({
         'room_name': roomName.text,
         'room_description': roomDescription.text,
         'room_creator': creatorUsername,
         'room_size': selectedNumber,
         'game_name': gameName,
       });
+
+      await roomRef.collection("roomUser").add({'username': creatorUsername});
     }
   }
 
