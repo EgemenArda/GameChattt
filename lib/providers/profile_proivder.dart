@@ -8,20 +8,37 @@ class ProfileScreenProvider extends ChangeNotifier {
   ProfileScreenProvider() {
     getImageFromUserId(user);
   }
+
   final formKey = GlobalKey<FormState>();
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   final FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  Future<void> validateForm() async {
+
+  Future<void> validateForm(context) async {
     if (formKey.currentState!.validate()) {
       User? user = auth.currentUser;
       return users
           .doc(user!.uid)
-          .update({'username': usernameController.text})
-          .then((value) => print('User updated'))
-          .catchError((error) => print('Failed to update user $error'));
+          .update({'username': usernameController.text}).then(
+              (value) => showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Profile Information Change'),
+                      content: const Text('Profile informations successfully changed!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(),
+                          child: Container(
+                            color: Colors.green,
+                            padding: const EdgeInsets.all(14),
+                            child: const Text('Okay'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ));
     }
     notifyListeners();
   }

@@ -16,7 +16,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -79,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: provider.validateForm,
+                    onPressed: () => provider.validateForm(context),
                     child: const Text('Save Changes'),
                   ),
                 ],

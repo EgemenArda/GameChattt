@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:game_chat_1/screens/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/screens/home_screen.dart';
 
 class AuthProvider extends ChangeNotifier {
   final _firebase = FirebaseAuth.instance;
@@ -15,9 +17,12 @@ class AuthProvider extends ChangeNotifier {
   var enteredEmail = '';
   var enteredPassword = '';
 
+  bool checkedBool = false;
+
   var enteredUsername = '';
   File? selectedImage;
-  void register(context) async {
+
+  register(context) async {
     formKeyRegister.currentState!.save();
     try {
       final userCredential = await _firebase.createUserWithEmailAndPassword(
@@ -30,36 +35,56 @@ class AuthProvider extends ChangeNotifier {
         'username': enteredUsername,
         'email': enteredEmail,
       });
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Registration error!'),
           content: Text(error.message ?? 'Auth failed.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Container(
+                color: Colors.green,
+                padding: const EdgeInsets.all(14),
+                child: const Text('Okay'),
+              ),
+            ),
+          ],
         ),
       );
-
       isAuthenticating = false;
     }
   }
 
-  void login(context) {
+  void login(context) async {
     formKeyLogin.currentState!.save();
     try {
-      final userCredential = _firebase.signInWithEmailAndPassword(
+      final userCredential = await _firebase.signInWithEmailAndPassword(
           email: enteredEmail, password: enteredPassword);
-      print(userCredential);
-      
+      print('User logged in: ${userCredential.user?.email}');
     } on FirebaseAuthException catch (error) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      print(error.message);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error.message ?? 'Auth failed.'),
+
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Login error!'),
+          content: const Text('Wrong email or password! Please correct and try again!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Container(
+                color: Colors.green,
+                padding: const EdgeInsets.all(14),
+                child: const Text('Okay'),
+              ),
+            ),
+          ],
         ),
       );
-
-      isAuthenticating = false;
     }
+    // Make sure to update state after catching the error
     notifyListeners();
   }
 }

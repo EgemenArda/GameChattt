@@ -47,7 +47,7 @@ class GameRoomProvider extends ChangeNotifier {
                     .doc(roomId)
                     .collection("roomUser")
                     .add({'username': currentUsername});
-
+                Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (ctx) => ChatScreen(
                     roomId: roomId, // Oda belgesinin ID'sini geçir
