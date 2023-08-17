@@ -87,6 +87,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               return InkWell(
                 onTap: () {
                   if (index == 2) {
+                    Provider.of<ProfileScreenProvider>(context, listen: false).checkEmailVerification();
                     Navigator.of(context).pop();
                     Navigator.push(
                         context,

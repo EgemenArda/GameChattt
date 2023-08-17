@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +58,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: provider.emailVerifys ? null : () {
+                      FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                      print('sent email to ${FirebaseAuth.instance.currentUser!.email}');
+                    },
+                    child: Text(provider.emailVerifys ? 'Email Verified' : 'Verify Email'),
                   ),
                   const SizedBox(height: 15),
                   Expanded(

@@ -35,7 +35,6 @@ class AuthProvider extends ChangeNotifier {
         'username': enteredUsername,
         'email': enteredEmail,
         'image_url': "https://picsum.photos/200/300",
-        'emailVerify': false,
       });
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
