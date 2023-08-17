@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,8 @@ class _GameRoomsState extends State<GameRooms> {
       appBar: AppBar(
         leading: Builder(
           builder: (context) => CircleAvatar(
-            backgroundImage: NetworkImage(Provider.of<ProfileScreenProvider>(context).userImage),
+            backgroundImage: NetworkImage(
+                Provider.of<ProfileScreenProvider>(context).userImage),
             child: TextButton(
               child: const Text(''),
               onPressed: () => Scaffold.of(context).openDrawer(),
@@ -43,8 +45,8 @@ class _GameRoomsState extends State<GameRooms> {
                 },
                 child: const Text("Create room"),
               ),
-              FutureBuilder(
-                future: provider.fetchRooms(),
+              StreamBuilder(
+                stream: provider.getRooms(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -60,10 +62,8 @@ class _GameRoomsState extends State<GameRooms> {
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () {
-                            provider.showAlertDialog(
-                                context,
-                                rooms[index].roomName,
-                                rooms[index].documentId);
+                            provider.showAlertDialog(context,
+                                rooms[index].roomName, rooms[index].documentId, rooms[index].roomSize);
                           },
                           child: ListTile(
                             leading: Text(rooms[index].roomCreator),

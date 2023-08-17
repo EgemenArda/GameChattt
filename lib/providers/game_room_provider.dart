@@ -6,16 +6,18 @@ import 'package:game_chat_1/models/room_model.dart';
 import 'package:game_chat_1/screens/chat_screen.dart';
 
 class GameRoomProvider extends ChangeNotifier {
-  Future<List<Rooms>> fetchRooms() async {
-    final QuerySnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection('rooms').get();
-    final List<Rooms> rooms = snapshot.docs.map((doc) {
-      return Rooms.fromSnapshot(doc);
-    }).toList();
-    return rooms;
-  } 
- 
-  Future<void> showAlertDialog(context, roomName, roomId) async {
+  Stream<List<Rooms>> getRooms() {
+    final stream = FirebaseFirestore.instance.collection("rooms").snapshots();
+    return stream.map((event) => event.docs.map((doc) {
+          return Rooms.fromSnapshot(doc);
+        }).toList());
+  }
+
+  Future<void> showAlertDialog(context, roomName, roomId, roomSize) async {
+    String user = FirebaseAuth.instance.currentUser!.uid;
+
+    String currentUsername = await getUsernameFromUserId(user);
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -40,6 +42,12 @@ class GameRoomProvider extends ChangeNotifier {
             TextButton(
               child: const Text('Yes'),
               onPressed: () {
+                var roomUser = FirebaseFirestore.instance
+                    .collection("rooms")
+                    .doc(roomId)
+                    .collection("roomUser")
+                    .add({'username': currentUsername});
+
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (ctx) => ChatScreen(
                     roomId: roomId, // Oda belgesinin ID'sini geçir
@@ -52,5 +60,22 @@ class GameRoomProvider extends ChangeNotifier {
         );
       },
     );
+  }
+
+  Future<String> getUsernameFromUserId(String userId) async {
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (userSnapshot.exists) {
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+      if (userData != null && userData.containsKey('username')) {
+        return userData['username'];
+      } else {
+        return 'Username Not Found';
+      }
+    } else {
+      return 'Unknown User';
+    }
   }
 }
