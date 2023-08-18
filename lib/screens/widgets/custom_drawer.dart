@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/friends_screen.dart';
 import 'package:game_chat_1/screens/login_screen.dart';
+import 'package:game_chat_1/screens/myrooms_screen.dart';
 import 'package:game_chat_1/screens/profile_screen.dart';
 import 'package:game_chat_1/screens/register_screen.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +89,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
             itemBuilder: (BuildContext context, index) {
               return InkWell(
                 onTap: () {
-                  if (index == 2) {
+                  if (index == 3) {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => MyRoomsScreen(username: Username)));
+                  } else if (index == 2) {
                     Provider.of<ProfileScreenProvider>(context, listen: false)
                         .checkEmailVerification();
                     Navigator.of(context).pop();
@@ -97,10 +104,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         MaterialPageRoute(
                             builder: (ctx) =>
                                 ProfileScreen(Username: Username)));
-                  }
-                  if (index == 4) {
+                  } else if (index == 4) {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const FriendsScreen()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const FriendsScreen()));
                   }
                 },
                 child: ListTile(
