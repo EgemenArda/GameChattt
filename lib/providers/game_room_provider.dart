@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:game_chat_1/models/room_model.dart';
 import 'package:game_chat_1/screens/chat_screen.dart';
+
+import '../screens/widgets/custom_alert_dialog.dart';
 
 class GameRoomProvider extends ChangeNotifier {
   Stream<List<Rooms>> getRooms() {
@@ -14,7 +15,8 @@ class GameRoomProvider extends ChangeNotifier {
   }
 
   Stream<List<Rooms>> getMyRooms(String username) {
-    final stream = FirebaseFirestore.instance.collectionGroup('roomUser')
+    final stream = FirebaseFirestore.instance
+        .collectionGroup('roomUser')
         .where('username', isEqualTo: username)
         .snapshots();
 
@@ -23,10 +25,11 @@ class GameRoomProvider extends ChangeNotifier {
 
       for (var doc in event.docs) {
         String roomPath = doc.reference.parent.parent!.id;
-        DocumentSnapshot<Map<String, dynamic>> roomSnapshot = await FirebaseFirestore.instance
-            .collection('rooms')
-            .doc(roomPath)
-            .get();
+        DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
+            await FirebaseFirestore.instance
+                .collection('rooms')
+                .doc(roomPath)
+                .get();
 
         if (roomSnapshot.exists) {
           myRooms.add(Rooms.fromSnapshot(roomSnapshot));
@@ -36,14 +39,6 @@ class GameRoomProvider extends ChangeNotifier {
       return myRooms;
     });
   }
-
-
-
-
-
-
-
-
 
   Stream<int> getRoomUserCountStream(String roomId) {
     return FirebaseFirestore.instance
@@ -62,10 +57,9 @@ class GameRoomProvider extends ChangeNotifier {
 
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          // <-- SEE HERE
+          backgroundColor: Colors.white.withOpacity(0.4),
           title: const Text('Join room?'),
           content: const SingleChildScrollView(
             child: ListBody(
@@ -82,7 +76,13 @@ class GameRoomProvider extends ChangeNotifier {
               },
             ),
             TextButton(
-              child: const Text('Yes'),
+              child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.all(14),
+                  child: const Text('Yes')),
               onPressed: () async {
                 var querySnapshot = await FirebaseFirestore.instance
                     .collection('rooms')
@@ -91,14 +91,12 @@ class GameRoomProvider extends ChangeNotifier {
                     .get();
                 List<String> usernames = [];
                 if (querySnapshot.docs.isNotEmpty) {
-                  querySnapshot.docs.forEach((doc) {
-                    Map<String, dynamic> data =
-                        doc.data() as Map<String, dynamic>;
-                    String username = data[
-                        'username']; // Varsayılan alan adını kullanarak ayarlayın
+                  for (var doc in querySnapshot.docs) {
+                    Map<String, dynamic> data = doc.data();
+                    String username = data['username'];
 
                     usernames.add(username);
-                  });
+                  }
 
                   print("Usernames in the room: $usernames");
                 } else {
@@ -110,28 +108,20 @@ class GameRoomProvider extends ChangeNotifier {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => ChatScreen(
-                      roomId: roomId, // Oda belgesinin ID'sini geçir
+                      roomId: roomId,
                       roomName: roomName,
-                      roomCreator: roomCreator, roomType: roomType,
+                      roomCreator: roomCreator,
+                      roomType: roomType,
                     ),
                   ));
                 } else {
                   if (roomUsers.length >= roomSize) {
-                    // ignore: use_build_context_synchronously
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("Error!!"),
-                          content: const Text("this room is full!"),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text("OK"),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
+                        return const CustomAlertDialog(
+                          title: 'error',
+                          content: "this room is full!",
                         );
                       },
                     );
@@ -145,9 +135,10 @@ class GameRoomProvider extends ChangeNotifier {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (ctx) => ChatScreen(
-                        roomId: roomId, // Oda belgesinin ID'sini geçir
+                        roomId: roomId,
                         roomName: roomName,
-                        roomCreator: roomCreator, roomType: roomType,
+                        roomCreator: roomCreator,
+                        roomType: roomType,
                       ),
                     ));
                   }

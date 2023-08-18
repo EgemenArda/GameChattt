@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/custom_alert_dialog.dart';
 import 'package:game_chat_1/screens/widgets/custom_elevated_buton.dart';
@@ -8,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'login_screen.dart';
 
-final _firebase = FirebaseAuth.instance;
+// final _firebase = FirebaseAuth.instance;
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -137,7 +136,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                         title: ('Sing up'),
                                       ),
                                     if (!provider.isAuthenticating)
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 8,
                                       ),
                                     CustomElevatedButton(

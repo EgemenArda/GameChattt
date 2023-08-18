@@ -18,8 +18,8 @@ class ProfileScreenProvider extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  checkEmailVerification() async{
-    User? user = auth.currentUser;
+  checkEmailVerification() async {
+    // User? user = auth.currentUser;
     await FirebaseAuth.instance.currentUser!.reload();
     if (FirebaseAuth.instance.currentUser!.emailVerified) {
       emailVerifys = true;
@@ -30,26 +30,25 @@ class ProfileScreenProvider extends ChangeNotifier {
   Future<void> validateForm(context) async {
     if (formKey.currentState!.validate()) {
       User? user = auth.currentUser;
-      return users
-          .doc(user!.uid)
-          .update({'username': usernameController.text}).then(
-              (value) => showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: const Text('Profile Information Change'),
-                      content: const Text('Profile informations successfully changed!'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.of(ctx).pop(),
-                          child: Container(
-                            color: Colors.green,
-                            padding: const EdgeInsets.all(14),
-                            child: const Text('Okay'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ));
+      return users.doc(user!.uid).update({
+        'username': usernameController.text
+      }).then((value) => showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Profile Information Change'),
+              content: const Text('Profile informations successfully changed!'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: Container(
+                    color: Colors.green,
+                    padding: const EdgeInsets.all(14),
+                    child: const Text('Okay'),
+                  ),
+                ),
+              ],
+            ),
+          ));
     }
     notifyListeners();
   }

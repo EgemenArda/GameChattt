@@ -13,12 +13,18 @@ class HomeScreen extends StatelessWidget {
     return ConnectionCheck(
       child: Scaffold(
         body: Container(
+          width: double.maxFinite,
+          height: double.maxFinite,
           decoration: const BoxDecoration(
-              gradient: RadialGradient(
-            colors: [Color(0xff2e2e2e), Color(0xff171717)],
-            stops: [0, 1],
-            center: Alignment.topLeft,
-          )),
+            gradient: LinearGradient(
+                begin: Alignment.center,
+                end: Alignment.bottomRight,
+                tileMode: TileMode.mirror,
+                colors: [
+                  Color.fromRGBO(44, 8, 78, 0.8),
+                  Color.fromRGBO(2, 5, 28, 0.8)
+                ]),
+          ),
           child: Consumer<HomePageProvider>(
             builder: (context, provider, child) {
               return SingleChildScrollView(
@@ -27,26 +33,30 @@ class HomeScreen extends StatelessWidget {
                       shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
+                        crossAxisCount: 2,
                       ),
                       itemCount: provider.games.length,
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () {
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
+                            Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) {
                                 return GameRooms(
                                   gameName: provider.games[index].name,
+                                  gameImage: provider.games[index].image,
                                 );
                               },
                             ));
                           },
                           child: Padding(
-                            padding: EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(12),
                             child: Stack(
                               children: [
-                                Image.network(provider.games[index].image),
+                                Center(
+                                  child: Image.network(
+                                      provider.games[index].image,
+                                      fit: BoxFit.contain),
+                                ),
                               ],
                             ),
                           ),

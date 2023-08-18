@@ -6,7 +6,8 @@ class EditableTextForm extends StatefulWidget {
   final TextEditingController controller;
   final String initialValue;
 
-  EditableTextForm({
+  const EditableTextForm({
+    super.key,
     required this.title,
     required this.validator,
     required this.controller,

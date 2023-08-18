@@ -3,22 +3,22 @@
     {
       "name": "League of Legends",
       "genre": "MOBA",
-      "image": "https://firebasestorage.googleapis.com/v0/b/game-chat-b80b7.appspot.com/o/homepage_games_image%2Fhome_valorant_image.png?alt=media&token=be08f188-8d24-465c-b5ea-b651802d7776"
+      "image": "https://upload.wikimedia.org/wikipedia/tr/archive/7/77/20200402195827%21League_of_Legends_logo.png"
     },
     {
       "name": "Valorant",
       "genre": "FPS",
-      "image": "https://firebasestorage.googleapis.com/v0/b/game-chat-b80b7.appspot.com/o/homepage_games_image%2Fhome_valorant_image.png?alt=media&token=be08f188-8d24-465c-b5ea-b651802d7776"
+      "image": "https://1000logos.net/wp-content/uploads/2022/09/Valorant-Logo.png"
     },
     {
       "name": "Counter-Strike: Global Offensive",
       "genre": "FPS",
-      "image": "https://firebasestorage.googleapis.com/v0/b/game-chat-b80b7.appspot.com/o/homepage_games_image%2Fhome_valorant_image.png?alt=media&token=be08f188-8d24-465c-b5ea-b651802d7776"
+      "image": "https://i.redd.it/1s0j5e4fhws01.png"
     },
     {
       "name": "Minecraft",
       "genre": "Sandbox",
-      "image": "https://firebasestorage.googleapis.com/v0/b/game-chat-b80b7.appspot.com/o/homepage_games_image%2Fhome_valorant_image.png?alt=media&token=be08f188-8d24-465c-b5ea-b651802d7776"
+      "image": "https://logos-world.net/wp-content/uploads/2020/05/Minecraft-Logo.png"
     }
   ]
 }

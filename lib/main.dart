@@ -30,7 +30,7 @@ void main() async {
           create: (_) => ProfileScreenProvider()),
       ListenableProvider<FriendsProvider>(create: (_) => FriendsProvider()),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 

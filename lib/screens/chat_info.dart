@@ -9,13 +9,13 @@ class ChatInfo extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text("Owner: ${owner}"),
-            Container(
+            Text("Owner: $owner"),
+            SizedBox(
               height: 500,
               child: ListView.builder(
                 itemCount: 1,
                 itemBuilder: (BuildContext context, int index) {
-                  return ;
+                  return;
                 },
               ),
             ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/create_room_provider.dart';
-import 'package:game_chat_1/screens/game_rooms.dart';
-
 import 'package:provider/provider.dart';
 
 class CreateRoomScreen extends StatefulWidget {
@@ -55,7 +53,6 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                           setState(() {
                             currentOption = value.toString();
                             provider.selectedRoomType = currentOption;
-
                           });
                         },
                       ),

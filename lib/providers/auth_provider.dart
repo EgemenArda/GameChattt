@@ -67,7 +67,7 @@ class AuthProvider extends ChangeNotifier {
       print('User logged in: ${userCredential.user?.email}');
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
-    } on FirebaseAuthException catch (error) {
+    } on FirebaseAuthException {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(

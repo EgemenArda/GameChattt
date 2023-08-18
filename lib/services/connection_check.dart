@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/internet_connection_failed.dart';
 
 class ConnectionCheck extends StatelessWidget {
-  ConnectionCheck({Key? key, required this.child}) : super(key: key);
+  const ConnectionCheck({Key? key, required this.child}) : super(key: key);
 
-  Widget child;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {

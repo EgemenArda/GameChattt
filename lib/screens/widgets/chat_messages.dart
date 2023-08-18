@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/message_bubble.dart';
-
 
 class ChatMessages extends StatelessWidget {
   const ChatMessages({super.key, required this.roomId});

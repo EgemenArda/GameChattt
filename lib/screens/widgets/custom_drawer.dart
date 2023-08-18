@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/friends_screen.dart';
-import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:game_chat_1/screens/myrooms_screen.dart';
 import 'package:game_chat_1/screens/profile_screen.dart';
 import 'package:game_chat_1/screens/register_screen.dart';
@@ -17,7 +16,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  String Username = '';
+  String username = '';
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -32,7 +31,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       if (userSnapshot.exists) {
         var userName = userSnapshot['username'];
         setState(() {
-          Username = userName;
+          username = userName;
         });
       } else {
         print('User data not found in Firestore.');
@@ -44,6 +43,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   void initState() {
+    super.initState();
     _getUserName();
   }
 
@@ -60,6 +60,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      elevation: 10,
+      backgroundColor: Color.fromRGBO(44, 8, 78, 0.5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -71,7 +73,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           const SizedBox(height: 10),
           Text(
-            Username,
+            username,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
@@ -94,7 +96,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (ctx) => MyRoomsScreen(username: Username)));
+                            builder: (ctx) =>
+                                MyRoomsScreen(username: username)));
                   } else if (index == 2) {
                     Provider.of<ProfileScreenProvider>(context, listen: false)
                         .checkEmailVerification();
@@ -103,7 +106,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         context,
                         MaterialPageRoute(
                             builder: (ctx) =>
-                                ProfileScreen(Username: Username)));
+                                ProfileScreen(username: username)));
                   } else if (index == 4) {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
@@ -145,7 +148,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Icons.exit_to_app,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              label: Text("Sign Out"))
+              label: const Text("Sign Out"))
         ],
       ),
     );

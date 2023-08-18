@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/game_room_provider.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class MyRoomsScreen extends StatefulWidget {
   MyRoomsScreen({super.key, required this.username});
 
@@ -34,7 +35,7 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                         return const Center(child: Text('No rooms found.'));
                       } else {
                         final rooms = snapshot.data;
-                        return Container(
+                        return SizedBox(
                           height: 285,
                           child: ListView.builder(
                             itemCount: rooms!.length,
@@ -69,10 +70,10 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
-                                        return Text("Loading...");
+                                        return const Text("Loading...");
                                       }
                                       if (snapshot.hasError) {
-                                        return Text("Error");
+                                        return const Text("Error");
                                       }
                                       int roomUserCount = snapshot.data ?? 0;
                                       return Text(

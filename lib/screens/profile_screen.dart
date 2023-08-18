@@ -6,9 +6,9 @@ import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key, required this.Username});
+  const ProfileScreen({super.key, required this.username});
 
-  String Username;
+  final String username;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: SizedBox(
                         width: 200,
                         child: EditableTextForm(
-                          initialValue: widget.Username,
+                          initialValue: widget.username,
                           title: 'Username',
                           validator: (value) {
                             if (value.isEmpty) {
