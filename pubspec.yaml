@@ -43,6 +43,7 @@ dependencies:
   image_picker: ^1.0.2
   animated_text_kit: ^4.2.2
   kartal: ^3.2.0
+  connectivity_plus: ^4.0.2
 
 dev_dependencies:
   flutter_test:
