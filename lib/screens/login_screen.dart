@@ -107,9 +107,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                           if (emailController.text.isEmpty ||
                                               passController.text.isEmpty) {
                                             showDialog(
-                                                context: context,
-                                                builder: (ctx) =>
-                                                    CustomAlertDialog());
+                                              context: context,
+                                              builder: (ctx) =>
+                                                  const CustomAlertDialog(
+                                                      title: 'Login error!',
+                                                      content:
+                                                          'Please dont leave files empty'),
+                                            );
                                           } else {
                                             provider.login(context);
                                           }
