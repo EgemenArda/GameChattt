@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
+import 'package:game_chat_1/screens/friends_screen.dart';
 import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:game_chat_1/screens/profile_screen.dart';
 import 'package:game_chat_1/screens/register_screen.dart';
@@ -25,7 +26,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
     if (user != null) {
       DocumentSnapshot userSnapshot =
-      await _firestore.collection('users').doc(user.uid).get();
+          await _firestore.collection('users').doc(user.uid).get();
 
       if (userSnapshot.exists) {
         var userName = userSnapshot['username'];
@@ -45,10 +46,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
     _getUserName();
   }
 
-  void signOut(context) async{
+  void signOut(context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const AuthScreen()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (ctx) => const AuthScreen()));
     } catch (error) {
       print('error geldi $error');
     }
@@ -82,12 +84,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           ListView.builder(
             shrinkWrap: true,
-            itemCount: 4,
+            itemCount: 5,
             itemBuilder: (BuildContext context, index) {
               return InkWell(
                 onTap: () {
                   if (index == 2) {
-                    Provider.of<ProfileScreenProvider>(context, listen: false).checkEmailVerification();
+                    Provider.of<ProfileScreenProvider>(context, listen: false)
+                        .checkEmailVerification();
                     Navigator.of(context).pop();
                     Navigator.push(
                         context,
@@ -95,33 +98,47 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             builder: (ctx) =>
                                 ProfileScreen(Username: Username)));
                   }
+                  if (index == 4) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const FriendsScreen()));
+                  }
                 },
                 child: ListTile(
                   leading: index == 0
                       ? const Icon(Icons.settings)
                       : index == 1
-                      ? const Icon(Icons.notifications)
-                      : index == 2
-                      ? const Icon(Icons.person)
-                      : index == 3
-                      ? const Icon(Icons.home)
-                      : const Icon(Icons.home),
+                          ? const Icon(Icons.notifications)
+                          : index == 2
+                              ? const Icon(Icons.person)
+                              : index == 3
+                                  ? const Icon(Icons.home)
+                                  : index == 4
+                                      ? const Icon(Icons.people_alt)
+                                      : const Icon(Icons.people_alt),
                   title: index == 0
                       ? const Text('Setting')
                       : index == 1
-                      ? const Text('Notifications')
-                      : index == 2
-                      ? const Text('Profile')
-                      : index == 3
-                      ? const Text('My Rooms')
-                      : const Text('My Rooms'),
+                          ? const Text('Notifications')
+                          : index == 2
+                              ? const Text('Profile')
+                              : index == 3
+                                  ? const Text('My Rooms')
+                                  : index == 4
+                                      ? const Text('Friends')
+                                      : const Text('Friends'),
                 ),
               );
             },
           ),
-          TextButton.icon(onPressed:(){
-            signOut(context);
-          } , icon: Icon(Icons.exit_to_app, color: Theme.of(context).colorScheme.primary,), label: Text("Sign Out"))
+          TextButton.icon(
+              onPressed: () {
+                signOut(context);
+              },
+              icon: Icon(
+                Icons.exit_to_app,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              label: Text("Sign Out"))
         ],
       ),
     );

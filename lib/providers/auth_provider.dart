@@ -1,7 +1,6 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:game_chat_1/screens/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/home_screen.dart';
@@ -36,7 +35,8 @@ class AuthProvider extends ChangeNotifier {
         'email': enteredEmail,
         'image_url': "https://picsum.photos/200/300",
       });
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
       showDialog(
         context: context,
@@ -65,14 +65,15 @@ class AuthProvider extends ChangeNotifier {
       final userCredential = await _firebase.signInWithEmailAndPassword(
           email: enteredEmail, password: enteredPassword);
       print('User logged in: ${userCredential.user?.email}');
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
-
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
           title: const Text('Login error!'),
-          content: const Text('Wrong email or password! Please correct and try again!'),
+          content: const Text(
+              'Wrong email or password! Please correct and try again!'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),

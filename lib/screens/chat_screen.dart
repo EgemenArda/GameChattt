@@ -3,14 +3,16 @@ import 'package:game_chat_1/screens/chat_info.dart';
 
 import 'package:game_chat_1/screens/widgets/chat_messages.dart';
 import 'package:game_chat_1/screens/widgets/new_messages.dart';
+import 'package:game_chat_1/services/connection_check.dart';
 
 class ChatScreen extends StatelessWidget {
   final String roomId;
   final String roomName;
   final String roomCreator;
+  final String roomType;
 
 
-  const ChatScreen({required this.roomId, required this.roomName, required this.roomCreator});
+  const ChatScreen({required this.roomId, required this.roomName, required this.roomCreator, required this.roomType});
 
   @override
   Widget build(BuildContext context) {

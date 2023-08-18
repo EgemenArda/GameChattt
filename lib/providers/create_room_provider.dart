@@ -5,6 +5,8 @@ import 'package:game_chat_1/screens/chat_screen.dart';
 
 class CreateRoomProvider extends ChangeNotifier {
   int selectedNumber = 1; // Varsayılan seçilen sayı 1
+  String selectedRoomType = "";
+
   TextEditingController roomName = TextEditingController();
   TextEditingController roomDescription = TextEditingController();
   String gameName = "Please Choose a game";
@@ -29,6 +31,7 @@ class CreateRoomProvider extends ChangeNotifier {
         'room_creator': creatorUsername,
         'room_size': selectedNumber,
         'game_name': gameName,
+        'room_type': selectedRoomType,
       });
 
       await roomRef.collection("roomUser").add({'username': creatorUsername});
@@ -36,7 +39,7 @@ class CreateRoomProvider extends ChangeNotifier {
         builder: (ctx) => ChatScreen(
           roomId: roomRef.id, // Oda belgesinin ID'sini geçir
           roomName: roomName.text,
-          roomCreator: creatorUsername,
+          roomCreator: creatorUsername, roomType: selectedRoomType,
         ),
       ));
     }

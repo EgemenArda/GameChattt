@@ -64,7 +64,6 @@ class _GameRoomsState extends State<GameRooms> {
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
                             onTap: () async {
-                              print(rooms[index].roomUser);
                               CollectionReference _roomCollection =
                                   FirebaseFirestore.instance
                                       .collection('rooms');
@@ -72,6 +71,10 @@ class _GameRoomsState extends State<GameRooms> {
                                   .doc(rooms[index].documentId)
                                   .collection('roomUser')
                                   .get();
+                              List<String> usernames = [];
+                              snapshot.docs.forEach((doc) {
+                                usernames.add(doc.data().toString());
+                              });
 
                               // ignore: use_build_context_synchronously
                               provider.showAlertDialog(
@@ -80,8 +83,8 @@ class _GameRoomsState extends State<GameRooms> {
                                   rooms[index].documentId,
                                   rooms[index].roomSize,
                                   snapshot.docs,
-                                  rooms[index].roomCreator
-                                  );
+                                  rooms[index].roomCreator,
+                                  rooms[index].roomType);
                             },
                             child: ListTile(
                               leading: Text(rooms[index].roomCreator),
