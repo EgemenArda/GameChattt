@@ -36,6 +36,7 @@ class CreateRoomProvider extends ChangeNotifier {
         builder: (ctx) => ChatScreen(
           roomId: roomRef.id, // Oda belgesinin ID'sini geçir
           roomName: roomName.text,
+          roomCreator: creatorUsername,
         ),
       ));
     }

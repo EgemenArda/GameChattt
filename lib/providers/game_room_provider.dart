@@ -28,6 +28,7 @@ class GameRoomProvider extends ChangeNotifier {
     roomId,
     roomSize,
     roomUsers,
+    roomCreator,
   ) async {
     String user = FirebaseAuth.instance.currentUser!.uid;
 
@@ -81,11 +82,12 @@ class GameRoomProvider extends ChangeNotifier {
                 if (usernames.contains(currentUsername)) {
                   // ignore: use_build_context_synchronously
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => ChatScreen(
-                        roomId: roomId, // Oda belgesinin ID'sini geçir
-                        roomName: roomName,
-                      ),
-                    ));
+                    builder: (ctx) => ChatScreen(
+                      roomId: roomId, // Oda belgesinin ID'sini geçir
+                      roomName: roomName,
+                      roomCreator: roomCreator,
+                    ),
+                  ));
                 } else {
                   if (roomUsers.length >= roomSize) {
                     // ignore: use_build_context_synchronously
@@ -93,11 +95,11 @@ class GameRoomProvider extends ChangeNotifier {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text("Error!!"),
-                          content: Text("this room is full!"),
+                          title: const Text("Error!!"),
+                          content: const Text("this room is full!"),
                           actions: <Widget>[
                             TextButton(
-                              child: Text("OK"),
+                              child: const Text("OK"),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -118,6 +120,7 @@ class GameRoomProvider extends ChangeNotifier {
                       builder: (ctx) => ChatScreen(
                         roomId: roomId, // Oda belgesinin ID'sini geçir
                         roomName: roomName,
+                        roomCreator: roomCreator,
                       ),
                     ));
                   }

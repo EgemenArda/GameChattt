@@ -64,6 +64,7 @@ class _GameRoomsState extends State<GameRooms> {
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
                             onTap: () async {
+                              print(rooms[index].roomUser);
                               CollectionReference _roomCollection =
                                   FirebaseFirestore.instance
                                       .collection('rooms');
@@ -78,7 +79,9 @@ class _GameRoomsState extends State<GameRooms> {
                                   rooms[index].roomName,
                                   rooms[index].documentId,
                                   rooms[index].roomSize,
-                                  snapshot.docs);
+                                  snapshot.docs,
+                                  rooms[index].roomCreator
+                                  );
                             },
                             child: ListTile(
                               leading: Text(rooms[index].roomCreator),
