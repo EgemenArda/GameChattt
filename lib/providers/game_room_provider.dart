@@ -80,6 +80,7 @@ class GameRoomProvider extends ChangeNotifier {
                 print(usernames);
                 if (usernames.contains(currentUsername)) {
                   // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (ctx) => ChatScreen(
                         roomId: roomId, // Oda belgesinin ID'sini geçir

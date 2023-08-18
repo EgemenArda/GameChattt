@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/auth_provider.dart';
 import 'package:game_chat_1/providers/create_room_provider.dart';
+import 'package:game_chat_1/providers/friend_provider.dart';
 import 'package:game_chat_1/providers/game_room_provider.dart';
 import 'package:game_chat_1/providers/homepage_provider.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
@@ -25,6 +26,7 @@ void main() async {
       ListenableProvider<CreateRoomProvider>(create: (_) => CreateRoomProvider()),
       ListenableProvider<GameRoomProvider>(create: (_) => GameRoomProvider()),
       ListenableProvider<ProfileScreenProvider>(create: (_) => ProfileScreenProvider()),
+      ListenableProvider<FriendsProvider>(create: (_) => FriendsProvider()),
 
     ],
     child: MyApp(),
