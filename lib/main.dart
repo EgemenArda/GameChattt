@@ -23,11 +23,12 @@ void main() async {
     providers: [
       ListenableProvider<HomePageProvider>(create: (_) => HomePageProvider()),
       ListenableProvider<AuthProvider>(create: (_) => AuthProvider()),
-      ListenableProvider<CreateRoomProvider>(create: (_) => CreateRoomProvider()),
+      ListenableProvider<CreateRoomProvider>(
+          create: (_) => CreateRoomProvider()),
       ListenableProvider<GameRoomProvider>(create: (_) => GameRoomProvider()),
-      ListenableProvider<ProfileScreenProvider>(create: (_) => ProfileScreenProvider()),
+      ListenableProvider<ProfileScreenProvider>(
+          create: (_) => ProfileScreenProvider()),
       ListenableProvider<FriendsProvider>(create: (_) => FriendsProvider()),
-
     ],
     child: MyApp(),
   ));
