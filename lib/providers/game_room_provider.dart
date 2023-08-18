@@ -54,13 +54,8 @@ class GameRoomProvider extends ChangeNotifier {
         .map((snapshot) => snapshot.docs.length);
   }
 
-  Future<void> showAlertDialog(
-    context,
-    roomName,
-    roomId,
-    roomSize,
-    roomUsers,
-  ) async {
+  Future<void> showAlertDialog(context, roomName, roomId, roomSize, roomUsers,
+      roomCreator, roomType) async {
     String user = FirebaseAuth.instance.currentUser!.uid;
 
     String currentUsername = await getUsernameFromUserId(user);
@@ -114,11 +109,12 @@ class GameRoomProvider extends ChangeNotifier {
                   // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => ChatScreen(
-                        roomId: roomId, // Oda belgesinin ID'sini geçir
-                        roomName: roomName,
-                      ),
-                    ));
+                    builder: (ctx) => ChatScreen(
+                      roomId: roomId, // Oda belgesinin ID'sini geçir
+                      roomName: roomName,
+                      roomCreator: roomCreator, roomType: roomType,
+                    ),
+                  ));
                 } else {
                   if (roomUsers.length >= roomSize) {
                     // ignore: use_build_context_synchronously
@@ -126,11 +122,11 @@ class GameRoomProvider extends ChangeNotifier {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text("Error!!"),
-                          content: Text("this room is full!"),
+                          title: const Text("Error!!"),
+                          content: const Text("this room is full!"),
                           actions: <Widget>[
                             TextButton(
-                              child: Text("OK"),
+                              child: const Text("OK"),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -151,6 +147,7 @@ class GameRoomProvider extends ChangeNotifier {
                       builder: (ctx) => ChatScreen(
                         roomId: roomId, // Oda belgesinin ID'sini geçir
                         roomName: roomName,
+                        roomCreator: roomCreator, roomType: roomType,
                       ),
                     ));
                   }

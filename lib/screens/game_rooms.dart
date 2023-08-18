@@ -71,6 +71,10 @@ class _GameRoomsState extends State<GameRooms> {
                                   .doc(rooms[index].documentId)
                                   .collection('roomUser')
                                   .get();
+                              List<String> usernames = [];
+                              snapshot.docs.forEach((doc) {
+                                usernames.add(doc.data().toString());
+                              });
 
                               // ignore: use_build_context_synchronously
                               provider.showAlertDialog(
@@ -78,7 +82,9 @@ class _GameRoomsState extends State<GameRooms> {
                                   rooms[index].roomName,
                                   rooms[index].documentId,
                                   rooms[index].roomSize,
-                                  snapshot.docs);
+                                  snapshot.docs,
+                                  rooms[index].roomCreator,
+                                  rooms[index].roomType);
                             },
                             child: ListTile(
                               leading: Text(rooms[index].roomCreator),
