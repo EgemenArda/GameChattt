@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/register_screen.dart';
+import 'package:game_chat_1/screens/widgets/custom_alert_dialog.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
@@ -106,29 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           if (emailController.text.isEmpty ||
                                               passController.text.isEmpty) {
                                             showDialog(
-                                              context: context,
-                                              builder: (ctx) => AlertDialog(
-                                                backgroundColor: Colors.white
-                                                    .withOpacity(0.2),
-                                                title:
-                                                    const Text('Login error!'),
-                                                content: const Text(
-                                                    'Please dont leave fields empty!'),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.of(ctx).pop(),
-                                                    child: Container(
-                                                      color: Colors.green,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              14),
-                                                      child: const Text('Okay'),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                                context: context,
+                                                builder: (ctx) =>
+                                                    CustomAlertDialog());
                                           } else {
                                             provider.login(context);
                                           }

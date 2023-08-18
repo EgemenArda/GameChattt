@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:game_chat_1/providers/game_room_provider.dart';
+import 'package:provider/provider.dart';
 
-class MyRoomsScreen extends StatefulWidget{
+class MyRoomsScreen extends StatefulWidget {
   MyRoomsScreen({super.key, required this.username});
 
   String username;
@@ -17,7 +17,7 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Consumer<GameRoomProvider> (
+      body: Consumer<GameRoomProvider>(
         builder: (context, provider, child) {
           return SingleChildScrollView(
             child: Center(
@@ -42,8 +42,8 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                               return InkWell(
                                 onTap: () async {
                                   CollectionReference _roomCollection =
-                                  FirebaseFirestore.instance
-                                      .collection('rooms');
+                                      FirebaseFirestore.instance
+                                          .collection('rooms');
                                   QuerySnapshot snapshot = await _roomCollection
                                       .doc(rooms[index].documentId)
                                       .collection('roomUser')
@@ -55,7 +55,9 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                                       rooms[index].roomName,
                                       rooms[index].documentId,
                                       rooms[index].roomSize,
-                                      snapshot.docs);
+                                      snapshot.docs,
+                                      rooms[index].roomCreator,
+                                      rooms[index].roomType);
                                 },
                                 child: ListTile(
                                   leading: Text(rooms[index].roomCreator),
