@@ -43,8 +43,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Game Chat',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        theme: ThemeData.dark(
+          // brightness: Brightness.dark,
+          // primarySwatch: Colors.grey,
           useMaterial3: true,
         ),
         home: StreamBuilder(
