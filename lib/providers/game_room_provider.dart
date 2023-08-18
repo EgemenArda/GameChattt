@@ -13,6 +13,38 @@ class GameRoomProvider extends ChangeNotifier {
         }).toList());
   }
 
+  Stream<List<Rooms>> getMyRooms(String username) {
+    final stream = FirebaseFirestore.instance.collectionGroup('roomUser')
+        .where('username', isEqualTo: username)
+        .snapshots();
+
+    return stream.asyncMap((event) async {
+      List<Rooms> myRooms = [];
+
+      for (var doc in event.docs) {
+        String roomPath = doc.reference.parent.parent!.id;
+        DocumentSnapshot<Map<String, dynamic>> roomSnapshot = await FirebaseFirestore.instance
+            .collection('rooms')
+            .doc(roomPath)
+            .get();
+
+        if (roomSnapshot.exists) {
+          myRooms.add(Rooms.fromSnapshot(roomSnapshot));
+        }
+      }
+
+      return myRooms;
+    });
+  }
+
+
+
+
+
+
+
+
+
   Stream<int> getRoomUserCountStream(String roomId) {
     return FirebaseFirestore.instance
         .collection('rooms')
