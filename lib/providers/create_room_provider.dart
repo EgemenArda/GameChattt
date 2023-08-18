@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/screens/chat_screen.dart';
 
 class CreateRoomProvider extends ChangeNotifier {
   int selectedNumber = 1; // Varsayılan seçilen sayı 1
@@ -12,7 +13,7 @@ class CreateRoomProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createRoom() async {
+  void createRoom(context) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -31,6 +32,12 @@ class CreateRoomProvider extends ChangeNotifier {
       });
 
       await roomRef.collection("roomUser").add({'username': creatorUsername});
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (ctx) => ChatScreen(
+          roomId: roomRef.id, // Oda belgesinin ID'sini geçir
+          roomName: roomName.text,
+        ),
+      ));
     }
   }
 

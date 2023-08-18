@@ -13,8 +13,19 @@ class ProfileScreenProvider extends ChangeNotifier {
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  bool emailVerifys = false;
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+  checkEmailVerification() async{
+    User? user = auth.currentUser;
+    await FirebaseAuth.instance.currentUser!.reload();
+    if (FirebaseAuth.instance.currentUser!.emailVerified) {
+      emailVerifys = true;
+    }
+    notifyListeners();
+  }
 
   Future<void> validateForm(context) async {
     if (formKey.currentState!.validate()) {

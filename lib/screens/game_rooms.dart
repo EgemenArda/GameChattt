@@ -78,7 +78,7 @@ class _GameRoomsState extends State<GameRooms> {
                                   rooms[index].roomName,
                                   rooms[index].documentId,
                                   rooms[index].roomSize,
-                                  snapshot.docs.length);
+                                  snapshot.docs);
                             },
                             child: ListTile(
                               leading: Text(rooms[index].roomCreator),
