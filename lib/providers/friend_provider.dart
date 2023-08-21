@@ -108,19 +108,19 @@ class FriendsProvider extends ChangeNotifier {
         .collection('users')
         .doc(currentUserId)
         .collection('friends')
-        .doc(pendingUserId);
+        .doc(pendingUserId).set({});
 
     await FirebaseFirestore.instance
         .collection('users')
         .doc(pendingUserId)
         .collection('friends')
-        .doc(currentUserId);
+        .doc(currentUserId).set({});
 
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(pendingUserId)
-        .collection('pendingRequests')
         .doc(currentUserId)
+        .collection('pendingRequests')
+        .doc(pendingUserId)
         .delete();
   }
 
