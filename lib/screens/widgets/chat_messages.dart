@@ -2,14 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/message_bubble.dart';
+import 'package:swipe_to/swipe_to.dart';
 
 class ChatMessages extends StatelessWidget {
-  const ChatMessages({super.key, required this.roomId});
+  const ChatMessages({super.key, required this.roomId, required this.onSwippedMessage});
   final String roomId;
-
+  final ValueChanged onSwippedMessage;
   @override
   Widget build(BuildContext context) {
     final authenticatedUser = FirebaseAuth.instance.currentUser!;
+    bool isRevealed = false;
 
     return StreamBuilder(
       stream: FirebaseFirestore.instance
@@ -55,15 +57,23 @@ class ChatMessages extends StatelessWidget {
             final nextUserIsSame = nextMessageUserId == currentMessageUserId;
 
             if (nextUserIsSame) {
-              return MessageBubble.next(
-                  message: chatMessage["text"],
-                  isMe: authenticatedUser.uid == currentMessageUserId);
+              return SwipeTo(
+                onRightSwipe: () {},
+                child: MessageBubble.next(
+                    message: chatMessage["text"],
+                    isMe: authenticatedUser.uid == currentMessageUserId),
+              );
             } else {
-              return MessageBubble.first(
-                  userImage: chatMessage["userImage"],
-                  username: chatMessage["username"],
-                  message: chatMessage["text"],
-                  isMe: authenticatedUser.uid == currentMessageUserId);
+              final message = chatMessage["text"];
+
+              return SwipeTo(
+                onRightSwipe: () => onSwippedMessage(message),
+                child: MessageBubble.first(
+                    userImage: chatMessage["userImage"],
+                    username: chatMessage["username"],
+                    message: chatMessage["text"],
+                    isMe: authenticatedUser.uid == currentMessageUserId),
+              );
             }
           },
         );

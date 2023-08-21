@@ -2,32 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/chat_info.dart';
 import 'package:game_chat_1/screens/widgets/chat_messages.dart';
 import 'package:game_chat_1/screens/widgets/new_messages.dart';
+import 'package:swipe_to/swipe_to.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   final String roomId;
   final String roomName;
   final String roomCreator;
   final String roomType;
   final String? roomCode;
-
   const ChatScreen(
-      {required this.roomId,
+      {super.key,
+      required this.roomId,
       required this.roomName,
       required this.roomCreator,
       required this.roomType,
       this.roomCode});
 
   @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  var ReplyMessage;
+  final focusNode = FocusNode();
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(roomCode == null ? "Public Room" : roomCode!),
+        title: Text(widget.roomCode == null ? "Public Room" : widget.roomCode!),
         actions: [
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (ctx) => ChatInfo(
-                    owner: roomCreator,
+                    owner: widget.roomCreator,
                   ),
                 ));
               },
@@ -38,13 +46,32 @@ class ChatScreen extends StatelessWidget {
         children: [
           Expanded(
               child: ChatMessages(
-            roomId: roomId,
+            roomId: widget.roomId,
+            onSwippedMessage: (message) {
+              replyToMessage(message);
+              focusNode.requestFocus();
+            },
           )), // ChatMessages widget'i burada
           NewMessage(
-            roomId: roomId,
+            roomId: widget.roomId,
+            focusNode: focusNode,
+            onCancelReply: cancelReply,
+            replyMessage: ReplyMessage,
           ) // NewMessage widget'i burada
         ],
       ),
     );
+  }
+
+  void replyToMessage(message) {
+    setState(() {
+      ReplyMessage = message;
+    });
+  }
+
+  void cancelReply() {
+    setState(() {
+      ReplyMessage = null;
+    });
   }
 }

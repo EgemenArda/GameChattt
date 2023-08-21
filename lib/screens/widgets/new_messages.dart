@@ -9,7 +9,10 @@ import 'package:uuid/uuid.dart';
 
 class NewMessage extends StatefulWidget {
   final String roomId;
-  const NewMessage({super.key, required this.roomId});
+  final FocusNode focusNode;
+  final replyMessage;
+  final VoidCallback onCancelReply;
+  const NewMessage({super.key, required this.roomId, required this.focusNode, required this.onCancelReply, required this.replyMessage});
 
   @override
   State<NewMessage> createState() => _NewMessageState();
@@ -78,6 +81,7 @@ class _NewMessageState extends State<NewMessage> {
 
   @override
   Widget build(BuildContext context) {
+    final isReplying = widget.replyMessage != null;  
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 1, bottom: 14),
       child: Row(
@@ -87,8 +91,10 @@ class _NewMessageState extends State<NewMessage> {
             icon: const Icon(Icons.photo),
             color: Theme.of(context).colorScheme.primary,
           ),
+          
           Expanded(
             child: TextField(
+              focusNode: widget.focusNode,
               controller: _messageController,
               textCapitalization: TextCapitalization.sentences,
               autocorrect: true,
