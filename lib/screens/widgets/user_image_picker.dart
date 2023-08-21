@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -41,12 +42,12 @@ class _UserImagePickerState extends State<UserImagePicker> {
               _pickedImageFile != null ? FileImage(_pickedImageFile!) : null,
         ),
         TextButton.icon(
-            onPressed: _pickImage,
-            icon: const Icon(Icons.image),
-            label: Text(
-              "Add Image",
-              style: TextStyle(color: Theme.of(context).primaryColor),
-            ))
+          onPressed: _pickImage,
+          icon: const Icon(Icons.image),
+          label: Text(
+            "Use your Camera",
+          ),
+        )
       ],
     );
   }
