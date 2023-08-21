@@ -35,6 +35,10 @@ class AuthProvider extends ChangeNotifier {
         'email': enteredEmail,
         'image_url': "https://picsum.photos/200/300",
       });
+      
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('pendingRequests').add({});
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('friends').add({});
+      
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {

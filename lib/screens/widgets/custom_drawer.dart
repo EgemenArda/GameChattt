@@ -5,7 +5,7 @@ import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/friends_screen.dart';
 import 'package:game_chat_1/screens/myrooms_screen.dart';
 import 'package:game_chat_1/screens/profile_screen.dart';
-import 'package:game_chat_1/screens/register_screen.dart';
+import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -51,7 +51,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     try {
       await FirebaseAuth.instance.signOut();
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (ctx) => const AuthScreen()));
+          MaterialPageRoute(builder: (ctx) => const LoginScreen()));
     } catch (error) {
       print('error geldi $error');
     }
