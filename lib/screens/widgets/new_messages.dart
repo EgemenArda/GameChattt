@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class NewMessage extends StatefulWidget {
   final String roomId;
@@ -46,12 +51,42 @@ class _NewMessageState extends State<NewMessage> {
     });
   }
 
+  File? imageFile;
+  Future getImage() async {
+    ImagePicker _picker = ImagePicker();
+    await _picker.pickImage(source: ImageSource.camera).then((xFile) {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        uploadImage();
+      }
+    });
+  }
+
+  Future uploadImage() async {
+    String fileName = Uuid().v1();
+    var ref = FirebaseStorage.instance.ref().child("images").child("");
+
+    var uploadTask = await ref.putFile(imageFile!);
+    String ImageUrl = await uploadTask.ref.getDownloadURL();
+    FirebaseFirestore.instance
+        .collection("rooms")
+        .doc(widget.roomId)
+        .collection("room_images")
+        .add({'image_url': ImageUrl});
+    print(ImageUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 1, bottom: 14),
       child: Row(
         children: [
+          IconButton(
+            onPressed: () => getImage(),
+            icon: const Icon(Icons.photo),
+            color: Theme.of(context).colorScheme.primary,
+          ),
           Expanded(
             child: TextField(
               controller: _messageController,

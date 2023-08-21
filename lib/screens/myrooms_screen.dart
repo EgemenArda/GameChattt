@@ -59,11 +59,12 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                                       snapshot.docs,
                                       rooms[index].roomCreator,
                                       rooms[index].roomType,
-                                      rooms[index].roomCode
-                                      );
+                                      rooms[index].roomCode);
                                 },
                                 child: ListTile(
-                                  leading: Text(rooms[index].roomCreator),
+                                  leading: rooms[index].roomType == "Private"
+                                      ? Icon(Icons.lock_outline)
+                                      : Icon(Icons.lock_open_outlined),
                                   title: Text(rooms[index].roomName),
                                   subtitle: Text(rooms[index].roomDescription),
                                   trailing: StreamBuilder<int>(
