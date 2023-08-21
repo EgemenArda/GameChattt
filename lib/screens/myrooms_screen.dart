@@ -58,7 +58,9 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                                       rooms[index].roomSize,
                                       snapshot.docs,
                                       rooms[index].roomCreator,
-                                      rooms[index].roomType);
+                                      rooms[index].roomType,
+                                      rooms[index].roomCode
+                                      );
                                 },
                                 child: ListTile(
                                   leading: Text(rooms[index].roomCreator),

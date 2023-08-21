@@ -8,6 +8,7 @@ class Rooms {
   String roomName;
   String roomType;
   int roomSize;
+  String roomCode;
 
   Rooms(
       {required this.documentId,
@@ -16,7 +17,8 @@ class Rooms {
       required this.roomDescription,
       required this.roomName,
       required this.roomSize,
-      required this.roomType});
+      required this.roomType,
+      required this.roomCode});
 
   factory Rooms.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data();
@@ -29,6 +31,7 @@ class Rooms {
       roomSize: data?['room_size'],
       documentId: snapshot.id,
       roomType: data?["room_type"],
+      roomCode: data?["room_code"],
     );
   }
 }

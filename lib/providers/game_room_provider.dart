@@ -50,7 +50,7 @@ class GameRoomProvider extends ChangeNotifier {
   }
 
   Future<void> showAlertDialog(context, roomName, roomId, roomSize, roomUsers,
-      roomCreator, roomType) async {
+      roomCreator, roomType, roomCode) async {
     String user = FirebaseAuth.instance.currentUser!.uid;
 
     String currentUsername = await getUsernameFromUserId(user);
@@ -112,6 +112,7 @@ class GameRoomProvider extends ChangeNotifier {
                       roomName: roomName,
                       roomCreator: roomCreator,
                       roomType: roomType,
+                      roomCode: roomCode,
                     ),
                   ));
                 } else {
@@ -139,6 +140,7 @@ class GameRoomProvider extends ChangeNotifier {
                         roomName: roomName,
                         roomCreator: roomCreator,
                         roomType: roomType,
+                        roomCode: roomCode,
                       ),
                     ));
                   }

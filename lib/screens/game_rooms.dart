@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
+import 'package:game_chat_1/screens/create_room_screen.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
@@ -116,7 +117,9 @@ class _GameRoomsState extends State<GameRooms> {
                                               rooms[index].roomSize,
                                               snapshot.docs,
                                               rooms[index].roomCreator,
-                                              rooms[index].roomType);
+                                              rooms[index].roomType,
+                                              rooms[index].roomCode
+                                              );
                                         },
                                         child: Container(
                                           margin: const EdgeInsets.all(8),
@@ -128,8 +131,9 @@ class _GameRoomsState extends State<GameRooms> {
                                           //       opacity: 0.3),
                                           // ),
                                           child: ListTile(
-                                            leading:
-                                                Text(rooms[index].roomCreator),
+                                            
+                                            leading: rooms[index].roomType == "Private"? Icon(Icons.lock_outline) : Icon(Icons.lock_open_outlined),
+                                              
                                             title: Text(rooms[index].roomName),
                                             subtitle: Text(
                                                 rooms[index].roomDescription),
@@ -162,15 +166,15 @@ class _GameRoomsState extends State<GameRooms> {
                             }
                           },
                         ),
-                        // ElevatedButton(
-                        //   onPressed: () {
-                        //     Navigator.of(context).push(MaterialPageRoute(
-                        //         builder: (ctx) => CreateRoomScreen(
-                        //               gameName: widget.gameName,
-                        //             )));
-                        //   },
-                        //   child: const Text("Create room"),
-                        // ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => CreateRoomScreen(
+                                      gameName: widget.gameName,
+                                    )));
+                          },
+                          child: const Text("Create room"),
+                        ),
                         ////////***************/////////////
                         // Padding(
                         //   padding: const EdgeInsets.all(16.0),

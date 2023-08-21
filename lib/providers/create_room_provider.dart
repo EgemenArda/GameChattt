@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,13 @@ class CreateRoomProvider extends ChangeNotifier {
     if (user != null) {
       String creatorUserId = user.uid;
       String creatorUsername = await getUsernameFromUserId(creatorUserId);
+      const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+      Random _rnd = Random();
+
+      String getRandomString(int length) =>
+          String.fromCharCodes(Iterable.generate(
+              length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+      final code = getRandomString(6);
 
       DocumentReference roomRef =
           FirebaseFirestore.instance.collection('rooms').doc();
@@ -32,16 +41,28 @@ class CreateRoomProvider extends ChangeNotifier {
         'room_size': selectedNumber,
         'game_name': gameName,
         'room_type': selectedRoomType,
+        'room_code': code,
       });
 
       await roomRef.collection("roomUser").add({'username': creatorUsername});
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (ctx) => ChatScreen(
-          roomId: roomRef.id, // Oda belgesinin ID'sini geçir
-          roomName: roomName.text,
-          roomCreator: creatorUsername, roomType: selectedRoomType,
-        ),
-      ));
+      if (selectedRoomType == "Private") {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (ctx) => ChatScreen(
+            roomId: roomRef.id, // Oda belgesinin ID'sini geçir
+            roomName: roomName.text,
+            roomCode: code,
+            roomCreator: creatorUsername, roomType: selectedRoomType,
+          ),
+        ));
+      } else {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (ctx) => ChatScreen(
+            roomId: roomRef.id, // Oda belgesinin ID'sini geçir
+            roomName: roomName.text,
+            roomCreator: creatorUsername, roomType: selectedRoomType,
+          ),
+        ));
+      }
     }
   }
 
