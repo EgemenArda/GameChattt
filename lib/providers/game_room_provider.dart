@@ -107,7 +107,6 @@ class GameRoomProvider extends ChangeNotifier {
                 print(usernames);
                 if (usernames.contains(currentUsername)) {
                   // ignore: use_build_context_synchronously
-                  Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => ChatScreen(
                       roomId: roomId,
@@ -167,7 +166,6 @@ class GameRoomProvider extends ChangeNotifier {
                             .doc(roomId)
                             .collection("roomUser")
                             .add({'username': currentUsername});
-                        Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => ChatScreen(
                             roomId: roomId,
@@ -180,6 +178,21 @@ class GameRoomProvider extends ChangeNotifier {
                       } else {
                         print("Error");
                       }
+                    } else {
+                      FirebaseFirestore.instance
+                          .collection("rooms")
+                          .doc(roomId)
+                          .collection("roomUser")
+                          .add({'username': currentUsername});
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => ChatScreen(
+                          roomId: roomId,
+                          roomName: roomName,
+                          roomCreator: roomCreator,
+                          roomType: roomType,
+                          roomCode: roomCode,
+                        ),
+                      ));
                     }
                   }
                 }
