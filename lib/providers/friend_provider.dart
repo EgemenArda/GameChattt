@@ -79,7 +79,8 @@ class FriendsProvider extends ChangeNotifier {
             children: [
               TextField(
                 controller: friendUsernameController,
-                decoration: const InputDecoration(labelText: 'Friends Username'),
+                decoration:
+                    const InputDecoration(labelText: 'Friends Username'),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -107,14 +108,14 @@ class FriendsProvider extends ChangeNotifier {
         .collection('users')
         .doc(currentUserId)
         .collection('friends')
-        .doc(pendingUserId)
-        .set({});
+        .doc(pendingUserId);
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(pendingUserId)
         .collection('friends')
-        .doc(currentUserId)
-        .set({});
+        .doc(currentUserId);
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(pendingUserId)
@@ -132,5 +133,4 @@ class FriendsProvider extends ChangeNotifier {
         .doc(pendingUserId)
         .delete();
   }
-
 }
