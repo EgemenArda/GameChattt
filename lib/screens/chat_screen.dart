@@ -9,6 +9,7 @@ class ChatScreen extends StatelessWidget {
   final String roomCreator;
   final String roomType;
   final String? roomCode;
+
   const ChatScreen(
       {required this.roomId,
       required this.roomName,
@@ -20,7 +21,7 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(roomCode! == null ? "Public Room" : roomCode!),
+        title: Text(roomCode == null ? "Public Room" : roomCode!),
         actions: [
           IconButton(
               onPressed: () {
