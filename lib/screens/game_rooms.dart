@@ -108,72 +108,16 @@ class _GameRoomsState extends State<GameRooms> {
                                                   .doc(rooms[index].documentId)
                                                   .collection('roomUser')
                                                   .get();
-
-                                          if (rooms[index].roomType ==
-                                              "Private") {
-                                            String enteredPassword =
-                                                // ignore: use_build_context_synchronously
-                                                await showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                String password =
-                                                    ''; // Girilen şifre için boş bir başlangıç değeri
-                                                return AlertDialog(
-                                                  title: Text(
-                                                      'Private Room Password'),
-                                                  content: TextField(
-                                                    onChanged: (value) {
-                                                      password =
-                                                          value; // Kullanıcının girdiği şifreyi güncelle
-                                                    },
-                                                    obscureText:
-                                                        true, // Şifreyi gizli göster
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          'Enter the password',
-                                                    ),
-                                                  ),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context,
-                                                            password); // Şifreyi döndür
-                                                      },
-                                                      child: Text('Submit'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-
-                                            // Eğer doğru şifre girilmişse işlemi yap, aksi halde bir hata mesajı gösterilebilir
-                                            if (enteredPassword ==
-                                                rooms[index].roomCode) {
-                                              // ignore: use_build_context_synchronously
-                                              provider.showAlertDialog(
-                                                  context,
-                                                  rooms[index].roomName,
-                                                  rooms[index].documentId,
-                                                  rooms[index].roomSize,
-                                                  snapshot.docs,
-                                                  rooms[index].roomCreator,
-                                                  rooms[index].roomType,
-                                                  rooms[index].roomCode);
-                                            } else {
-                                              print("Error");
-                                            }
-                                          } else {
-                                            // ignore: use_build_context_synchronously
-                                            provider.showAlertDialog(
-                                                context,
-                                                rooms[index].roomName,
-                                                rooms[index].documentId,
-                                                rooms[index].roomSize,
-                                                snapshot.docs,
-                                                rooms[index].roomCreator,
-                                                rooms[index].roomType,
-                                                rooms[index].roomCode);
-                                          }
+                                          // ignore: use_build_context_synchronously
+                                          provider.showAlertDialog(
+                                              context,
+                                              rooms[index].roomName,
+                                              rooms[index].documentId,
+                                              rooms[index].roomSize,
+                                              snapshot.docs,
+                                              rooms[index].roomCreator,
+                                              rooms[index].roomType,
+                                              rooms[index].roomCode);
                                         },
                                         child: Container(
                                           margin: const EdgeInsets.all(8),

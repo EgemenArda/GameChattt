@@ -117,6 +117,7 @@ class GameRoomProvider extends ChangeNotifier {
                   ));
                 } else {
                   if (roomUsers.length >= roomSize) {
+                    // ignore: use_build_context_synchronously
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -127,22 +128,53 @@ class GameRoomProvider extends ChangeNotifier {
                       },
                     );
                   } else {
-                    FirebaseFirestore.instance
-                        .collection("rooms")
-                        .doc(roomId)
-                        .collection("roomUser")
-                        .add({'username': currentUsername});
+                    if (roomType == "Private") {
+                      String enteredPassword =
+                          // ignore: use_build_context_synchronously
+                          await showDialog(
+                        context: context,
+                        builder: (context) {
+                          String password = '';
+                          return AlertDialog(
+                            title: Text('Private Room Password'),
+                            content: TextField(
+                              onChanged: (value) {
+                                password = value;
+                              },
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                hintText: 'Enter the password',
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(
+                                      context, password); // Şifreyi döndür
+                                },
+                                child: Text('Submit'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
 
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => ChatScreen(
-                        roomId: roomId,
-                        roomName: roomName,
-                        roomCreator: roomCreator,
-                        roomType: roomType,
-                        roomCode: roomCode,
-                      ),
-                    ));
+                      if (enteredPassword == roomCode) {
+                        FirebaseFirestore.instance.collection("rooms").doc(roomId).collection("roomUser").add({'username' : currentUsername});
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => ChatScreen(
+                            roomId: roomId,
+                            roomName: roomName,
+                            roomCreator: roomCreator,
+                            roomType: roomType,
+                            roomCode: roomCode,
+                          ),
+                        ));
+                      } else {
+                        print("Error");
+                      }
+                    }
                   }
                 }
               },
