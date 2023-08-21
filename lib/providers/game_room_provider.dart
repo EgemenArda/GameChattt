@@ -84,6 +84,8 @@ class GameRoomProvider extends ChangeNotifier {
                   padding: const EdgeInsets.all(14),
                   child: const Text('Yes')),
               onPressed: () async {
+                Navigator.of(context).pop();
+
                 var querySnapshot = await FirebaseFirestore.instance
                     .collection('rooms')
                     .doc(roomId)
@@ -160,7 +162,11 @@ class GameRoomProvider extends ChangeNotifier {
                       );
 
                       if (enteredPassword == roomCode) {
-                        FirebaseFirestore.instance.collection("rooms").doc(roomId).collection("roomUser").add({'username' : currentUsername});
+                        FirebaseFirestore.instance
+                            .collection("rooms")
+                            .doc(roomId)
+                            .collection("roomUser")
+                            .add({'username': currentUsername});
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => ChatScreen(
