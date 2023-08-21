@@ -15,9 +15,25 @@ class UserImagePicker extends StatefulWidget {
 class _UserImagePickerState extends State<UserImagePicker> {
   File? _pickedImageFile;
 
-  void _pickImage() async {
+  void _pickImageCamera() async {
     final pickedImage = await ImagePicker().pickImage(
       source: ImageSource.camera,
+      imageQuality: 50,
+      maxWidth: 150,
+    );
+    if (pickedImage == null) {
+      return;
+    }
+    setState(() {
+      _pickedImageFile = File(pickedImage.path);
+    });
+
+    widget.onPickImage(_pickedImageFile!);
+  }
+
+  void _pickImageGallery() async {
+    final pickedImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
       imageQuality: 50,
       maxWidth: 150,
     );
@@ -35,18 +51,32 @@ class _UserImagePickerState extends State<UserImagePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CircleAvatar(
-          radius: 40,
-          backgroundColor: Colors.grey,
-          foregroundImage:
-              _pickedImageFile != null ? FileImage(_pickedImageFile!) : null,
-        ),
-        TextButton.icon(
-          onPressed: _pickImage,
-          icon: const Icon(Icons.image),
-          label: Text(
-            "Use your Camera",
+        Center(
+          child: CircleAvatar(
+            child: Icon(Icons.photo_camera),
+            radius: 40,
+            foregroundImage:
+                _pickedImageFile != null ? FileImage(_pickedImageFile!) : null,
           ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton.icon(
+              onPressed: _pickImageCamera,
+              icon: const Icon(Icons.image),
+              label: Text(
+                "Camera",
+              ),
+            ),
+            TextButton.icon(
+              onPressed: _pickImageGallery,
+              icon: const Icon(Icons.folder_copy),
+              label: const Text(
+                "Gallery",
+              ),
+            )
+          ],
         )
       ],
     );

@@ -57,8 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onPressed: () {
                                 showDialog(
                                     context: context,
-                                    builder: (ctx) => CustomImagePicker(
-                                        title: 'asfg', content: 'asfsada'));
+                                    builder: (ctx) => CustomImagePicker());
                               }),
                         ),
                       ],
