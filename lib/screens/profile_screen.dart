@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/widgets/CustomFormField.dart';
+import 'package:game_chat_1/screens/widgets/custom_image_picker.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
@@ -45,16 +46,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           bottom: 0,
                           right: -10,
                           child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              shape: const CircleBorder(),
-                            ),
-                            child: const Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                            onPressed: () => print('editing pp'),
-                          ),
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.blueAccent,
+                                shape: const CircleBorder(),
+                              ),
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (ctx) => CustomImagePicker());
+                              }),
                         ),
                       ],
                     ),

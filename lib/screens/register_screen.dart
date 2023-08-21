@@ -117,7 +117,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           AutovalidateMode.onUserInteraction,
                                       validator: (value) {
                                         if (value == null ||
-                                            value.trim().length <= 6 ||
+                                            value.trim().length < 6 ||
                                             value.trim().length > 20) {
                                           return 'Password must be between 6-20 characters';
                                         }

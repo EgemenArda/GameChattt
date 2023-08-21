@@ -67,21 +67,25 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                                       : Icon(Icons.lock_open_outlined),
                                   title: Text(rooms[index].roomName),
                                   subtitle: Text(rooms[index].roomDescription),
-                                  trailing: StreamBuilder<int>(
-                                    stream: provider.getRoomUserCountStream(
-                                        rooms[index].documentId),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return const Text("Loading...");
+                                  trailing: ElevatedButton(
+                                    onPressed: () async {
+                                      QuerySnapshot snapshot = await FirebaseFirestore.instance
+                                          .collection('rooms')
+                                          .doc(rooms[index].documentId)
+                                          .collection('roomUser')
+                                          .where('username', isEqualTo: widget.username)
+                                          .get();
+                                      if (snapshot.size > 0) {
+                                        String docId = snapshot.docs[0].id;
+                                        await FirebaseFirestore.instance
+                                            .collection('rooms')
+                                            .doc(rooms[index].documentId)
+                                            .collection('roomUser')
+                                            .doc(docId)
+                                            .delete();
                                       }
-                                      if (snapshot.hasError) {
-                                        return const Text("Error");
-                                      }
-                                      int roomUserCount = snapshot.data ?? 0;
-                                      return Text(
-                                          "$roomUserCount/${rooms[index].roomSize}");
                                     },
+                                    child: Text('Odadan ayrıl'),
                                   ),
                                 ),
                               );

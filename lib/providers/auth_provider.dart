@@ -37,8 +37,11 @@ class AuthProvider extends ChangeNotifier {
       });
       
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('pendingRequests');
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('pendingRequests').doc(userCredential.user!.uid).delete();
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('friends');
-      
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('friends').doc(userCredential.user!.uid).delete();
+
+
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
