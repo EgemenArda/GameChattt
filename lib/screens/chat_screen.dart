@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/chat_info.dart';
 import 'package:game_chat_1/screens/widgets/chat_messages.dart';
@@ -10,13 +11,15 @@ class ChatScreen extends StatefulWidget {
   final String roomCreator;
   final String roomType;
   final String? roomCode;
+  final List<String> roomUser;
   const ChatScreen(
       {super.key,
       required this.roomId,
       required this.roomName,
       required this.roomCreator,
       required this.roomType,
-      this.roomCode});
+      this.roomCode,
+      required this.roomUser});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -36,6 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (ctx) => ChatInfo(
                     owner: widget.roomCreator,
+                    users: widget.roomUser,
                   ),
                 ));
               },

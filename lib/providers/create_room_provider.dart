@@ -6,8 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/chat_screen.dart';
 
 class CreateRoomProvider extends ChangeNotifier {
+  CreateRoomProvider(){
+    setCurrentUsername();
+  }
   int selectedNumber = 1; // Varsayılan seçilen sayı 1
   String selectedRoomType = "";
+  String currentUsername = "";
+  void setCurrentUsername() async {
+    currentUsername = await getUsernameFromUserId(FirebaseAuth.instance.currentUser!.uid);
+    notifyListeners();
+  }
 
   TextEditingController roomName = TextEditingController();
   TextEditingController roomDescription = TextEditingController();
@@ -45,6 +53,24 @@ class CreateRoomProvider extends ChangeNotifier {
       });
 
       await roomRef.collection("roomUser").add({'username': creatorUsername});
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(roomRef.id)
+          .collection('roomUser')
+          .get();
+      List<String> usernames = [];
+      if (querySnapshot.docs.isNotEmpty) {
+        for (var doc in querySnapshot.docs) {
+          Map<String, dynamic> data = doc.data();
+          String username = data['username'];
+
+          usernames.add(username);
+        }
+
+        print("Usernames in the room: $usernames");
+      } else {
+        print("No usernames found in the room.");
+      }
       if (selectedRoomType == "Private") {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (ctx) => ChatScreen(
@@ -52,6 +78,7 @@ class CreateRoomProvider extends ChangeNotifier {
             roomName: roomName.text,
             roomCode: code,
             roomCreator: creatorUsername, roomType: selectedRoomType,
+            roomUser: usernames,
           ),
         ));
       } else {
@@ -60,6 +87,7 @@ class CreateRoomProvider extends ChangeNotifier {
             roomId: roomRef.id, // Oda belgesinin ID'sini geçir
             roomName: roomName.text,
             roomCreator: creatorUsername, roomType: selectedRoomType,
+            roomUser: usernames,
           ),
         ));
       }

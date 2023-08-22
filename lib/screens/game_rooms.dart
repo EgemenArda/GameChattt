@@ -91,6 +91,7 @@ class _GameRoomsState extends State<GameRooms> {
                                   child: Text('No rooms found.'));
                             } else {
                               final rooms = snapshot.data;
+
                               return SafeArea(
                                 child: SizedBox(
                                   height: 400,

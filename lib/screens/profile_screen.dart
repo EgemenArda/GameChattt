@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
@@ -38,9 +39,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: NetworkImage(provider.userImage),
+                        StreamBuilder(
+                          stream: provider.streamImagesFromUserId(FirebaseAuth.instance.currentUser!.uid),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            return CircleAvatar(
+                              radius: 50,
+                              backgroundImage: NetworkImage(provider.userImage),
+                            );
+                          },
                         ),
                         Positioned(
                           bottom: 0,

@@ -3,12 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreenProvider extends ChangeNotifier {
-  String user = FirebaseAuth.instance.currentUser!.uid;
-
-  ProfileScreenProvider() {
-    getImageFromUserId(user);
-  }
-
   final formKey = GlobalKey<FormState>();
 
   TextEditingController usernameController = TextEditingController();
@@ -55,15 +49,17 @@ class ProfileScreenProvider extends ChangeNotifier {
 
   String userImage = "";
 
-  void getImageFromUserId(String userId) async {
-    DocumentSnapshot userSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
-
-    if (userSnapshot.exists) {
-      Map<String, dynamic>? userData =
-          userSnapshot.data() as Map<String, dynamic>?;
-      userImage = userData!["image_url"];
-    }
-    notifyListeners();
+  Stream<void> streamImagesFromUserId(String userId) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .snapshots()
+        .map((userSnapshot) {
+      if (userSnapshot.exists) {
+        Map<String, dynamic>? userData =
+            userSnapshot.data() as Map<String, dynamic>?;
+        userImage = userData!["image_url"];
+      }
+    });
   }
 }

@@ -9,9 +9,24 @@ import '../screens/widgets/custom_alert_dialog.dart';
 class GameRoomProvider extends ChangeNotifier {
   Stream<List<Rooms>> getRooms() {
     final stream = FirebaseFirestore.instance.collection("rooms").snapshots();
-    return stream.map((event) => event.docs.map((doc) {
-          return Rooms.fromSnapshot(doc);
-        }).toList());
+
+    return stream.asyncMap((event) async {
+      final roomFutures = event.docs.map((doc) async {
+        final room = Rooms.fromSnapshot(doc);
+        final roomUserCollection = doc.reference.collection("roomUser");
+
+        final roomUserSnapshot = await roomUserCollection.get();
+        if (roomUserSnapshot.docs.isEmpty) {
+          await doc.reference.delete();
+          return null;
+        }
+
+        return room;
+      }).toList();
+
+      final rooms = await Future.wait(roomFutures);
+      return rooms.whereType<Rooms>().toList(); // Filter out null values
+    });
   }
 
   Stream<List<Rooms>> getMyRooms(String username) {
@@ -114,6 +129,7 @@ class GameRoomProvider extends ChangeNotifier {
                       roomCreator: roomCreator,
                       roomType: roomType,
                       roomCode: roomCode,
+                      roomUser: usernames,
                     ),
                   ));
                 } else {
@@ -173,6 +189,7 @@ class GameRoomProvider extends ChangeNotifier {
                             roomCreator: roomCreator,
                             roomType: roomType,
                             roomCode: roomCode,
+                            roomUser: usernames,
                           ),
                         ));
                       } else {
@@ -191,6 +208,7 @@ class GameRoomProvider extends ChangeNotifier {
                           roomCreator: roomCreator,
                           roomType: roomType,
                           roomCode: roomCode,
+                          roomUser: usernames,
                         ),
                       ));
                     }

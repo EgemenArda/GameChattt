@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/screens/widgets/reply_messages.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -12,7 +13,12 @@ class NewMessage extends StatefulWidget {
   final FocusNode focusNode;
   final replyMessage;
   final VoidCallback onCancelReply;
-  const NewMessage({super.key, required this.roomId, required this.focusNode, required this.onCancelReply, required this.replyMessage});
+  const NewMessage(
+      {super.key,
+      required this.roomId,
+      required this.focusNode,
+      required this.onCancelReply,
+      required this.replyMessage});
 
   @override
   State<NewMessage> createState() => _NewMessageState();
@@ -81,7 +87,7 @@ class _NewMessageState extends State<NewMessage> {
 
   @override
   Widget build(BuildContext context) {
-    final isReplying = widget.replyMessage != null;  
+    final isReplying = widget.replyMessage != null;
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 1, bottom: 14),
       child: Row(
@@ -91,7 +97,7 @@ class _NewMessageState extends State<NewMessage> {
             icon: const Icon(Icons.photo),
             color: Theme.of(context).colorScheme.primary,
           ),
-          
+          // if (isReplying) buildReply(),
           Expanded(
             child: TextField(
               focusNode: widget.focusNode,
@@ -111,4 +117,16 @@ class _NewMessageState extends State<NewMessage> {
       ),
     );
   }
+
+  // Widget buildReply() => Container(
+  //       padding: EdgeInsets.all(8),
+  //       decoration: BoxDecoration(
+  //           color: Colors.grey.withOpacity(0.2),
+  //           borderRadius: const BorderRadius.only(
+  //             topLeft: Radius.circular(12),
+  //             topRight: Radius.circular(24),
+  //           )),
+  //       child: ReplyMessageWidget(
+  //           message: widget.replyMessage, onCancelReply: widget.onCancelReply),
+  //     );
 }
