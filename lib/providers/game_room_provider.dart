@@ -33,7 +33,7 @@ class GameRoomProvider extends ChangeNotifier {
   }
 
   Stream<List<String>> getUsersInRoom(String roomId) {
-    final stream = FirebaseFirestore.instance.collection('users').doc(roomId).collection('roomUser').snapshots();
+    final stream = FirebaseFirestore.instance.collection('rooms').doc(roomId).collection('roomUser').snapshots();
 
     return stream.map((querySnapshot) {
       List<String> usersInRoom = [];
@@ -43,6 +43,7 @@ class GameRoomProvider extends ChangeNotifier {
 
       return usersInRoom;
     });
+    
   }
 
   Stream<List<Rooms>> getMyRooms(String username) {

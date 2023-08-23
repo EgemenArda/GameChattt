@@ -6,14 +6,18 @@ import 'package:game_chat_1/providers/game_room_provider.dart';
 import 'package:provider/provider.dart';
 
 class ChatInfo extends StatefulWidget {
-  const ChatInfo(
-      {super.key,
-      required this.owner,
-      required this.users,
-      required this.roomId});
+  const ChatInfo({
+    super.key,
+    required this.owner,
+    required this.users,
+    required this.roomId,
+    required this.userImage,
+  });
 
   final String owner;
   final String roomId;
+  final String userImage;
+
   final List<String> users;
 
   @override
@@ -42,7 +46,8 @@ class _ChatInfoState extends State<ChatInfo> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No users found beside Owner!'));
+                      return const Center(
+                          child: Text('No users found beside Owner!'));
                     } else {
                       final usersInRoom = snapshot.data;
                       return SizedBox(
@@ -80,6 +85,10 @@ class _ChatInfoState extends State<ChatInfo> {
                             } else {
                               return ListTile(
                                 title: Text(usersInRoom[index]),
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(widget.userImage),
+                                  backgroundColor: Colors.transparent,
+                                ),
                               );
                             }
                           },

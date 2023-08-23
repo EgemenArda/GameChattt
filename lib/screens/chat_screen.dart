@@ -11,6 +11,7 @@ class ChatScreen extends StatefulWidget {
   final String roomName;
   final String roomCreator;
   final String roomType;
+
   final String? roomCode;
   final List<String> roomUser;
 
@@ -58,6 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     roomId: widget.roomId,
                     owner: widget.roomCreator,
                     users: widget.roomUser,
+                    userImage: '',
                   ),
                 ));
               },
