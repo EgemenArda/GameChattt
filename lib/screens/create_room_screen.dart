@@ -90,7 +90,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                             items: List<DropdownMenuItem<int>>.generate(10,
                                 (int index) {
                               return DropdownMenuItem<int>(
-                                value: index + 1,
+                                value: index += 1,
                                 child: Text((index + 1).toString()),
                               );
                             }),

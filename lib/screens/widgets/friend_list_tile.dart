@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/screens/user_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/profile_proivder.dart';
@@ -17,20 +18,27 @@ class FriendListTile extends StatelessWidget {
         leading: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundImage: NetworkImage(friendsImage),
-              backgroundColor: Colors.transparent,
-              // child: Container(
-              //   height: 30,
-              //   width: 30,
-              //   decoration: BoxDecoration(
-              //     shape: BoxShape.circle,
-              //     color: Colors.green,
-              //   ),
-              // ),
-              ///To Do child conteiner positonal olarak ayarlanacak sol alt ya da sag altta cıkacak
-              ///kullanıcı statusune göre renk degiştirecek
+            InkWell(
+              onTap: (){
+                 Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => UserPageScreen(profilePicture: friendsImage, username: friendsName)
+                  ));
+              },
+              child: CircleAvatar(
+                radius: 24,
+                backgroundImage: NetworkImage(friendsImage),
+                backgroundColor: Colors.transparent,
+                // child: Container(
+                //   height: 30,
+                //   width: 30,
+                //   decoration: BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     color: Colors.green,
+                //   ),
+                // ),
+                ///To Do child conteiner positonal olarak ayarlanacak sol alt ya da sag altta cıkacak
+                ///kullanıcı statusune göre renk degiştirecek
+              ),
             ),
           ],
         ),
