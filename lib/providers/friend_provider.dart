@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class FriendsProvider extends ChangeNotifier {
   TextEditingController friendUsernameController = TextEditingController();
 
-  Future<void> _sendFriendRequest(context) async {
+  Future<void> sendFriendRequest(context) async {
     final friendUsername = friendUsernameController.text.trim();
 
     if (friendUsername.isEmpty) {
@@ -85,7 +85,7 @@ class FriendsProvider extends ChangeNotifier {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  _sendFriendRequest(context);
+                  sendFriendRequest(context);
                 },
                 child: const Text('Send Friend Request'),
               ),
