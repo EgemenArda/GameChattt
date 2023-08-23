@@ -12,6 +12,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ProfileScreenProvider>(context).updateTheImageNow();
     return ConnectionCheck(
       child: Scaffold(
         appBar: AppBar(

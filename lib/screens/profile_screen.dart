@@ -39,15 +39,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        StreamBuilder(
-                          stream: provider.streamImagesFromUserId(FirebaseAuth.instance.currentUser!.uid),
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            return CircleAvatar(
-                              radius: 50,
-                              backgroundImage: NetworkImage(provider.userImage),
-                            );
-                          },
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(provider.userImage),
                         ),
                         Positioned(
                           bottom: 0,

@@ -12,7 +12,7 @@ class ProfileScreenProvider extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  ProfileScreenProvider() {
+  updateTheImageNow() {
     streamImagesFromUserId(auth.currentUser!.uid);
   }
 
@@ -53,18 +53,15 @@ class ProfileScreenProvider extends ChangeNotifier {
 
   String userImage = "";
 
-  Stream<void> streamImagesFromUserId(String userId) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .snapshots()
-        .map((userSnapshot) {
-      if (userSnapshot.exists) {
-        Map<String, dynamic>? userData =
-            userSnapshot.data() as Map<String, dynamic>?;
-        userImage = userData!["image_url"];
-      }
-      notifyListeners();
-    });
+  streamImagesFromUserId(String userId) async{
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (documentSnapshot.exists) {
+      userImage = documentSnapshot.data()?['image_url'] ?? 'image yok la gardaş';
+    } else {
+      print('Belge bulunamadı.');
+    }
+    notifyListeners();
   }
 }
