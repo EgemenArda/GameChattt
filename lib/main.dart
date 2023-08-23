@@ -11,7 +11,6 @@ import 'package:game_chat_1/screens/home_screen.dart';
 import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:game_chat_1/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
-
 import 'firebase_options.dart';
 
 void main() async {

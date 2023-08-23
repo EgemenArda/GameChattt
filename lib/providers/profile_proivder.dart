@@ -12,6 +12,10 @@ class ProfileScreenProvider extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
+  ProfileScreenProvider() {
+    streamImagesFromUserId(auth.currentUser!.uid);
+  }
+
   checkEmailVerification() async {
     // User? user = auth.currentUser;
     await FirebaseAuth.instance.currentUser!.reload();
@@ -60,6 +64,7 @@ class ProfileScreenProvider extends ChangeNotifier {
             userSnapshot.data() as Map<String, dynamic>?;
         userImage = userData!["image_url"];
       }
+      notifyListeners();
     });
   }
 }

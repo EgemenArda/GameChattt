@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onPressed: () {
                                 showDialog(
                                     context: context,
-                                    builder: (ctx) => CustomImagePicker());
+                                    builder: (ctx) => CustomImagePicker(username:widget.username,));
                               }),
                         ),
                       ],
