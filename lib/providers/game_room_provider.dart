@@ -32,6 +32,19 @@ class GameRoomProvider extends ChangeNotifier {
     });
   }
 
+  Stream<List<String>> getUsersInRoom(String roomId) {
+    final stream = FirebaseFirestore.instance.collection('users').doc(roomId).collection('roomUser').snapshots();
+
+    return stream.map((querySnapshot) {
+      List<String> usersInRoom = [];
+      for (var doc in querySnapshot.docs) {
+        usersInRoom.add(doc.data()['username']);
+      }
+
+      return usersInRoom;
+    });
+  }
+
   Stream<List<Rooms>> getMyRooms(String username) {
     final stream = FirebaseFirestore.instance
         .collectionGroup('roomUser')

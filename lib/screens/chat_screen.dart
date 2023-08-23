@@ -55,6 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (ctx) => ChatInfo(
+                    roomId: widget.roomId,
                     owner: widget.roomCreator,
                     users: widget.roomUser,
                   ),
