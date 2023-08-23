@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/chat_info.dart';
 import 'package:game_chat_1/screens/widgets/chat_messages.dart';
@@ -12,6 +13,7 @@ class ChatScreen extends StatefulWidget {
   final String roomType;
   final String? roomCode;
   final List<String> roomUser;
+
   const ChatScreen(
       {super.key,
       required this.roomId,
@@ -26,8 +28,23 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  void setupPushNotifications() async {
+    final fcm = FirebaseMessaging.instance;
+
+    await fcm.requestPermission();
+    final token = fcm.getToken();
+    print(token);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupPushNotifications();
+  }
+
   var ReplyMessage;
   final focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
             focusNode: focusNode,
             onCancelReply: cancelReply,
             replyMessage: ReplyMessage,
-          ) // NewMessage widget'i burada
+          )
         ],
       ),
     );

@@ -7,8 +7,11 @@ import 'package:game_chat_1/screens/chat_screen.dart';
 import '../screens/widgets/custom_alert_dialog.dart';
 
 class GameRoomProvider extends ChangeNotifier {
-  Stream<List<Rooms>> getRooms() {
-    final stream = FirebaseFirestore.instance.collection("rooms").snapshots();
+  Stream<List<Rooms>> getRooms(gameName) {
+    final stream = FirebaseFirestore.instance
+        .collection("rooms")
+        .where("game_name", isEqualTo: gameName)
+        .snapshots();
 
     return stream.asyncMap((event) async {
       final roomFutures = event.docs.map((doc) async {

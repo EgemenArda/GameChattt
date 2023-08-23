@@ -76,7 +76,7 @@ class _GameRoomsState extends State<GameRooms> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         StreamBuilder(
-                          stream: provider.getRooms(),
+                          stream: provider.getRooms(widget.gameName),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -91,6 +91,10 @@ class _GameRoomsState extends State<GameRooms> {
                                   child: Text('No rooms found.'));
                             } else {
                               final rooms = snapshot.data;
+                              // final filteredRooms = snapshot.data?.where(
+                              //     (game) => game.gameName == widget.gameName);
+                              // print(filteredRooms);
+                              // print(rooms);
 
                               return SafeArea(
                                 child: SizedBox(
