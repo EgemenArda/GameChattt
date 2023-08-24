@@ -14,13 +14,8 @@ class GameRoomProvider extends ChangeNotifier {
         .snapshots();
 
     return stream.map((event) => event.docs.map((doc) {
-<<<<<<< HEAD
-          return Rooms.fromSnapshot(doc);
-        }).toList());
-=======
       return Rooms.fromSnapshot(doc);
     }).toList());
->>>>>>> ec74ba72f4c4f10fba75aa0703c494bc6c5d06d1
   }
 
   Stream<int> compareAfterDate(String roomId) async* {

@@ -4,7 +4,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/chat_info.dart';
 import 'package:game_chat_1/screens/widgets/chat_messages.dart';
+import 'package:game_chat_1/screens/widgets/chat_messages_dm.dart';
 import 'package:game_chat_1/screens/widgets/new_messages.dart';
+import 'package:game_chat_1/screens/widgets/new_messages_dm.dart';
 import 'package:swipe_to/swipe_to.dart';
 
 class DmScreen extends StatefulWidget {
@@ -57,14 +59,14 @@ class _DmScreenState extends State<DmScreen> {
       body: Column(
         children: [
           Expanded(
-              child: ChatMessages(
+              child: ChatMessagesDm(
             roomId: widget.roomId,
             onSwippedMessage: (message) {
               replyToMessage(message);
               focusNode.requestFocus();
             },
           )), // ChatMessages widget'i burada
-          NewMessage(
+          NewMessagesDm(
             roomId: widget.roomId,
             focusNode: focusNode,
             onCancelReply: cancelReply,
