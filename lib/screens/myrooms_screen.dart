@@ -17,14 +17,7 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text('debuggurum benum'),
-          ),
-        ],
-      ),
+      appBar: AppBar(),
       body: Consumer<GameRoomProvider>(
         builder: (context, provider, child) {
           return SingleChildScrollView(

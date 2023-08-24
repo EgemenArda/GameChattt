@@ -17,19 +17,16 @@ class DmCreateProvider extends ChangeNotifier {
 
     if (user1Rooms.docs.isNotEmpty) {
       print('Ysdasdasd');
-
+      String roomId = user1Rooms.docs[0].id; // Get the ID of the existing room
       Navigator.of(context).push(MaterialPageRoute(
           builder: (ctx) => DmScreen(
-                roomId: dmCollection.doc().id,
+                roomId: roomId,
                 roomName: user2,
                 roomImage: userImage,
               )));
     } else {
       DocumentReference newDmRoom = await dmCollection.add({
-        'roomUser': [
-          user1,
-          user2
-        ] // Burada alan adını 'roomUser' olarak düzelttim
+        'roomUser': [user1, user2]
       });
       Navigator.of(context).push(MaterialPageRoute(
           builder: (ctx) => DmScreen(
