@@ -17,7 +17,14 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: const Text('debuggurum benum'),
+          ),
+        ],
+      ),
       body: Consumer<GameRoomProvider>(
         builder: (context, provider, child) {
           return SingleChildScrollView(
@@ -62,19 +69,39 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                                       rooms[index].roomCode);
                                 },
                                 child: ListTile(
-                                  leading: rooms[index].roomType == "Private"
-                                      ? Icon(Icons.lock_outline)
-                                      : Icon(Icons.lock_open_outlined),
+                                  leading: StreamBuilder<int>(
+                                    stream: provider.compareAfterDate(
+                                        rooms[index].documentId),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      }
+                                      if (snapshot.hasError) {
+                                        return const Text("0");
+                                      }
+                                      final messageCount = snapshot.data ?? 0;
+                                      return Text(
+                                        "$messageCount",
+                                        style: const TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                   title: Text(rooms[index].roomName),
                                   subtitle: Text(rooms[index].roomDescription),
                                   trailing: ElevatedButton(
                                     onPressed: () async {
-                                      QuerySnapshot snapshot = await FirebaseFirestore.instance
-                                          .collection('rooms')
-                                          .doc(rooms[index].documentId)
-                                          .collection('roomUser')
-                                          .where('username', isEqualTo: widget.username)
-                                          .get();
+                                      QuerySnapshot snapshot =
+                                          await FirebaseFirestore.instance
+                                              .collection('rooms')
+                                              .doc(rooms[index].documentId)
+                                              .collection('roomUser')
+                                              .where('username',
+                                                  isEqualTo: widget.username)
+                                              .get();
                                       if (snapshot.size > 0) {
                                         String docId = snapshot.docs[0].id;
                                         await FirebaseFirestore.instance
@@ -85,7 +112,7 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                                             .delete();
                                       }
                                     },
-                                    child: Text('Odadan ayrıl'),
+                                    child: const Text('Odadan ayrıl'),
                                   ),
                                 ),
                               );
