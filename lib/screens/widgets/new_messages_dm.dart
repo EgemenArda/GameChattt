@@ -23,7 +23,7 @@ class NewMessagesDm extends StatefulWidget {
   State<NewMessagesDm> createState() => _NewMessagesDmState();
 }
 
-class _NewMessagesDmState extends State<NewMessage> {
+class _NewMessagesDmState extends State<NewMessagesDm> {
   final _messageController = TextEditingController();
 
   @override

@@ -7,7 +7,8 @@ class DmCreateProvider extends ChangeNotifier {
   DocumentReference roomRef =
       FirebaseFirestore.instance.collection('direct-messages').doc();
 
-  Future<void> checkAndCreateDMRoom(String user1, String user2, context, userImage) async {
+  Future<void> checkAndCreateDMRoom(
+      String user1, String user2, context, userImage) async {
     CollectionReference dmCollection =
         FirebaseFirestore.instance.collection('direct-messages');
 
@@ -18,7 +19,11 @@ class DmCreateProvider extends ChangeNotifier {
       print('Ysdasdasd');
 
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (ctx) => DmScreen(roomId: roomRef.id, roomName: user2, roomImage: userImage,)));
+          builder: (ctx) => DmScreen(
+                roomId: dmCollection.doc().id,
+                roomName: user2,
+                roomImage: userImage,
+              )));
     } else {
       DocumentReference newDmRoom = await dmCollection.add({
         'roomUser': [
@@ -26,6 +31,12 @@ class DmCreateProvider extends ChangeNotifier {
           user2
         ] // Burada alan adını 'roomUser' olarak düzelttim
       });
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (ctx) => DmScreen(
+                roomId: newDmRoom.id,
+                roomName: user2,
+                roomImage: userImage,
+              )));
       print('Yeni DM odası oluşturuldu: ${newDmRoom.id}');
     }
   }
