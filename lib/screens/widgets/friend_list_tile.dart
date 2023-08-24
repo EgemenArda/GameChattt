@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/providers/dm_create_provider.dart';
+import 'package:game_chat_1/screens/dm_screen.dart';
 import 'package:game_chat_1/screens/user_page.dart';
 import 'package:provider/provider.dart';
 
@@ -84,17 +86,9 @@ class FriendListTile extends StatelessWidget {
 
                   String creatorUsername = await getUsernameFromUserId(
                       FirebaseAuth.instance.currentUser!.uid);
-                  DocumentReference roomRef =
-                      FirebaseFirestore.instance.collection('dm').doc();
-                  await roomRef.collection("roomUser").add({
-                    'username': friendsName,
-                  });
-                  await roomRef.collection("roomUser").add({
-                    'username': creatorUsername,
-                  });
-                  await roomRef.set({
-                    'room_size': 2,
-                  });
+
+                 // ignore: use_build_context_synchronously
+                 Provider.of<DmCreateProvider>(context, listen: false).checkAndCreateDMRoom(creatorUsername, friendsName, context, friendsImage);
                 },
                 icon: const Icon(Icons.mail_outline)),
             IconButton(

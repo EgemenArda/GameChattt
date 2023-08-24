@@ -13,27 +13,17 @@ class GameRoomProvider extends ChangeNotifier {
         .where("game_name", isEqualTo: gameName)
         .snapshots();
 
-    return stream.asyncMap((event) async {
-      final roomFutures = event.docs.map((doc) async {
-        final room = Rooms.fromSnapshot(doc);
-        final roomUserCollection = doc.reference.collection("roomUser");
-
-        final roomUserSnapshot = await roomUserCollection.get();
-        if (roomUserSnapshot.docs.isEmpty) {
-          await doc.reference.delete();
-          return null;
-        }
-
-        return room;
-      }).toList();
-
-      final rooms = await Future.wait(roomFutures);
-      return rooms.whereType<Rooms>().toList(); // Filter out null values
-    });
+    return stream.map((event) => event.docs.map((doc) {
+          return Rooms.fromSnapshot(doc);
+        }).toList());
   }
 
   Stream<List<String>> getUsersInRoom(String roomId) {
-    final stream = FirebaseFirestore.instance.collection('rooms').doc(roomId).collection('roomUser').snapshots();
+    final stream = FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('roomUser')
+        .snapshots();
 
     return stream.map((querySnapshot) {
       List<String> usersInRoom = [];
@@ -43,7 +33,6 @@ class GameRoomProvider extends ChangeNotifier {
 
       return usersInRoom;
     });
-    
   }
 
   Stream<List<Rooms>> getMyRooms(String username) {
