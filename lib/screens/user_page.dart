@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/friend_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../services/status_service.dart';
+
 class UserPageScreen extends StatelessWidget {
+
+  final OnlineStatusService _onlineStatusService = OnlineStatusService();
+
   UserPageScreen(
       {super.key, required this.profilePicture, required this.username});
+
   String username;
   String profilePicture;
 
@@ -25,12 +31,24 @@ class UserPageScreen extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                   ),
                 ),
-                SizedBox(
-                  height: 12,
+                SizedBox(height: 12),
+                Container(
+                  child: StreamBuilder<bool>(
+                    stream: _onlineStatusService.onlineStatusStream(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        bool isOnline = snapshot.data!;
+                        return Text(isOnline ? 'Online' : 'Offline');
+                      } else {
+                        return Text('...');
+                      }
+                    },
+                  ),
                 ),
+                SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: () {
-                    provider.sendFriendRequest(context);
+                    provider.sendFriendRequestWithButton(context, username);
                   },
                   child: const Text('Send Friend Request'),
                 ),

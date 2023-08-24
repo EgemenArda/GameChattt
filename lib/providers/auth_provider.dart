@@ -5,7 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/home_screen.dart';
 
+import '../services/status_service.dart';
+
 class AuthProvider extends ChangeNotifier {
+
+  final OnlineStatusService _onlineStatusService = OnlineStatusService();
+
+  void signIn() async {
+    await _onlineStatusService.updateOnlineStatus(true);
+  }
+
   final _firebase = FirebaseAuth.instance;
 
   TextEditingController phoneController = TextEditingController();
@@ -69,6 +78,7 @@ class AuthProvider extends ChangeNotifier {
 
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+      signIn();
     } on FirebaseAuthException catch (error) {
       showDialog(
         context: context,

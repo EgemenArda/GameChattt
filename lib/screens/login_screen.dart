@@ -6,6 +6,7 @@ import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../services/status_service.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -19,6 +20,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  final OnlineStatusService _onlineStatusService = OnlineStatusService();
+
+  void signIn() async {
+    await _onlineStatusService.updateOnlineStatus(true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           );
                                         } else {
                                           provider.login(context);
+                                          signIn();
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(

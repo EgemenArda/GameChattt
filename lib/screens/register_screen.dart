@@ -5,6 +5,7 @@ import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../services/status_service.dart';
 import 'login_screen.dart';
 
 // final _firebase = FirebaseAuth.instance;
@@ -17,6 +18,12 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final OnlineStatusService _onlineStatusService = OnlineStatusService();
+
+  void signIn() async {
+    await _onlineStatusService.updateOnlineStatus(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     void registerControl() {

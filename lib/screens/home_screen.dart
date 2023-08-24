@@ -7,8 +7,16 @@ import '../providers/homepage_provider.dart';
 import '../providers/profile_proivder.dart';
 import 'game_rooms.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget with WidgetsBindingObserver {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+ 
 
   @override
   Widget build(BuildContext context) {

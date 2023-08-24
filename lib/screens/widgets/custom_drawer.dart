@@ -8,6 +8,8 @@ import 'package:game_chat_1/screens/profile_screen.dart';
 import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../services/status_service.dart';
+
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
 
@@ -16,6 +18,12 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+
+  void signOffline() async {
+    await _onlineStatusService.updateOnlineStatus(false);
+  }
+
+  final OnlineStatusService _onlineStatusService = OnlineStatusService();
   String username = '';
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -49,6 +57,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   void signOut(context) async {
     try {
+      signOffline();
       await FirebaseAuth.instance.signOut();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const LoginScreen()));
