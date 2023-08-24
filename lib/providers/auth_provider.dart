@@ -39,6 +39,16 @@ class AuthProvider extends ChangeNotifier {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
+          .collection('lastDate');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .collection('lastDate')
+          .doc(userCredential.user!.uid)
+          .delete();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
           .collection('pendingRequests');
       await FirebaseFirestore.instance
           .collection('users')

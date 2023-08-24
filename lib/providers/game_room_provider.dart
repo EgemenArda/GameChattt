@@ -14,9 +14,31 @@ class GameRoomProvider extends ChangeNotifier {
         .snapshots();
 
     return stream.map((event) => event.docs.map((doc) {
+<<<<<<< HEAD
           return Rooms.fromSnapshot(doc);
         }).toList());
+=======
+      return Rooms.fromSnapshot(doc);
+    }).toList());
+>>>>>>> ec74ba72f4c4f10fba75aa0703c494bc6c5d06d1
   }
+
+  Stream<int> compareAfterDate(String roomId) async* {
+    DocumentSnapshot<Map<String, dynamic>> userDocSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('lastDate')
+        .doc(roomId)
+        .get();
+    Timestamp before = userDocSnapshot.data()?['left'];
+    QuerySnapshot<Map<String, dynamic>> messagesAfterDate = await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('messages').where('createdAt', isGreaterThan: before).get();
+
+    yield messagesAfterDate.docs.length;
+  }
+
 
   Stream<List<String>> getUsersInRoom(String roomId) {
     final stream = FirebaseFirestore.instance
@@ -47,10 +69,10 @@ class GameRoomProvider extends ChangeNotifier {
       for (var doc in event.docs) {
         String roomPath = doc.reference.parent.parent!.id;
         DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
-            await FirebaseFirestore.instance
-                .collection('rooms')
-                .doc(roomPath)
-                .get();
+        await FirebaseFirestore.instance
+            .collection('rooms')
+            .doc(roomPath)
+            .get();
 
         if (roomSnapshot.exists) {
           myRooms.add(Rooms.fromSnapshot(roomSnapshot));
@@ -153,8 +175,8 @@ class GameRoomProvider extends ChangeNotifier {
                   } else {
                     if (roomType == "Private") {
                       String enteredPassword =
-                          // ignore: use_build_context_synchronously
-                          await showDialog(
+                      // ignore: use_build_context_synchronously
+                      await showDialog(
                         context: context,
                         builder: (context) {
                           String password = '';
@@ -230,11 +252,11 @@ class GameRoomProvider extends ChangeNotifier {
 
   Future<String> getUsernameFromUserId(String userId) async {
     DocumentSnapshot userSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (userSnapshot.exists) {
       Map<String, dynamic>? userData =
-          userSnapshot.data() as Map<String, dynamic>?;
+      userSnapshot.data() as Map<String, dynamic>?;
       if (userData != null && userData.containsKey('username')) {
         return userData['username'];
       } else {

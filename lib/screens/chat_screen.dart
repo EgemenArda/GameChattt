@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/chat_info.dart';
+import 'package:game_chat_1/screens/home_screen.dart';
 import 'package:game_chat_1/screens/widgets/chat_messages.dart';
 import 'package:game_chat_1/screens/widgets/new_messages.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -51,6 +52,18 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_return),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => HomeScreen()));
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .collection('lastDate')
+                .doc(widget.roomId)
+                .set({'left': Timestamp.now()});
+          },
+        ),
         title: Text(widget.roomCode == null ? "Public Room" : widget.roomCode!),
         actions: [
           IconButton(

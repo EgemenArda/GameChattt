@@ -61,7 +61,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 10,
-      backgroundColor: Color.fromRGBO(44, 8, 78, 0.5),
+      backgroundColor: const Color.fromRGBO(44, 8, 78, 0.5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
