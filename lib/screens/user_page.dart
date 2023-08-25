@@ -33,12 +33,12 @@ class UserPageScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 12),
                 Container(
-                  child: StreamBuilder<bool>(
+                  child: StreamBuilder<String>(
                     stream: _onlineStatusService.onlineStatusStream(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        bool isOnline = snapshot.data!;
-                        return Text(isOnline ? 'Online' : 'Offline');
+                        String isOnline = snapshot.data!;
+                        return Text(isOnline == 'false' ? 'Offline' : 'Online');
                       } else {
                         return Text('...');
                       }

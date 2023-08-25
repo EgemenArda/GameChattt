@@ -71,7 +71,13 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
                                         return const CircularProgressIndicator();
                                       }
                                       if (snapshot.hasError) {
-                                        return const Text("0");
+                                        return const Text(
+                                          "0",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 25,
+                                          ),
+                                        );
                                       }
                                       final messageCount = snapshot.data ?? 0;
                                       return Text(
