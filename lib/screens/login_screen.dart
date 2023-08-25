@@ -20,11 +20,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  final OnlineStatusService _onlineStatusService = OnlineStatusService();
-
-  void signIn() async {
-    await _onlineStatusService.updateOnlineStatus(true);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                           );
                                         } else {
                                           provider.login(context);
-                                          signIn();
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(

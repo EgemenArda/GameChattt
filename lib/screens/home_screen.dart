@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return ConnectionCheck(
       child: Scaffold(
         appBar: AppBar(
-          flexibleSpace: Image(
+          flexibleSpace: const Image(
             image: AssetImage(
               'assets/images/background.jpg',
             ),
@@ -69,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisSpacing: 15,
+                        mainAxisSpacing: 15,
                         crossAxisCount: 2,
                       ),
                       itemCount: provider.games.length,
@@ -88,16 +90,21 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ));
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: Image.network(
-                                      provider.games[index].image,
-                                      fit: BoxFit.contain),
-                                ),
-                              ],
+                          child: Card(
+                            margin: EdgeInsets.all(10),
+                            borderOnForeground: true,
+                            color: Colors.transparent,
+                            child: Padding(
+                              padding: const EdgeInsets.all(25),
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: Image.network(
+                                        provider.games[index].image,
+                                        fit: BoxFit.contain),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );

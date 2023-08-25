@@ -57,7 +57,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   void signOut(context) async {
     try {
-      signOffline();
       await FirebaseAuth.instance.signOut();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const LoginScreen()));
@@ -151,6 +150,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           TextButton.icon(
               onPressed: () {
+                signOffline();
                 signOut(context);
               },
               icon: Icon(

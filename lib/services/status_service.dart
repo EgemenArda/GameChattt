@@ -5,21 +5,16 @@ class OnlineStatusService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Kullanıcının durumunu Firestore'a güncelleyen fonksiyon
   Future<void> updateOnlineStatus(bool isOnline) async {
-    try {
-      final user = _auth.currentUser;
+    print(isOnline);
+    final user = _auth.currentUser;
       if (user != null) {
         final userRef = _firestore.collection('users').doc(user.uid);
-        userRef.set({'isOnline': isOnline});
-      }
-    } catch (error) {
-      print("Online status update error: $error");
+        await userRef.update({'isOnline': '$isOnline'});
     }
   }
 
-  // Kullanıcının online durumunu dinleyen Stream
-  Stream<bool> onlineStatusStream() {
+  Stream<String> onlineStatusStream() {
     final user = _auth.currentUser;
     if (user != null) {
       final userRef = _firestore.collection('users').doc(user.uid);
@@ -27,7 +22,7 @@ class OnlineStatusService {
         return snapshot.data()?['isOnline'] ?? false;
       });
     } else {
-      return Stream<bool>.value(false);
+      return Stream<String>.value('false');
     }
   }
 }

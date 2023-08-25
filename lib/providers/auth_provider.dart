@@ -76,9 +76,9 @@ class AuthProvider extends ChangeNotifier {
           .doc(userCredential.user!.uid)
           .delete();
 
+      signIn();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
-      signIn();
     } on FirebaseAuthException catch (error) {
       showDialog(
         context: context,
@@ -107,6 +107,7 @@ class AuthProvider extends ChangeNotifier {
       final userCredential = await _firebase.signInWithEmailAndPassword(
           email: enteredEmail, password: enteredPassword);
       print('User logged in: ${userCredential.user?.email}');
+      signIn();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException {
