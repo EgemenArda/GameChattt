@@ -32,16 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Builder(
-              builder: (context) => CircleAvatar(
-                backgroundImage: NetworkImage(
-                    Provider.of<ProfileScreenProvider>(context).userImage),
-                child: TextButton(
-                  child: const Text(''),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
+          leading: Builder(
+            builder: (context) => CircleAvatar(
+              backgroundImage: NetworkImage(
+                  Provider.of<ProfileScreenProvider>(context).userImage),
+              child: TextButton(
+                child: const Text(''),
+                onPressed: () => Scaffold.of(context).openDrawer(),
               ),
             ),
           ),
@@ -69,8 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisSpacing: 15,
-                        mainAxisSpacing: 15,
+                            crossAxisSpacing: 24,
+                        mainAxisSpacing: 24,
                         crossAxisCount: 2,
                       ),
                       itemCount: provider.games.length,
@@ -95,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderOnForeground: true,
                             color: Colors.transparent,
                             child: Padding(
-                              padding: const EdgeInsets.all(25),
+                              padding: const EdgeInsets.all(10),
                               child: Stack(
                                 children: [
                                   Center(

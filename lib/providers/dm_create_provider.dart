@@ -31,6 +31,8 @@ class DmCreateProvider extends ChangeNotifier {
         'roomUser': [user1, user2],
         'roomIdentifier': roomIdentifier
       });
+      await dmCollection.doc().collection('dmPeople').add({'username': user1});
+      await dmCollection.doc().collection('dmPeople').add({'username': user2});
       Navigator.of(context).push(MaterialPageRoute(
         builder: (ctx) => DmScreen(
           roomId: newDmRoom.id,

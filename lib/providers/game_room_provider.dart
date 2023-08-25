@@ -17,7 +17,6 @@ class GameRoomProvider extends ChangeNotifier {
           return Rooms.fromSnapshot(doc);
         }).toList());
   }
-
   Stream<int> compareAfterDate(String roomId) async* {
     DocumentSnapshot<Map<String, dynamic>> userDocSnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -66,6 +65,32 @@ class GameRoomProvider extends ChangeNotifier {
         DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
         await FirebaseFirestore.instance
             .collection('rooms')
+            .doc(roomPath)
+            .get();
+
+        if (roomSnapshot.exists) {
+          myRooms.add(Rooms.fromSnapshot(roomSnapshot));
+        }
+      }
+
+      return myRooms;
+    });
+  }
+
+  Stream<List<Rooms>> getMyDms(String username) {
+    final stream = FirebaseFirestore.instance
+        .collectionGroup('dmPeople')
+        .where('username', isEqualTo: username)
+        .snapshots();
+
+    return stream.asyncMap((event) async {
+      List<Rooms> myRooms = [];
+
+      for (var doc in event.docs) {
+        String roomPath = doc.reference.parent.parent!.id;
+        DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
+        await FirebaseFirestore.instance
+            .collection('direct-messages')
             .doc(roomPath)
             .get();
 
