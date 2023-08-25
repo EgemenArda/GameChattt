@@ -28,11 +28,10 @@ class DmCreateProvider extends ChangeNotifier {
       ));
     } else {
       DocumentReference newDmRoom = await dmCollection.add({
-        'roomUser': [user1, user2],
         'roomIdentifier': roomIdentifier
       });
-      await dmCollection.doc().collection('dmPeople').add({'username': user1});
-      await dmCollection.doc().collection('dmPeople').add({'username': user2});
+      await dmCollection.doc(newDmRoom.id).collection('dmPeople').add({'username': user1});
+      await dmCollection.doc(newDmRoom.id).collection('dmPeople').add({'username': user2});
       Navigator.of(context).push(MaterialPageRoute(
         builder: (ctx) => DmScreen(
           roomId: newDmRoom.id,

@@ -44,7 +44,7 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
         builder: (context, provider, child) {
           return SingleChildScrollView(
             child: Center(
-              child: inWhichRooms == 0 ? myRoomsss(username: widget.username,) : myDms(username: widget.username),
+              child: inWhichRooms == 0 ? myRoomsss(username: widget.username,) : myDms(),
             ),
           );
         },

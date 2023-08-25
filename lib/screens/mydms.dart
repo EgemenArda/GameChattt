@@ -1,13 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:game_chat_1/providers/game_room_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:game_chat_1/screens/user_page.dart';
+import 'package:game_chat_1/screens/widgets/friend_list_tile.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/dm_create_provider.dart';
+
 class myDms extends StatefulWidget {
-  myDms({super.key, required this.username});
-
-  String username;
-
   @override
   State<myDms> createState() => _myDmsState();
 }
@@ -15,108 +15,103 @@ class myDms extends StatefulWidget {
 class _myDmsState extends State<myDms> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameRoomProvider>(
-      builder: (context, provider, child) {
-        return Column(
-          children: [
-            StreamBuilder(
-              stream: provider.getMyDms(widget.username),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No dm found.'));
-                } else {
-                  final rooms = snapshot.data;
-                  return SizedBox(
-                    height: 285,
-                    child: ListView.builder(
-                      itemCount: rooms!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
-                          onTap: () async {
-                            CollectionReference _roomCollection =
-                            FirebaseFirestore.instance
-                                .collection('direct-messages');
-                            QuerySnapshot snapshot = await _roomCollection
-                                .doc(rooms[index].documentId)
-                                .collection('dmPeople')
-                                .get();
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
-                            // ignore: use_build_context_synchronously
-                            provider.showAlertDialog(
-                                context,
-                                rooms[index].roomName,
-                                rooms[index].documentId,
-                                rooms[index].roomSize,
-                                snapshot.docs,
-                                rooms[index].roomCreator,
-                                rooms[index].roomType,
-                                rooms[index].roomCode);
-                          },
-                          child: ListTile(
-                            leading: StreamBuilder<int>(
-                              stream: provider.compareAfterDate(
-                                  rooms[index].documentId),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                }
-                                if (snapshot.hasError) {
-                                  return const Text(
-                                    "0",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25,
-                                    ),
-                                  );
-                                }
-                                final messageCount = snapshot.data ?? 0;
-                                return Text(
-                                  "$messageCount",
-                                  style: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                );
-                              },
-                            ),
-                            title: Text(rooms[index].roomName),
-                            subtitle: Text(rooms[index].roomDescription),
-                            trailing: ElevatedButton(
-                              onPressed: () async {
-                                QuerySnapshot snapshot =
-                                await FirebaseFirestore.instance
-                                    .collection('direct-messages')
-                                    .doc(rooms[index].documentId)
-                                    .collection('dmPeople')
-                                    .where('username',
-                                    isEqualTo: widget.username)
-                                    .get();
-                                if (snapshot.size > 0) {
-                                  String docId = snapshot.docs[0].id;
-                                  await FirebaseFirestore.instance
-                                      .collection('direct-messages')
-                                      .doc(rooms[index].documentId)
-                                      .collection('dmPeople')
-                                      .doc(docId)
-                                      .delete();
-                                }
-                              },
-                              child: const Text('Odadan ayrıl'),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserId)
+          .collection('friends')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        List<String> myFriends =
+            List.from(snapshot.data!.docs.map((doc) => doc.id));
+
+        if (myFriends.isEmpty) {
+          return const Center(
+            child: Text('You have no friends yet'),
+          );
+        }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: myFriends.length,
+          itemBuilder: (context, index) {
+            String friendUserId = myFriends[index];
+
+            return FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(friendUserId)
+                  .get(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return SizedBox();
                 }
+
+                String friendUsername = snapshot.data!.get('username');
+                String friendImage = snapshot.data!.get('image_url');
+
+                return ListTile(
+                  leading: Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => UserPageScreen(
+                                  profilePicture: friendImage,
+                                  username: friendUsername)));
+                        },
+                        child: CircleAvatar(
+                          radius: 24,
+                          backgroundImage: NetworkImage(friendImage),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    ],
+                  ),
+                  title: Text(friendUsername,
+                      style: const TextStyle(
+                        fontSize: 24,
+                      )),
+                  subtitle: Text('Son mesaj'),
+                  onTap: () async {
+                    Future<String> getUsernameFromUserId(String userId) async {
+                      DocumentSnapshot userSnapshot = await FirebaseFirestore
+                          .instance
+                          .collection('users')
+                          .doc(userId)
+                          .get();
+
+                      if (userSnapshot.exists) {
+                        Map<String, dynamic>? userData =
+                        userSnapshot.data() as Map<String, dynamic>?;
+                        if (userData != null &&
+                            userData.containsKey('username')) {
+                          return userData['username'];
+                        } else {
+                          return 'Username Not Found';
+                        }
+                      } else {
+                        return 'Unknown User';
+                      }
+                    }
+
+                    String creatorUsername = await getUsernameFromUserId(
+                        FirebaseAuth.instance.currentUser!.uid);
+
+                    // ignore: use_build_context_synchronously
+                    Provider.of<DmCreateProvider>(context, listen: false).checkAndCreateDMRoom(creatorUsername, friendUsername, context, friendImage);
+                  },
+                );
               },
-            ),
-          ],
+            );
+          },
         );
       },
     );
