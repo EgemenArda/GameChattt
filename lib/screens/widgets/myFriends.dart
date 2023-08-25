@@ -54,7 +54,7 @@ class _myFriendsState extends State<myFriends> {
 
                 return FriendListTile(
                   friendsName: friendUsername,
-                  friendsImage: friendImage,
+                  friendsImage: friendImage, index: index,
                 );
               },
             );

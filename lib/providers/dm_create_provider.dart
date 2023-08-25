@@ -6,34 +6,38 @@ import 'package:game_chat_1/screens/dm_screen.dart';
 class DmCreateProvider extends ChangeNotifier {
   DocumentReference roomRef =
       FirebaseFirestore.instance.collection('direct-messages').doc();
-
   Future<void> checkAndCreateDMRoom(
       String user1, String user2, context, userImage) async {
     CollectionReference dmCollection =
         FirebaseFirestore.instance.collection('direct-messages');
 
-    QuerySnapshot user1Rooms = await dmCollection
-        .where('roomUser', arrayContainsAny: [user1, user2]).get();
+    String roomIdentifier = '${user1 + user2}';
 
-    if (user1Rooms.docs.isNotEmpty) {
-      print('Ysdasdasd');
-      String roomId = user1Rooms.docs[0].id; // Get the ID of the existing room
+    QuerySnapshot userRooms = await dmCollection
+        .where('roomIdentifier', isEqualTo: roomIdentifier)
+        .get();
+
+    if (userRooms.docs.isNotEmpty) {
+      String roomId = userRooms.docs.first.id;
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (ctx) => DmScreen(
-                roomId: roomId,
-                roomName: user2,
-                roomImage: userImage,
-              )));
+        builder: (ctx) => DmScreen(
+          roomId: roomId,
+          roomName: user2,
+          roomImage: userImage,
+        ),
+      ));
     } else {
       DocumentReference newDmRoom = await dmCollection.add({
-        'roomUser': [user1, user2]
+        'roomUser': [user1, user2],
+        'roomIdentifier': roomIdentifier
       });
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (ctx) => DmScreen(
-                roomId: newDmRoom.id,
-                roomName: user2,
-                roomImage: userImage,
-              )));
+        builder: (ctx) => DmScreen(
+          roomId: newDmRoom.id,
+          roomName: user2,
+          roomImage: userImage,
+        ),
+      ));
       print('Yeni DM odası oluşturuldu: ${newDmRoom.id}');
     }
   }

@@ -9,12 +9,15 @@ import 'package:provider/provider.dart';
 import '../../providers/profile_proivder.dart';
 
 class FriendListTile extends StatelessWidget {
+
   const FriendListTile(
-      {Key? key, required this.friendsName, required this.friendsImage})
+      {Key? key, required this.friendsName, required this.friendsImage, required this.index})
       : super(key: key);
 
   final String friendsName;
   final String friendsImage;
+  final int index;
+
 
   @override
   Widget build(BuildContext context) {
