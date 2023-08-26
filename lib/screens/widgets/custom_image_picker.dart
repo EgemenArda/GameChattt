@@ -7,7 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/user_image_picker.dart';
 
 class CustomImagePicker extends StatefulWidget {
-  const CustomImagePicker({Key? key}) : super(key: key);
+  const CustomImagePicker({Key? key, required this.userImage})
+      : super(key: key);
+
+  // final Provider<ProfileScreenProvider> provider;
+  final String userImage;
 
   @override
   State<CustomImagePicker> createState() => _CustomImagePickerState();

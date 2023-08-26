@@ -39,7 +39,9 @@ class ProfileScreenProvider extends ChangeNotifier {
               content: const Text('Profile informations successfully changed!'),
               actions: <Widget>[
                 TextButton(
-                  onPressed: () => Navigator.of(ctx).pop(),
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
                   child: Container(
                     color: Colors.green,
                     padding: const EdgeInsets.all(14),

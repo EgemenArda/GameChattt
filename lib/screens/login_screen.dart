@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               .colorScheme
                                               .primaryContainer),
                                       onPressed: () {
-                                        Navigator.of(context).pushReplacement(
+                                        Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (ctx) =>
                                                     const AuthScreen()));
