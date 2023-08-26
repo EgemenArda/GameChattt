@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/message_bubble.dart';
 import 'package:swipe_to/swipe_to.dart';
 
-class ChatMessages extends StatelessWidget {
-  const ChatMessages({super.key, required this.roomId, required this.onSwippedMessage});
+class ChatMessagesDm extends StatelessWidget {
+  const ChatMessagesDm({super.key, required this.roomId, required this.onSwippedMessage});
   final String roomId;
   final ValueChanged onSwippedMessage;
   @override
@@ -15,7 +15,7 @@ class ChatMessages extends StatelessWidget {
 
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection('rooms')
+          .collection('direct-messages')
           .doc(roomId)
           .collection('messages')
           .orderBy('createdAt', descending: true)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:game_chat_1/screens/widgets/friend_list_tile.dart';
 
 class myFriends extends StatefulWidget {
   @override
@@ -13,13 +14,18 @@ class _myFriendsState extends State<myFriends> {
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('users').doc(currentUserId).collection('friends').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserId)
+          .collection('friends')
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return CircularProgressIndicator();
         }
 
-        List<String> myFriends = List.from(snapshot.data!.docs.map((doc) => doc.id));
+        List<String> myFriends =
+            List.from(snapshot.data!.docs.map((doc) => doc.id));
 
         if (myFriends.isEmpty) {
           return const Center(
@@ -34,16 +40,21 @@ class _myFriendsState extends State<myFriends> {
             String friendUserId = myFriends[index];
 
             return FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance.collection('users').doc(friendUserId).get(),
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(friendUserId)
+                  .get(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return SizedBox();
                 }
 
                 String friendUsername = snapshot.data!.get('username');
+                String friendImage = snapshot.data!.get('image_url');
 
-                return ListTile(
-                  title: Text(friendUsername),
+                return FriendListTile(
+                  friendsName: friendUsername,
+                  friendsImage: friendImage, index: index,
                 );
               },
             );

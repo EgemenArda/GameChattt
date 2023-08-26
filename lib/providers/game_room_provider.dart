@@ -7,11 +7,48 @@ import 'package:game_chat_1/screens/chat_screen.dart';
 import '../screens/widgets/custom_alert_dialog.dart';
 
 class GameRoomProvider extends ChangeNotifier {
-  Stream<List<Rooms>> getRooms() {
-    final stream = FirebaseFirestore.instance.collection("rooms").snapshots();
+  Stream<List<Rooms>> getRooms(gameName) {
+    final stream = FirebaseFirestore.instance
+        .collection("rooms")
+        .where("game_name", isEqualTo: gameName)
+        .snapshots();
+
     return stream.map((event) => event.docs.map((doc) {
           return Rooms.fromSnapshot(doc);
         }).toList());
+  }
+  Stream<int> compareAfterDate(String roomId) async* {
+    DocumentSnapshot<Map<String, dynamic>> userDocSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('lastDate')
+        .doc(roomId)
+        .get();
+    Timestamp before = userDocSnapshot.data()?['left'];
+    QuerySnapshot<Map<String, dynamic>> messagesAfterDate = await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('messages').where('createdAt', isGreaterThan: before).get();
+
+    yield messagesAfterDate.docs.length;
+  }
+
+
+  Stream<List<String>> getUsersInRoom(String roomId) {
+    final stream = FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('roomUser')
+        .snapshots();
+
+    return stream.map((querySnapshot) {
+      List<String> usersInRoom = [];
+      for (var doc in querySnapshot.docs) {
+        usersInRoom.add(doc.data()['username']);
+      }
+
+      return usersInRoom;
+    });
   }
 
   Stream<List<Rooms>> getMyRooms(String username) {
@@ -26,10 +63,36 @@ class GameRoomProvider extends ChangeNotifier {
       for (var doc in event.docs) {
         String roomPath = doc.reference.parent.parent!.id;
         DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
-            await FirebaseFirestore.instance
-                .collection('rooms')
-                .doc(roomPath)
-                .get();
+        await FirebaseFirestore.instance
+            .collection('rooms')
+            .doc(roomPath)
+            .get();
+
+        if (roomSnapshot.exists) {
+          myRooms.add(Rooms.fromSnapshot(roomSnapshot));
+        }
+      }
+
+      return myRooms;
+    });
+  }
+
+  Stream<List<Rooms>> getMyDms(String username) {
+    final stream = FirebaseFirestore.instance
+        .collectionGroup('dmPeople')
+        .where('username', isEqualTo: username)
+        .snapshots();
+
+    return stream.asyncMap((event) async {
+      List<Rooms> myRooms = [];
+
+      for (var doc in event.docs) {
+        String roomPath = doc.reference.parent.parent!.id;
+        DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
+        await FirebaseFirestore.instance
+            .collection('direct-messages')
+            .doc(roomPath)
+            .get();
 
         if (roomSnapshot.exists) {
           myRooms.add(Rooms.fromSnapshot(roomSnapshot));
@@ -114,6 +177,7 @@ class GameRoomProvider extends ChangeNotifier {
                       roomCreator: roomCreator,
                       roomType: roomType,
                       roomCode: roomCode,
+                      roomUser: usernames,
                     ),
                   ));
                 } else {
@@ -131,8 +195,8 @@ class GameRoomProvider extends ChangeNotifier {
                   } else {
                     if (roomType == "Private") {
                       String enteredPassword =
-                          // ignore: use_build_context_synchronously
-                          await showDialog(
+                      // ignore: use_build_context_synchronously
+                      await showDialog(
                         context: context,
                         builder: (context) {
                           String password = '';
@@ -173,6 +237,7 @@ class GameRoomProvider extends ChangeNotifier {
                             roomCreator: roomCreator,
                             roomType: roomType,
                             roomCode: roomCode,
+                            roomUser: usernames,
                           ),
                         ));
                       } else {
@@ -191,6 +256,7 @@ class GameRoomProvider extends ChangeNotifier {
                           roomCreator: roomCreator,
                           roomType: roomType,
                           roomCode: roomCode,
+                          roomUser: usernames,
                         ),
                       ));
                     }
@@ -206,11 +272,11 @@ class GameRoomProvider extends ChangeNotifier {
 
   Future<String> getUsernameFromUserId(String userId) async {
     DocumentSnapshot userSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (userSnapshot.exists) {
       Map<String, dynamic>? userData =
-          userSnapshot.data() as Map<String, dynamic>?;
+      userSnapshot.data() as Map<String, dynamic>?;
       if (userData != null && userData.containsKey('username')) {
         return userData['username'];
       } else {

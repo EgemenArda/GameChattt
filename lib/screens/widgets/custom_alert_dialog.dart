@@ -9,9 +9,15 @@ class CustomAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.white.withOpacity(0.4),
-      title: Text(title),
-      content: Text(content),
+      backgroundColor: Colors.white.withOpacity(0.8),
+      title: Text(
+        title,
+        style: TextStyle(color: Colors.black87),
+      ),
+      content: Text(
+        content,
+        style: TextStyle(color: Colors.black54),
+      ),
       actions: <Widget>[
         TextButton(
           onPressed: () {

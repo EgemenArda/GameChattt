@@ -3,12 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreenProvider extends ChangeNotifier {
-  String user = FirebaseAuth.instance.currentUser!.uid;
-
-  ProfileScreenProvider() {
-    getImageFromUserId(user);
-  }
-
   final formKey = GlobalKey<FormState>();
 
   TextEditingController usernameController = TextEditingController();
@@ -17,6 +11,10 @@ class ProfileScreenProvider extends ChangeNotifier {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+  updateTheImageNow() {
+    streamImagesFromUserId(auth.currentUser!.uid);
+  }
 
   checkEmailVerification() async {
     // User? user = auth.currentUser;
@@ -57,14 +55,14 @@ class ProfileScreenProvider extends ChangeNotifier {
 
   String userImage = "";
 
-  void getImageFromUserId(String userId) async {
-    DocumentSnapshot userSnapshot =
+  streamImagesFromUserId(String userId) async{
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
-    if (userSnapshot.exists) {
-      Map<String, dynamic>? userData =
-          userSnapshot.data() as Map<String, dynamic>?;
-      userImage = userData!["image_url"];
+    if (documentSnapshot.exists) {
+      userImage = documentSnapshot.data()?['image_url'] ?? 'image yok la gardaş';
+    } else {
+      print('Belge bulunamadı.');
     }
     notifyListeners();
   }

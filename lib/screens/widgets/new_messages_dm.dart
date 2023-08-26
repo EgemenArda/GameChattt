@@ -7,12 +7,12 @@ import 'package:game_chat_1/screens/widgets/reply_messages.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-class NewMessage extends StatefulWidget {
+class NewMessagesDm extends StatefulWidget {
   final String roomId;
   final FocusNode focusNode;
   final replyMessage;
   final VoidCallback onCancelReply;
-  const NewMessage(
+  const NewMessagesDm(
       {super.key,
       required this.roomId,
       required this.focusNode,
@@ -20,10 +20,10 @@ class NewMessage extends StatefulWidget {
       required this.replyMessage});
 
   @override
-  State<NewMessage> createState() => _NewMessageState();
+  State<NewMessagesDm> createState() => _NewMessagesDmState();
 }
 
-class _NewMessageState extends State<NewMessage> {
+class _NewMessagesDmState extends State<NewMessagesDm> {
   final _messageController = TextEditingController();
 
   @override
@@ -47,7 +47,7 @@ class _NewMessageState extends State<NewMessage> {
         .doc(user.uid)
         .get();
     FirebaseFirestore.instance
-        .collection('rooms')
+        .collection('direct-messages')
         .doc(widget.roomId)
         .collection('messages')
         .add({

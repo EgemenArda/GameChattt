@@ -1,5 +1,4 @@
-import 'dart:html';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
@@ -16,8 +15,6 @@ class ProfileScreen extends StatefulWidget {
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
-
-late final File selectedProfilImage;
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
@@ -61,9 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onPressed: () {
                                 showDialog(
                                     context: context,
-                                    builder: (ctx) => CustomImagePicker(
-                                          userImage: provider.userImage,
-                                        ));
+                                    builder: (ctx) => CustomImagePicker(username:widget.username,));
                               }),
                         ),
                       ],

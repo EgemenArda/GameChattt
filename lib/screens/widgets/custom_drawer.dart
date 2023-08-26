@@ -8,6 +8,8 @@ import 'package:game_chat_1/screens/profile_screen.dart';
 import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../services/status_service.dart';
+
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
 
@@ -16,6 +18,12 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+
+  void signOffline() async {
+    await _onlineStatusService.updateOnlineStatus(false);
+  }
+
+  final OnlineStatusService _onlineStatusService = OnlineStatusService();
   String username = '';
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -61,7 +69,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 10,
-      backgroundColor: Color.fromRGBO(44, 8, 78, 0.5),
+      backgroundColor: const Color.fromRGBO(44, 8, 78, 0.5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -142,6 +150,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           TextButton.icon(
               onPressed: () {
+                signOffline();
                 signOut(context);
               },
               icon: Icon(

@@ -27,83 +27,86 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Form(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(labelText: widget.gameName),
-                      enabled: false,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: "Room Name"),
-                      controller: provider.roomName,
-                    ),
-                    TextFormField(
-                      decoration:
-                          const InputDecoration(labelText: "Room Description"),
-                      controller: provider.roomDescription,
-                    ),
-                    const SizedBox(height: 15),
-                    ListTile(
-                      title: const Text("Public"),
-                      leading: Radio(
-                        value: roomType[0],
-                        groupValue: currentOption,
-                        onChanged: (value) {
-                          setState(() {
-                            currentOption = value.toString();
-                            provider.selectedRoomType = currentOption;
-                          });
-                        },
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(labelText: widget.gameName),
+                        enabled: false,
                       ),
-                    ),
-                    ListTile(
-                      title: const Text("Private"),
-                      leading: Radio(
-                        value: roomType[1],
-                        groupValue: currentOption,
-                        onChanged: (value) {
-                          setState(() {
-                            currentOption = value.toString();
-                            provider.selectedRoomType = currentOption;
-                          });
-                        },
+                      TextFormField(
+                        decoration:
+                            const InputDecoration(labelText: "Room Name"),
+                        controller: provider.roomName,
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Room Size:",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(width: 10),
-                        DropdownButton<int>(
-                          value: provider.selectedNumber,
-                          onChanged: (int? newValue) {
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            labelText: "Room Description"),
+                        controller: provider.roomDescription,
+                      ),
+                      const SizedBox(height: 15),
+                      ListTile(
+                        title: const Text("Public"),
+                        leading: Radio(
+                          value: roomType[0],
+                          groupValue: currentOption,
+                          onChanged: (value) {
                             setState(() {
-                              provider.selectedNumber = newValue!;
+                              currentOption = value.toString();
+                              provider.selectedRoomType = currentOption;
                             });
                           },
-                          items: List<DropdownMenuItem<int>>.generate(10,
-                              (int index) {
-                            return DropdownMenuItem<int>(
-                              value: index + 1,
-                              child: Text((index + 1).toString()),
-                            );
-                          }),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        provider.setGameName(widget.gameName);
-                        provider.createRoom(context);
-                      },
-                      child: const Text("Create Room"),
-                    )
-                  ],
+                      ),
+                      ListTile(
+                        title: const Text("Private"),
+                        leading: Radio(
+                          value: roomType[1],
+                          groupValue: currentOption,
+                          onChanged: (value) {
+                            setState(() {
+                              currentOption = value.toString();
+                              provider.selectedRoomType = currentOption;
+                            });
+                          },
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Room Size:",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(width: 10),
+                          DropdownButton<int>(
+                            value: provider.selectedNumber,
+                            onChanged: (int? newValue) {
+                              setState(() {
+                                provider.selectedNumber = newValue!;
+                              });
+                            },
+                            items: List<DropdownMenuItem<int>>.generate(10,
+                                (int index) {
+                              return DropdownMenuItem<int>(
+                                value: index += 1,
+                                child: Text((index + 1).toString()),
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          provider.setGameName(widget.gameName);
+                          provider.createRoom(context);
+                        },
+                        child: const Text("Create Room"),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

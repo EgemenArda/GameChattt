@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class FriendsProvider extends ChangeNotifier {
   TextEditingController friendUsernameController = TextEditingController();
 
-  Future<void> _sendFriendRequest(context) async {
+  Future<void> sendFriendRequest(context) async {
     final friendUsername = friendUsernameController.text.trim();
 
     if (friendUsername.isEmpty) {
@@ -68,6 +68,42 @@ class FriendsProvider extends ChangeNotifier {
     );
   }
 
+  Future<void> sendFriendRequestWithButton(context, friendUsername) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: friendUsername)
+        .get();
+    String friendUserId = querySnapshot.docs[0].id;
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(friendUserId)
+        .collection('pendingRequests')
+        .doc(currentUserId)
+        .set({
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Friend Request Sent'),
+          content: Text('Friend request sent to $friendUsername'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void showFriendsDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -85,7 +121,7 @@ class FriendsProvider extends ChangeNotifier {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  _sendFriendRequest(context);
+                  sendFriendRequest(context);
                 },
                 child: const Text('Send Friend Request'),
               ),

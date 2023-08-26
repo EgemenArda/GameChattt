@@ -5,12 +5,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/home_screen.dart';
 
+import '../services/status_service.dart';
+
 class AuthProvider extends ChangeNotifier {
+
+  final OnlineStatusService _onlineStatusService = OnlineStatusService();
+
+  void signIn() async {
+    await _onlineStatusService.updateOnlineStatus(true);
+  }
+
   final _firebase = FirebaseAuth.instance;
 
   TextEditingController phoneController = TextEditingController();
-  final GlobalKey<FormState> formKeyRegister = GlobalKey<FormState>();
-  final GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyRegister = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
   var isLogin = true;
   var isAuthenticating = false;
   var enteredEmail = '';
@@ -35,13 +44,39 @@ class AuthProvider extends ChangeNotifier {
         'email': enteredEmail,
         'image_url': "https://picsum.photos/200/300",
       });
-      
-      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('pendingRequests');
-      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('pendingRequests').doc(userCredential.user!.uid).delete();
-      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('friends');
-      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).collection('friends').doc(userCredential.user!.uid).delete();
 
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .collection('lastDate');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .collection('lastDate')
+          .doc(userCredential.user!.uid)
+          .delete();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .collection('pendingRequests');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .collection('pendingRequests')
+          .doc(userCredential.user!.uid)
+          .delete();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .collection('friends');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .collection('friends')
+          .doc(userCredential.user!.uid)
+          .delete();
 
+      signIn();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException catch (error) {
@@ -72,6 +107,7 @@ class AuthProvider extends ChangeNotifier {
       final userCredential = await _firebase.signInWithEmailAndPassword(
           email: enteredEmail, password: enteredPassword);
       print('User logged in: ${userCredential.user?.email}');
+      signIn();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
     } on FirebaseAuthException {

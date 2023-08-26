@@ -1,40 +1,106 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:game_chat_1/providers/create_room_provider.dart';
+import 'package:game_chat_1/providers/game_room_provider.dart';
+import 'package:provider/provider.dart';
 
 class ChatInfo extends StatefulWidget {
-  const ChatInfo({super.key, required this.owner});
+  const ChatInfo({
+    super.key,
+    required this.owner,
+    required this.users,
+    required this.roomId,
+    required this.userImage,
+  });
+
   final String owner;
+  final String roomId;
+  final String userImage;
+
+  final List<String> users;
 
   @override
   State<ChatInfo> createState() => _ChatInfoState();
 }
 
 class _ChatInfoState extends State<ChatInfo> {
-
   User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-
-    String username = user!.displayName.toString();
-
+    widget.users.remove(widget.owner);
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            Text("Owner: ${username}"),
-            SizedBox(
-              height: 500,
-              child: ListView.builder(
-                itemCount: 1,
-                itemBuilder: (BuildContext context, int index) {
-                  return;
-                },
-              ),
+      body: Consumer<GameRoomProvider>(
+        builder: (context, provider, child) {
+          return Center(
+            child: Column(
+              children: [
+                Text("Owner: ${widget.owner}"),
+                StreamBuilder(
+                  stream: provider.getUsersInRoom(widget.roomId),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                          child: Text('No users found beside Owner!'));
+                    } else {
+                      final usersInRoom = snapshot.data;
+                      return SizedBox(
+                        height: 300,
+                        child: ListView.builder(
+                          itemCount: usersInRoom!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (widget.owner ==
+                                Provider.of<CreateRoomProvider>(context)
+                                    .currentUsername) {
+                              usersInRoom.remove(widget.owner);
+                              return ListTile(
+                                title: Text(usersInRoom[index]),
+                                trailing: ElevatedButton(
+                                  onPressed: () async {
+                                    QuerySnapshot snapshot =
+                                        await FirebaseFirestore.instance
+                                            .collection('rooms')
+                                            .doc(widget.roomId)
+                                            .collection('roomUser')
+                                            .get();
+                                    if (snapshot.size > 0) {
+                                      String docId = snapshot.docs[0].id;
+                                      await FirebaseFirestore.instance
+                                          .collection('rooms')
+                                          .doc(widget.roomId)
+                                          .collection('userRoom')
+                                          .doc(docId)
+                                          .delete();
+                                    }
+                                  },
+                                  child: const Text('Remove from chat'),
+                                ),
+                              );
+                            } else {
+                              return ListTile(
+                                title: Text(usersInRoom[index]),
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(widget.userImage),
+                                  backgroundColor: Colors.transparent,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

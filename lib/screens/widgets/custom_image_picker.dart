@@ -1,17 +1,17 @@
 import 'dart:io';
-
+import 'package:game_chat_1/providers/profile_proivder.dart';
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/user_image_picker.dart';
 
-class CustomImagePicker extends StatefulWidget {
-  const CustomImagePicker({Key? key, required this.userImage})
-      : super(key: key);
+import '../profile_screen.dart';
 
-  // final Provider<ProfileScreenProvider> provider;
-  final String userImage;
+class CustomImagePicker extends StatefulWidget {
+  const CustomImagePicker({Key? key, required this.username}) : super(key: key);
+  final String username;
 
   @override
   State<CustomImagePicker> createState() => _CustomImagePickerState();
@@ -38,6 +38,9 @@ class _CustomImagePickerState extends State<CustomImagePicker> {
 
   @override
   Widget build(BuildContext context) {
+
+    String user = FirebaseAuth.instance.currentUser!.uid;
+
     return AlertDialog(
       backgroundColor: Colors.white.withOpacity(0.4),
       title: const Text(
