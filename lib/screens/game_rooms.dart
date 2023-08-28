@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/create_room_screen.dart';
+import 'package:game_chat_1/screens/home_screen.dart';
 import 'package:game_chat_1/screens/widgets/custom_elevated_buton.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
@@ -119,13 +120,10 @@ class _GameRoomsState extends State<GameRooms> {
                                       },
                                       child: Container(
                                         margin: const EdgeInsets.all(8),
-                                        // decoration: BoxDecoration(
-                                        //   image: DecorationImage(
-                                        //       fit: BoxFit.fill,
-                                        //       image: NetworkImage(
-                                        //           widget.gameImage),
-                                        //       opacity: 0.3),
-                                        // ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.transparent.withOpacity(0.4),
+                                          border: Border.all(width: 2, color: Colors.transparent.withOpacity(0.7)),
+                                        ),
                                         child: ListTile(
                                           leading: rooms[index].roomType ==
                                                   "Private"
@@ -181,14 +179,16 @@ class _GameRoomsState extends State<GameRooms> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.black12,
-          selectedItemColor: Colors.deepPurple,
+          unselectedItemColor: Colors.white,
+          selectedItemColor: Colors.white,
           onTap: (index) {
-            setState(() {});
+            if (index == 0) {
+              Navigator.pop(context);
+            }
           },
-          currentIndex: 0,
           items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.gamepad_outlined), label: 'Games Screen'),
+                icon: Icon(Icons.gamepad_outlined), label: 'Games'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.message_outlined), label: 'Messages')
           ],

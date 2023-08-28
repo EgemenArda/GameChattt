@@ -39,7 +39,7 @@ class _ChatInfoState extends State<ChatInfo> {
               children: [
                 Text("Owner: ${widget.owner}"),
                 StreamBuilder(
-                  stream: provider.getUsersInRoom(widget.roomId),
+                  stream: provider.getUsersInRoom(widget.roomId, widget.owner),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());

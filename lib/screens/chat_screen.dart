@@ -53,9 +53,9 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.keyboard_return),
+          icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => HomeScreen()));
+            Navigator.of(context).pop();
             FirebaseFirestore.instance
                 .collection('users')
                 .doc(FirebaseAuth.instance.currentUser!.uid)

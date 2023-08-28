@@ -34,7 +34,7 @@ class GameRoomProvider extends ChangeNotifier {
   }
 
 
-  Stream<List<String>> getUsersInRoom(String roomId) {
+  Stream<List<String>> getUsersInRoom(String roomId, String owner) {
     final stream = FirebaseFirestore.instance
         .collection('rooms')
         .doc(roomId)
@@ -47,6 +47,7 @@ class GameRoomProvider extends ChangeNotifier {
         usersInRoom.add(doc.data()['username']);
       }
 
+      usersInRoom.remove(owner);
       return usersInRoom;
     });
   }
