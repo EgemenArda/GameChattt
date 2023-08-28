@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/custom_drawer.dart';
 import 'package:game_chat_1/services/connection_check.dart';
@@ -15,8 +16,21 @@ class HomeScreen extends StatefulWidget with WidgetsBindingObserver {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    setupPushNotifications();
+    super.initState();
+  }
 
- 
+  void setupPushNotifications() async {
+    final fcm = FirebaseMessaging.instance;
+
+    await fcm.requestPermission();
+    final token = fcm.getToken();
+
+    print('*************************************************');
+    print(token);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,49 +77,50 @@ class _HomeScreenState extends State<HomeScreen> {
               return SingleChildScrollView(
                 child: SizedBox(
                   child: GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisSpacing: 24,
-                        mainAxisSpacing: 24,
-                        crossAxisCount: 2,
-                      ),
-                      itemCount: provider.games.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        // final filteredRooms = provider.games
-                        //     .where((game) =>
-                        //         game.name == provider.games[index].name)
-                        //     .toList();
-                        return InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) {
-                                return GameRooms(
-                                  gameName: provider.games[index].name,
-                                  gameImage: provider.games[index].image,
-                                );
-                              },
-                            ));
-                          },
-                          child: Card(
-                            margin: EdgeInsets.all(10),
-                            borderOnForeground: true,
-                            color: Colors.transparent,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Stack(
-                                children: [
-                                  Center(
-                                    child: Image.network(
-                                        provider.games[index].image,
-                                        fit: BoxFit.contain),
-                                  ),
-                                ],
-                              ),
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 24,
+                      mainAxisSpacing: 24,
+                      crossAxisCount: 2,
+                    ),
+                    itemCount: provider.games.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      // final filteredRooms = provider.games
+                      //     .where((game) =>
+                      //         game.name == provider.games[index].name)
+                      //     .toList();
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) {
+                              return GameRooms(
+                                gameName: provider.games[index].name,
+                                gameImage: provider.games[index].image,
+                              );
+                            },
+                          ));
+                        },
+                        child: Card(
+                          margin: EdgeInsets.all(10),
+                          borderOnForeground: true,
+                          color: Colors.transparent,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Stack(
+                              children: [
+                                Center(
+                                  child: Image.network(
+                                      provider.games[index].image,
+                                      fit: BoxFit.contain),
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                      }),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               );
             },

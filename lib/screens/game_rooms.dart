@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/create_room_screen.dart';
+import 'package:game_chat_1/screens/widgets/custom_elevated_buton.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
@@ -80,8 +81,7 @@ class _GameRoomsState extends State<GameRooms> {
                                 child: Text('Error: ${snapshot.error}'));
                           } else if (!snapshot.hasData ||
                               snapshot.data!.isEmpty) {
-                            return const Center(
-                                child: Text('No rooms found.'));
+                            return const Center(child: Text('No rooms found.'));
                           } else {
                             final rooms = snapshot.data;
                             // final filteredRooms = snapshot.data?.where(
@@ -130,20 +130,18 @@ class _GameRoomsState extends State<GameRooms> {
                                           leading: rooms[index].roomType ==
                                                   "Private"
                                               ? Icon(Icons.lock_outline)
-                                              : Icon(
-                                                  Icons.lock_open_outlined),
+                                              : Icon(Icons.lock_open_outlined),
                                           title: Text(rooms[index].roomName),
                                           subtitle: Text(
                                               rooms[index].roomDescription),
                                           trailing: StreamBuilder<int>(
-                                            stream: provider
-                                                .getRoomUserCountStream(
+                                            stream:
+                                                provider.getRoomUserCountStream(
                                                     rooms[index].documentId),
                                             builder: (context, snapshot) {
                                               if (snapshot.connectionState ==
                                                   ConnectionState.waiting) {
-                                                return const Text(
-                                                    "Loading...");
+                                                return const Text("Loading...");
                                               }
                                               if (snapshot.hasError) {
                                                 return const Text("Error");
@@ -164,41 +162,35 @@ class _GameRoomsState extends State<GameRooms> {
                           }
                         },
                       ),
-                      SizedBox(
-                        height: 45,
-                        width: 200,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) => CreateRoomScreen(
-                                      gameName: widget.gameName,
-                                    )));
-                          },
-                          child: const Text("Create room"),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      ////////***************/////////////
-                      // Padding(
-                      //   padding: const EdgeInsets.all(16.0),
-                      //   child: CustomElevatedButton(
-                      //     title: 'Create room',
-                      //     onPressed: () {
-                      //       Navigator.of(context).push(MaterialPageRoute(
-                      //           builder: (ctx) => CreateRoomScreen(
-                      //                 gameName: widget.gameName,
-                      //               )));
-                      //     },
-                      //   ),
-                      // ),
                     ],
                   ),
                 );
               },
             ),
-            // CustomBottomNavigationBar(),
-
-            ///TO DO fix the snapshot error
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: CustomElevatedButton(
+          title: 'Create room',
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (ctx) => CreateRoomScreen(
+                      gameName: widget.gameName,
+                    )));
+          },
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.black12,
+          selectedItemColor: Colors.deepPurple,
+          onTap: (index) {
+            setState(() {});
+          },
+          currentIndex: 0,
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.gamepad_outlined), label: 'Games Screen'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.message_outlined), label: 'Messages')
           ],
         ),
       ),

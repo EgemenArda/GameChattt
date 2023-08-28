@@ -2,22 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/dm_create_provider.dart';
-import 'package:game_chat_1/screens/dm_screen.dart';
 import 'package:game_chat_1/screens/user_page.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/profile_proivder.dart';
-
 class FriendListTile extends StatelessWidget {
-
   const FriendListTile(
-      {Key? key, required this.friendsName, required this.friendsImage, required this.index})
+      {Key? key,
+      required this.friendsName,
+      required this.friendsImage,
+      required this.index})
       : super(key: key);
 
   final String friendsName;
   final String friendsImage;
   final int index;
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +88,10 @@ class FriendListTile extends StatelessWidget {
                   String creatorUsername = await getUsernameFromUserId(
                       FirebaseAuth.instance.currentUser!.uid);
 
-                 // ignore: use_build_context_synchronously
-                 Provider.of<DmCreateProvider>(context, listen: false).checkAndCreateDMRoom(creatorUsername, friendsName, context, friendsImage);
+                  // ignore: use_build_context_synchronously
+                  Provider.of<DmCreateProvider>(context, listen: false)
+                      .checkAndCreateDMRoom(
+                          creatorUsername, friendsName, context, friendsImage);
                 },
                 icon: const Icon(Icons.mail_outline)),
             IconButton(

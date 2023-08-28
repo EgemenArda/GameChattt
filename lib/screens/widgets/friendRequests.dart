@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:game_chat_1/screens/widgets/custom_elevated_buton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/friend_provider.dart';
+import 'package:provider/provider.dart';
 
 class friendRequests extends StatefulWidget {
   const friendRequests({super.key});
@@ -31,7 +30,7 @@ class _friendRequestsState extends State<friendRequests> {
             }
 
             List<String> pendingRequests =
-            List.from(snapshot.data!.docs.map((doc) => doc.id));
+                List.from(snapshot.data!.docs.map((doc) => doc.id));
 
             if (pendingRequests.isEmpty) {
               return const Center(
@@ -55,8 +54,7 @@ class _friendRequestsState extends State<friendRequests> {
                         return const SizedBox();
                       }
 
-                      String username =
-                      snapshot.data!.get('username');
+                      String username = snapshot.data!.get('username');
 
                       return Text(username);
                     },
@@ -65,12 +63,13 @@ class _friendRequestsState extends State<friendRequests> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        onPressed: () => provider
-                            .acceptFriendRequest(pendingUserId),
+                        onPressed: () =>
+                            provider.acceptFriendRequest(pendingUserId),
                         icon: const Icon(Icons.check),
                       ),
                       IconButton(
-                        onPressed: () => provider.rejectFriendRequest(pendingUserId),
+                        onPressed: () =>
+                            provider.rejectFriendRequest(pendingUserId),
                         icon: const Icon(Icons.close),
                       ),
                     ],

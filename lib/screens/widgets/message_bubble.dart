@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_chat_1/providers/friend_provider.dart';
 import 'package:game_chat_1/screens/user_page.dart';
-import 'package:provider/provider.dart';
 
 // A MessageBubble for showing a single chat message on the ChatScreen.
 class MessageBubble extends StatelessWidget {
@@ -56,8 +54,8 @@ class MessageBubble extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => UserPageScreen(profilePicture: userImage!, username: username!)
-                ));
+                    builder: (ctx) => UserPageScreen(
+                        profilePicture: userImage!, username: username!)));
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage(
