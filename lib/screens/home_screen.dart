@@ -4,6 +4,7 @@ import 'package:game_chat_1/screens/widgets/custom_drawer.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
+import '../api/apis.dart';
 import '../providers/homepage_provider.dart';
 import '../providers/profile_proivder.dart';
 import 'game_rooms.dart';
@@ -20,15 +21,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     setupPushNotifications();
     super.initState();
+    APIs.getSelfInfo();
   }
 
   void setupPushNotifications() async {
     final fcm = FirebaseMessaging.instance;
 
     await fcm.requestPermission();
+    fcm.subscribeToTopic('chat');
     final token = fcm.getToken();
-
-    print('*************************************************');
+    print('*****************************************');
     print(token);
   }
 

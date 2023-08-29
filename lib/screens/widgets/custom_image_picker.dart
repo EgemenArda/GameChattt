@@ -1,13 +1,10 @@
 import 'dart:io';
-import 'package:game_chat_1/providers/profile_proivder.dart';
-import 'package:provider/provider.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/user_image_picker.dart';
-
-import '../profile_screen.dart';
 
 class CustomImagePicker extends StatefulWidget {
   const CustomImagePicker({Key? key, required this.username}) : super(key: key);
@@ -24,7 +21,7 @@ class _CustomImagePickerState extends State<CustomImagePicker> {
     var ref = FirebaseStorage.instance.ref().child("images").child("");
 
     File imageFile = selectedImagefile;
-    var uploadTask = await ref.putFile(imageFile!);
+    var uploadTask = await ref.putFile(imageFile);
     String ImageUrl = await uploadTask.ref.getDownloadURL();
 
     User? user = FirebaseAuth.instance.currentUser;
@@ -38,7 +35,6 @@ class _CustomImagePickerState extends State<CustomImagePicker> {
 
   @override
   Widget build(BuildContext context) {
-
     String user = FirebaseAuth.instance.currentUser!.uid;
 
     return AlertDialog(

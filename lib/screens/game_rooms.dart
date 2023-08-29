@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/create_room_screen.dart';
-import 'package:game_chat_1/screens/home_screen.dart';
 import 'package:game_chat_1/screens/widgets/custom_elevated_buton.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
@@ -121,8 +120,12 @@ class _GameRoomsState extends State<GameRooms> {
                                       child: Container(
                                         margin: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: Colors.transparent.withOpacity(0.4),
-                                          border: Border.all(width: 2, color: Colors.transparent.withOpacity(0.7)),
+                                          color: Colors.transparent
+                                              .withOpacity(0.4),
+                                          border: Border.all(
+                                              width: 2,
+                                              color: Colors.transparent
+                                                  .withOpacity(0.7)),
                                         ),
                                         child: ListTile(
                                           leading: rooms[index].roomType ==

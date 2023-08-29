@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/dm_screen.dart';
 
@@ -27,11 +26,16 @@ class DmCreateProvider extends ChangeNotifier {
         ),
       ));
     } else {
-      DocumentReference newDmRoom = await dmCollection.add({
-        'roomIdentifier': roomIdentifier
-      });
-      await dmCollection.doc(newDmRoom.id).collection('dmPeople').add({'username': user1});
-      await dmCollection.doc(newDmRoom.id).collection('dmPeople').add({'username': user2});
+      DocumentReference newDmRoom =
+          await dmCollection.add({'roomIdentifier': roomIdentifier});
+      await dmCollection
+          .doc(newDmRoom.id)
+          .collection('dmPeople')
+          .add({'username': user1});
+      await dmCollection
+          .doc(newDmRoom.id)
+          .collection('dmPeople')
+          .add({'username': user2});
       Navigator.of(context).push(MaterialPageRoute(
         builder: (ctx) => DmScreen(
           roomId: newDmRoom.id,

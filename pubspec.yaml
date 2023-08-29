@@ -47,7 +47,7 @@ dependencies:
   fluttertoast: ^8.2.2
   uuid: ^3.0.7
   swipe_to: ^1.0.2
-  firebase_messaging: ^14.6.6
+  firebase_messaging: ^14.6.7
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/api/firebase_api.dart';
 import 'package:game_chat_1/providers/auth_provider.dart';
 import 'package:game_chat_1/providers/create_room_provider.dart';
 import 'package:game_chat_1/providers/dm_create_provider.dart';
@@ -12,13 +14,19 @@ import 'package:game_chat_1/screens/home_screen.dart';
 import 'package:game_chat_1/screens/login_screen.dart';
 import 'package:game_chat_1/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+
 import 'firebase_options.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseApi().initNotifications();
+  FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+
   runApp(MultiProvider(
     providers: [
       ListenableProvider<HomePageProvider>(create: (_) => HomePageProvider()),

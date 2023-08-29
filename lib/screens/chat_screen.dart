@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/api/firebase_api.dart';
 import 'package:game_chat_1/screens/chat_info.dart';
-import 'package:game_chat_1/screens/home_screen.dart';
 import 'package:game_chat_1/screens/widgets/chat_messages.dart';
 import 'package:game_chat_1/screens/widgets/new_messages.dart';
-import 'package:swipe_to/swipe_to.dart';
 
 class ChatScreen extends StatefulWidget {
   final String roomId;
@@ -31,22 +29,28 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  void setupPushNotifications() async {
-    final fcm = FirebaseMessaging.instance;
-
-    await fcm.requestPermission();
-    final token = fcm.getToken();
-    print(token);
-  }
-
+  // void setupPushNotifications() async {
+  //   final fcm = FirebaseMessaging.instance;
+  //
+  //   await fcm.requestPermission();
+  //   fcm.subscribeToTopic('topic=$roomTopic');
+  // }
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   setupPushNotifications();
+  //   print(roomTopic);
+  // }
   @override
   void initState() {
+    initPushNotifications();
     super.initState();
-    setupPushNotifications();
   }
 
   var ReplyMessage;
   final focusNode = FocusNode();
+  late String roomTopic = widget.roomId;
 
   @override
   Widget build(BuildContext context) {

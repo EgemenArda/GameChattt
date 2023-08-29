@@ -6,7 +6,6 @@ import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
-import '../services/status_service.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -30,9 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (context, provider, child) {
             return Center(
               child: SingleChildScrollView(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
+                child: Stack(alignment: Alignment.center, children: [
                   Image.asset('assets/images/background.jpg',
                       fit: BoxFit.cover),
                   Column(

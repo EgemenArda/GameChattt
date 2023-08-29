@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/user_page.dart';
-import 'package:game_chat_1/screens/widgets/friend_list_tile.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/dm_create_provider.dart';
@@ -90,7 +89,7 @@ class _myDmsState extends State<myDms> {
 
                       if (userSnapshot.exists) {
                         Map<String, dynamic>? userData =
-                        userSnapshot.data() as Map<String, dynamic>?;
+                            userSnapshot.data() as Map<String, dynamic>?;
                         if (userData != null &&
                             userData.containsKey('username')) {
                           return userData['username'];
@@ -106,7 +105,9 @@ class _myDmsState extends State<myDms> {
                         FirebaseAuth.instance.currentUser!.uid);
 
                     // ignore: use_build_context_synchronously
-                    Provider.of<DmCreateProvider>(context, listen: false).checkAndCreateDMRoom(creatorUsername, friendUsername, context, friendImage);
+                    Provider.of<DmCreateProvider>(context, listen: false)
+                        .checkAndCreateDMRoom(creatorUsername, friendUsername,
+                            context, friendImage);
                   },
                 );
               },

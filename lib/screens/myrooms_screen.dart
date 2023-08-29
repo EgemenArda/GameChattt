@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/game_room_provider.dart';
 import 'package:game_chat_1/screens/mydms.dart';
@@ -30,10 +29,8 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
         },
         currentIndex: inWhichRooms,
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), label: 'My Rooms'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.send), label: 'My Dms')
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'My Rooms'),
+          BottomNavigationBarItem(icon: Icon(Icons.send), label: 'My Dms')
         ],
       ),
       appBar: AppBar(
@@ -44,7 +41,11 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
         builder: (context, provider, child) {
           return SingleChildScrollView(
             child: Center(
-              child: inWhichRooms == 0 ? myRoomsss(username: widget.username,) : myDms(),
+              child: inWhichRooms == 0
+                  ? myRoomsss(
+                      username: widget.username,
+                    )
+                  : myDms(),
             ),
           );
         },
