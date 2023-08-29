@@ -7,33 +7,33 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      fixedColor: Color(0xff2398C3),
+      fixedColor: const Color(0xff2398C3),
       showSelectedLabels: false,
       showUnselectedLabels: false,
       currentIndex: snapshot.data.index,
       onTap: (int) {},
       items: [
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           label: 'search',
           icon: Icon(Icons.search),
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           label: 'Browse',
           icon: Icon(Icons.view_list),
         ),
         BottomNavigationBarItem(
           label: 'Create Room',
           icon: Container(
-            child: FlutterLogo(
+            child: const FlutterLogo(
               size: 35.0,
             ),
           ),
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           label: 'My Rooms',
           icon: Icon(Icons.bookmark),
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           label: 'Settings',
           icon: Icon(Icons.settings),
         ),

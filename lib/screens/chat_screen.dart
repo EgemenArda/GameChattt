@@ -29,19 +29,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  // void setupPushNotifications() async {
-  //   final fcm = FirebaseMessaging.instance;
-  //
-  //   await fcm.requestPermission();
-  //   fcm.subscribeToTopic('topic=$roomTopic');
-  // }
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   setupPushNotifications();
-  //   print(roomTopic);
-  // }
   @override
   void initState() {
     initPushNotifications();
@@ -93,7 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
               replyToMessage(message);
               focusNode.requestFocus();
             },
-          )), // ChatMessages widget'i burada
+          )),
           NewMessage(
             roomId: widget.roomId,
             focusNode: focusNode,

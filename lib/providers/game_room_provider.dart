@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/models/room_model.dart';
+import 'package:game_chat_1/models/user_model.dart';
 import 'package:game_chat_1/screens/chat_screen.dart';
 
 import '../screens/widgets/custom_alert_dialog.dart';
@@ -17,22 +18,26 @@ class GameRoomProvider extends ChangeNotifier {
           return Rooms.fromSnapshot(doc);
         }).toList());
   }
+
   Stream<int> compareAfterDate(String roomId) async* {
-    DocumentSnapshot<Map<String, dynamic>> userDocSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('lastDate')
-        .doc(roomId)
-        .get();
+    DocumentSnapshot<Map<String, dynamic>> userDocSnapshot =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection('lastDate')
+            .doc(roomId)
+            .get();
     Timestamp before = userDocSnapshot.data()?['left'];
-    QuerySnapshot<Map<String, dynamic>> messagesAfterDate = await FirebaseFirestore.instance
-        .collection('rooms')
-        .doc(roomId)
-        .collection('messages').where('createdAt', isGreaterThan: before).get();
+    QuerySnapshot<Map<String, dynamic>> messagesAfterDate =
+        await FirebaseFirestore.instance
+            .collection('rooms')
+            .doc(roomId)
+            .collection('messages')
+            .where('createdAt', isGreaterThan: before)
+            .get();
 
     yield messagesAfterDate.docs.length;
   }
-
 
   Stream<List<String>> getUsersInRoom(String roomId, String owner) {
     final stream = FirebaseFirestore.instance
@@ -64,10 +69,10 @@ class GameRoomProvider extends ChangeNotifier {
       for (var doc in event.docs) {
         String roomPath = doc.reference.parent.parent!.id;
         DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
-        await FirebaseFirestore.instance
-            .collection('rooms')
-            .doc(roomPath)
-            .get();
+            await FirebaseFirestore.instance
+                .collection('rooms')
+                .doc(roomPath)
+                .get();
 
         if (roomSnapshot.exists) {
           myRooms.add(Rooms.fromSnapshot(roomSnapshot));
@@ -90,10 +95,10 @@ class GameRoomProvider extends ChangeNotifier {
       for (var doc in event.docs) {
         String roomPath = doc.reference.parent.parent!.id;
         DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
-        await FirebaseFirestore.instance
-            .collection('direct-messages')
-            .doc(roomPath)
-            .get();
+            await FirebaseFirestore.instance
+                .collection('direct-messages')
+                .doc(roomPath)
+                .get();
 
         if (roomSnapshot.exists) {
           myRooms.add(Rooms.fromSnapshot(roomSnapshot));
@@ -196,29 +201,28 @@ class GameRoomProvider extends ChangeNotifier {
                   } else {
                     if (roomType == "Private") {
                       String enteredPassword =
-                      // ignore: use_build_context_synchronously
-                      await showDialog(
+                          // ignore: use_build_context_synchronously
+                          await showDialog(
                         context: context,
                         builder: (context) {
                           String password = '';
                           return AlertDialog(
-                            title: Text('Private Room Password'),
+                            title: const Text('Private Room Password'),
                             content: TextField(
                               onChanged: (value) {
                                 password = value;
                               },
                               obscureText: true,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Enter the password',
                               ),
                             ),
                             actions: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pop(
-                                      context, password); // Şifreyi döndür
+                                  Navigator.pop(context, password);
                                 },
-                                child: Text('Submit'),
+                                child: const Text('Submit'),
                               ),
                             ],
                           );
@@ -273,11 +277,11 @@ class GameRoomProvider extends ChangeNotifier {
 
   Future<String> getUsernameFromUserId(String userId) async {
     DocumentSnapshot userSnapshot =
-    await FirebaseFirestore.instance.collection('users').doc(userId).get();
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (userSnapshot.exists) {
       Map<String, dynamic>? userData =
-      userSnapshot.data() as Map<String, dynamic>?;
+          userSnapshot.data() as Map<String, dynamic>?;
       if (userData != null && userData.containsKey('username')) {
         return userData['username'];
       } else {
@@ -285,6 +289,27 @@ class GameRoomProvider extends ChangeNotifier {
       }
     } else {
       return 'Unknown User';
+    }
+  }
+
+  Future<void> getUserFromUserId(String userId) async {
+    userId = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (userSnapshot.exists) {
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+      print(userData);
+
+      if (userData != null) {
+        CurrentUser user = CurrentUser.fromMap(userData);
+        print(user);
+      } else {
+        print('User data is null.');
+      }
+    } else {
+      print('User does not exist.');
     }
   }
 }

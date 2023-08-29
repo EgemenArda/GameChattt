@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/create_room_screen.dart';
@@ -69,6 +70,12 @@ class _GameRoomsState extends State<GameRooms> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      TextButton(
+                          onPressed: () {
+                            provider.getUserFromUserId(
+                                FirebaseAuth.instance.currentUser!.uid);
+                          },
+                          child: Text('deneme')),
                       StreamBuilder(
                         stream: provider.getRooms(widget.gameName),
                         builder: (context, snapshot) {

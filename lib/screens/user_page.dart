@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../services/status_service.dart';
 
 class UserPageScreen extends StatelessWidget {
-
   final OnlineStatusService _onlineStatusService = OnlineStatusService();
 
   UserPageScreen(
@@ -24,8 +23,8 @@ class UserPageScreen extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  width: 100, // Genişliği istediğiniz gibi ayarlayın
-                  height: 100, // Yüksekliği istediğiniz gibi ayarlayın
+                  width: 100,
+                  height: 100,
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(profilePicture),
                     backgroundColor: Colors.transparent,

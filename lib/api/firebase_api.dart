@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:game_chat_1/screens/notifications_page.dart';
 
@@ -33,11 +35,17 @@ Future initPushNotifications() async {
 /// firebase request permission and create token
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
+  final user = FirebaseAuth.instance.currentUser;
 
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();
     initPushNotifications();
-    print('token: $fcmToken');
+    if (user != null) {
+      FirebaseFirestore.instance.collection('users').doc(user?.uid).update(
+        {'fcmToken': fcmToken},
+      );
+    }
+    print(fcmToken);
   }
 }

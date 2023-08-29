@@ -1,5 +1,5 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/api/firebase_api.dart';
 import 'package:game_chat_1/screens/widgets/custom_drawer.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
@@ -19,20 +19,21 @@ class HomeScreen extends StatefulWidget with WidgetsBindingObserver {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    setupPushNotifications();
+    // setupPushNotifications();
     super.initState();
     APIs.getSelfInfo();
+    FirebaseApi().initNotifications();
   }
 
-  void setupPushNotifications() async {
-    final fcm = FirebaseMessaging.instance;
-
-    await fcm.requestPermission();
-    fcm.subscribeToTopic('chat');
-    final token = fcm.getToken();
-    print('*****************************************');
-    print(token);
-  }
+  // void setupPushNotifications() async {
+  //   final fcm = FirebaseMessaging.instance;
+  //
+  //   await fcm.requestPermission();
+  //   fcm.subscribeToTopic('chat');
+  //   final token = fcm.getToken();
+  //   print('*****************************************');
+  //   print(token);
+  // }
 
   @override
   Widget build(BuildContext context) {
