@@ -202,23 +202,33 @@ class GameRoomProvider extends ChangeNotifier {
                         builder: (context) {
                           String password = '';
                           return AlertDialog(
-                            title: Text('Private Room Password'),
+                            title: const Text('Private Room Password'),
                             content: TextField(
                               onChanged: (value) {
                                 password = value;
                               },
                               obscureText: true,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Enter the password',
                               ),
                             ),
                             actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(
-                                      context, password); // Şifreyi döndür
-                                },
-                                child: Text('Submit'),
+                              Column(
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(
+                                          context, password); // Şifreyi döndür
+                                    },
+                                    child: const Text('Submit'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      sendJoinRequest(context, roomId);
+                                    },
+                                    child: const Text('Dont have a password? Send owner a joining request!', textAlign: TextAlign.center,),
+                                  ),
+                                ],
                               ),
                             ],
                           );
@@ -286,5 +296,59 @@ class GameRoomProvider extends ChangeNotifier {
     } else {
       return 'Unknown User';
     }
+  }
+
+
+  Future<void> acceptRoomInvite(String pendingUserId, String roomId) async {
+    String acceptedUsername = await getUsernameFromUserId(pendingUserId);
+    await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('roomUser')
+        .doc().set({'username': acceptedUsername});
+    await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('joinRequests')
+        .doc(pendingUserId)
+        .delete();
+  }
+
+  Future<void> rejectRoomInvite(String pendingUserId, String roomId) async {
+    await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('joinRequests')
+        .doc(pendingUserId)
+        .delete();
+  }
+
+  Future<void> sendJoinRequest(context, roomId) async {
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('joinRequests')
+        .doc(currentUserId)
+        .set({
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Join Request Sent'),
+          content: const Text('Join request sent to room owner, be sure to check your entered rooms!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:game_chat_1/api/firebase_api.dart';
 import 'package:game_chat_1/screens/chat_info.dart';
+import 'package:game_chat_1/screens/home_screen.dart';
 import 'package:game_chat_1/screens/widgets/chat_messages.dart';
 import 'package:game_chat_1/screens/widgets/new_messages.dart';
 
@@ -29,28 +30,10 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  // void setupPushNotifications() async {
-  //   final fcm = FirebaseMessaging.instance;
-  //
-  //   await fcm.requestPermission();
-  //   fcm.subscribeToTopic('topic=$roomTopic');
-  // }
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   setupPushNotifications();
-  //   print(roomTopic);
-  // }
+  String roomCode = '';
   @override
-  void initState() {
-    initPushNotifications();
-    super.initState();
-  }
-
   var ReplyMessage;
   final focusNode = FocusNode();
-  late String roomTopic = widget.roomId;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +64,30 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ));
               },
-              icon: const Icon(Icons.info_outline))
+              icon: const Icon(Icons.info_outline)),
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Get your friends!'),
+                      content: Text(roomCode),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              roomCode = 'Generated code!';
+                            });
+                          },
+                          child: Text('Create direct join code'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: const Icon(Icons.share)),
         ],
       ),
       body: Column(
