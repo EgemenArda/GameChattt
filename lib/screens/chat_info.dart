@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:game_chat_1/providers/create_room_provider.dart';
 import 'package:game_chat_1/providers/game_room_provider.dart';
+import 'package:game_chat_1/screens/widgets/chatJoinRequests.dart';
+import 'package:game_chat_1/screens/widgets/inChatInfo.dart';
 import 'package:provider/provider.dart';
 
 class ChatInfo extends StatefulWidget {
@@ -26,79 +28,67 @@ class ChatInfo extends StatefulWidget {
 
 class _ChatInfoState extends State<ChatInfo> {
   User? user = FirebaseAuth.instance.currentUser;
+  int whichInfoScreen = 0;
 
   @override
   Widget build(BuildContext context) {
     widget.users.remove(widget.owner);
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.deepPurple,
+        onTap: (index) {
+          setState(() {
+            whichInfoScreen = index;
+          });
+        },
+        currentIndex: whichInfoScreen,
+        items: [
+          const BottomNavigationBarItem(
+              icon: Icon(Icons.room_preferences), label: 'In room'),
+          BottomNavigationBarItem(
+            icon: Badge(
+              label: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rooms')
+                    .doc(widget.roomId)
+                    .collection('joinRequests')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  }
+                  List<String> joinRequests =
+                  List.from(snapshot.data!.docs.map((doc) => doc.id));
+                  if (joinRequests.isEmpty) {
+                    return Text('0');
+                  }
+                  return Text(joinRequests.length.toString());
+                },
+              ),
+
+              child: Icon(Icons.local_post_office_rounded),
+            ),
+            label: 'Join Requests',
+          )
+        ],
+      ),
       appBar: AppBar(),
       body: Consumer<GameRoomProvider>(
         builder: (context, provider, child) {
-          return Center(
-            child: Column(
-              children: [
-                Text("Owner: ${widget.owner}"),
-                StreamBuilder(
-                  stream: provider.getUsersInRoom(widget.roomId, widget.owner),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(
-                          child: Text('No users found beside Owner!'));
-                    } else {
-                      final usersInRoom = snapshot.data;
-                      return SizedBox(
-                        height: 300,
-                        child: ListView.builder(
-                          itemCount: usersInRoom!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (widget.owner ==
-                                Provider.of<CreateRoomProvider>(context)
-                                    .currentUsername) {
-                              usersInRoom.remove(widget.owner);
-                              return ListTile(
-                                title: Text(usersInRoom[index]),
-                                trailing: ElevatedButton(
-                                  onPressed: () async {
-                                    QuerySnapshot snapshot =
-                                        await FirebaseFirestore.instance
-                                            .collection('rooms')
-                                            .doc(widget.roomId)
-                                            .collection('roomUser')
-                                            .get();
-                                    if (snapshot.size > 0) {
-                                      String docId = snapshot.docs[0].id;
-                                      await FirebaseFirestore.instance
-                                          .collection('rooms')
-                                          .doc(widget.roomId)
-                                          .collection('userRoom')
-                                          .doc(docId)
-                                          .delete();
-                                    }
-                                  },
-                                  child: const Text('Remove from chat'),
-                                ),
-                              );
-                            } else {
-                              return ListTile(
-                                title: Text(usersInRoom[index]),
-                                leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(widget.userImage),
-                                  backgroundColor: Colors.transparent,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      );
-                    }
-                  },
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      whichInfoScreen == 0 ? inChatInfo(owner: widget.owner, roomId: widget.roomId, userImage: widget.userImage) : chatJoinRequests(roomId: widget.roomId),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),

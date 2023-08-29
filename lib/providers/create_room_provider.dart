@@ -53,6 +53,16 @@ class CreateRoomProvider extends ChangeNotifier {
       });
 
       await roomRef.collection("roomUser").add({'username': creatorUsername});
+      await FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(roomRef.id)
+          .collection('joinRequests');
+      await FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(roomRef.id)
+          .collection('joinRequests')
+          .doc(roomRef.id)
+          .delete();
       var querySnapshot = await FirebaseFirestore.instance
           .collection('rooms')
           .doc(roomRef.id)
