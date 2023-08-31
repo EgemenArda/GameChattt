@@ -28,7 +28,7 @@ class _chatJoinRequestsState extends State<chatJoinRequests> {
             }
 
             List<String> pendingRequests =
-            List.from(snapshot.data!.docs.map((doc) => doc.id));
+                List.from(snapshot.data!.docs.map((doc) => doc.id));
 
             if (pendingRequests.isEmpty) {
               return const Center(
@@ -61,16 +61,16 @@ class _chatJoinRequestsState extends State<chatJoinRequests> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
-                        onPressed: () =>
-                            provider.acceptRoomInvite(pendingUserId, widget.roomId),
-                        icon: const Icon(Icons.check),
-                      ),
-                      IconButton(
-                        onPressed: () =>
-                            provider.rejectRoomInvite(pendingUserId, widget.roomId),
-                        icon: const Icon(Icons.close),
-                      ),
+                      // IconButton(
+                      //   onPressed: () =>
+                      //       provider.acceptRoomInvite(pendingUserId, widget.roomId),
+                      //   icon: const Icon(Icons.check),
+                      // ),
+                      // IconButton(
+                      //   onPressed: () =>
+                      //       provider.rejectRoomInvite(pendingUserId, widget.roomId),
+                      //   icon: const Icon(Icons.close),
+                      // ),
                     ],
                   ),
                 );

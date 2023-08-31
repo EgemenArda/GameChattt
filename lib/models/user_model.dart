@@ -12,10 +12,10 @@ class CurrentUser {
   });
   factory CurrentUser.fromMap(Map<String, dynamic> map) {
     return CurrentUser(
-      fcmToken: 'fcmToken',
-      email: 'email',
-      username: 'username',
-      image_url: 'image_url',
+      fcmToken: map["fcmToken"],
+      email: map["email"],
+      username: map["username"],
+      image_url: map["image_url"],
     );
   }
 }

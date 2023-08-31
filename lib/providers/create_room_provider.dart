@@ -4,16 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/chat_screen.dart';
+import 'package:game_chat_1/services/firestore_services.dart';
 
 class CreateRoomProvider extends ChangeNotifier {
-  CreateRoomProvider(){
+  CreateRoomProvider() {
     setCurrentUsername();
   }
-  int selectedNumber = 1; // Varsayılan seçilen sayı 1
+  int selectedNumber = 1;
   String selectedRoomType = "";
   String currentUsername = "";
+
   void setCurrentUsername() async {
-    currentUsername = await getUsernameFromUserId(FirebaseAuth.instance.currentUser!.uid);
+    currentUsername =
+        await getUsernameFromUserId(FirebaseAuth.instance.currentUser!.uid);
     notifyListeners();
   }
 
@@ -26,11 +29,13 @@ class CreateRoomProvider extends ChangeNotifier {
   }
 
   void createRoom(context) async {
-    User? user = FirebaseAuth.instance.currentUser;
+    final FirestoreService firestoreService = FirestoreService();
+    Future<void> user = FirestoreService()
+        .getUserFromUserId(FirebaseAuth.instance.currentUser!.uid);
 
     if (user != null) {
-      String creatorUserId = user.uid;
-      String creatorUsername = await getUsernameFromUserId(creatorUserId);
+      String creatorUserId = FirebaseAuth.instance.currentUser!.uid;
+      String creatorUsername = await firestoreService.users.username;
       const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
       Random _rnd = Random();
 
@@ -52,7 +57,10 @@ class CreateRoomProvider extends ChangeNotifier {
         'room_code': code,
       });
 
-      await roomRef.collection("roomUser").add({'username': creatorUsername});
+      await roomRef.collection("roomUser").add({
+        'username': creatorUsername,
+        'fcmToken': 'user.fcmToken',
+      });
       await FirebaseFirestore.instance
           .collection('rooms')
           .doc(roomRef.id)

@@ -3,8 +3,12 @@ import 'package:game_chat_1/providers/create_room_provider.dart';
 import 'package:provider/provider.dart';
 
 class CreateRoomScreen extends StatefulWidget {
-  const CreateRoomScreen({super.key, required this.gameName});
+  const CreateRoomScreen({
+    super.key,
+    required this.gameName,
+  });
   final String gameName;
+  // final CurrentUser currentUser;
 
   @override
   State<CreateRoomScreen> createState() => _CreateRoomScreenState();
@@ -13,6 +17,11 @@ class CreateRoomScreen extends StatefulWidget {
 List<String> roomType = ["Public", "Private"];
 
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   String currentOption = roomType[0];
   @override
   Widget build(BuildContext context) {

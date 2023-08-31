@@ -36,6 +36,8 @@ Future initPushNotifications() async {
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
   final user = FirebaseAuth.instance.currentUser;
+  final CollectionReference roomsCollection =
+      FirebaseFirestore.instance.collection('rooms');
 
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();

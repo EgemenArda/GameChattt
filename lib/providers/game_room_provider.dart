@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/models/room_model.dart';
 import 'package:game_chat_1/models/user_model.dart';
 import 'package:game_chat_1/screens/chat_screen.dart';
+import 'package:game_chat_1/services/firestore_services.dart';
 
 import '../screens/widgets/custom_alert_dialog.dart';
 
 class GameRoomProvider extends ChangeNotifier {
+  final FirestoreService firestoreService = FirestoreService();
+
   Stream<List<Rooms>> getRooms(gameName) {
     final stream = FirebaseFirestore.instance
         .collection("rooms")
@@ -120,10 +123,6 @@ class GameRoomProvider extends ChangeNotifier {
 
   Future<void> showAlertDialog(context, roomName, roomId, roomSize, roomUsers,
       roomCreator, roomType, roomCode) async {
-    String user = FirebaseAuth.instance.currentUser!.uid;
-
-    String currentUsername = await getUsernameFromUserId(user);
-
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -153,6 +152,8 @@ class GameRoomProvider extends ChangeNotifier {
                   padding: const EdgeInsets.all(14),
                   child: const Text('Yes')),
               onPressed: () async {
+                firestoreService
+                    .getUserFromUserId(FirebaseAuth.instance.currentUser!.uid);
                 Navigator.of(context).pop();
 
                 var querySnapshot = await FirebaseFirestore.instance
@@ -161,21 +162,22 @@ class GameRoomProvider extends ChangeNotifier {
                     .collection('roomUser')
                     .get();
                 List<String> usernames = [];
+                bool isUsernameAlreadyRegistered = false;
                 if (querySnapshot.docs.isNotEmpty) {
                   for (var doc in querySnapshot.docs) {
                     Map<String, dynamic> data = doc.data();
                     String username = data['username'];
 
                     usernames.add(username);
+                    if (username == _users.username) {
+                      isUsernameAlreadyRegistered = true;
+                    }
                   }
-
-                  print("Usernames in the room: $usernames");
-                } else {
-                  print("No usernames found in the room.");
                 }
-                print(usernames);
-                if (usernames.contains(currentUsername)) {
-                  // ignore: use_build_context_synchronously
+                if (!isUsernameAlreadyRegistered) {
+                  firestoreService.addRoomUser(roomId, _users);
+                }
+                if (usernames.contains(_users.username)) {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => ChatScreen(
                       roomId: roomId,
@@ -230,11 +232,7 @@ class GameRoomProvider extends ChangeNotifier {
                       );
 
                       if (enteredPassword == roomCode) {
-                        FirebaseFirestore.instance
-                            .collection("rooms")
-                            .doc(roomId)
-                            .collection("roomUser")
-                            .add({'username': currentUsername});
+                        await firestoreService.addRoomUser(roomId, _users);
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => ChatScreen(
                             roomId: roomId,
@@ -249,11 +247,7 @@ class GameRoomProvider extends ChangeNotifier {
                         print("Error");
                       }
                     } else {
-                      FirebaseFirestore.instance
-                          .collection("rooms")
-                          .doc(roomId)
-                          .collection("roomUser")
-                          .add({'username': currentUsername});
+                      await firestoreService.addRoomUser(roomId, _users);
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (ctx) => ChatScreen(
                           roomId: roomId,
@@ -275,41 +269,35 @@ class GameRoomProvider extends ChangeNotifier {
     );
   }
 
-  Future<String> getUsernameFromUserId(String userId) async {
-    DocumentSnapshot userSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  late CurrentUser _users;
 
-    if (userSnapshot.exists) {
-      Map<String, dynamic>? userData =
-          userSnapshot.data() as Map<String, dynamic>?;
-      if (userData != null && userData.containsKey('username')) {
-        return userData['username'];
-      } else {
-        return 'Username Not Found';
-      }
-    } else {
-      return 'Unknown User';
-    }
+  CurrentUser get users => _users;
+
+  set users(user) {
+    _users = user;
   }
-
-  Future<void> getUserFromUserId(String userId) async {
-    userId = FirebaseAuth.instance.currentUser!.uid;
-    DocumentSnapshot userSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
-
-    if (userSnapshot.exists) {
-      Map<String, dynamic>? userData =
-          userSnapshot.data() as Map<String, dynamic>?;
-      print(userData);
-
-      if (userData != null) {
-        CurrentUser user = CurrentUser.fromMap(userData);
-        print(user);
-      } else {
-        print('User data is null.');
-      }
-    } else {
-      print('User does not exist.');
-    }
-  }
+//
+//   Future<void> getUserFromUserId(String userId) async {
+//     userId = FirebaseAuth.instance.currentUser!.uid;
+//     DocumentSnapshot userSnapshot =
+//         await FirebaseFirestore.instance.collection('users').doc(userId).get();
+//
+//     if (userSnapshot.exists) {
+//       Map<String, dynamic>? userData =
+//           userSnapshot.data() as Map<String, dynamic>?;
+//       // print(userData);
+//
+//       if (userData != null) {
+//         CurrentUser user = CurrentUser.fromMap(userData);
+//
+//         users = user;
+//         print(user);
+//       } else {
+//         print('User data is null.');
+//       }
+//     } else {
+//       print('User does not exist.');
+//     }
+//   }
+// }
 }

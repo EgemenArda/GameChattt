@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
 import 'package:game_chat_1/screens/create_room_screen.dart';
+import 'package:game_chat_1/screens/widgets/container_with_gradient.dart';
+import 'package:game_chat_1/screens/widgets/custom_bottom_navigation_bar_2.dart';
 import 'package:game_chat_1/screens/widgets/custom_elevated_buton.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ class _GameRoomsState extends State<GameRooms> {
       child: Scaffold(
         extendBody: true,
         appBar: AppBar(
-          flexibleSpace: Image(
+          flexibleSpace: const Image(
             image: AssetImage(
               'assets/images/background.jpg',
             ),
@@ -54,28 +55,10 @@ class _GameRoomsState extends State<GameRooms> {
           children: [
             Consumer<GameRoomProvider>(
               builder: (context, provider, child) {
-                return Container(
-                  width: double.maxFinite,
-                  height: double.maxFinite,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.center,
-                        end: Alignment.bottomRight,
-                        tileMode: TileMode.mirror,
-                        colors: [
-                          Color.fromRGBO(44, 8, 78, 0.8),
-                          Color.fromRGBO(2, 5, 28, 0.8)
-                        ]),
-                  ),
+                return ContainerWithGradient(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                          onPressed: () {
-                            provider.getUserFromUserId(
-                                FirebaseAuth.instance.currentUser!.uid);
-                          },
-                          child: Text('deneme')),
                       StreamBuilder(
                         stream: provider.getRooms(widget.gameName),
                         builder: (context, snapshot) {
@@ -91,11 +74,6 @@ class _GameRoomsState extends State<GameRooms> {
                             return const Center(child: Text('No rooms found.'));
                           } else {
                             final rooms = snapshot.data;
-                            // final filteredRooms = snapshot.data?.where(
-                            //     (game) => game.gameName == widget.gameName);
-                            // print(filteredRooms);
-                            // print(rooms);
-
                             return SafeArea(
                               child: SizedBox(
                                 height: 400,
@@ -187,22 +165,7 @@ class _GameRoomsState extends State<GameRooms> {
                     )));
           },
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.black12,
-          unselectedItemColor: Colors.white,
-          selectedItemColor: Colors.white,
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.pop(context);
-            }
-          },
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.gamepad_outlined), label: 'Games'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.message_outlined), label: 'Messages')
-          ],
-        ),
+        bottomNavigationBar: const CustomBottomNavigationBar2(),
       ),
     );
   }

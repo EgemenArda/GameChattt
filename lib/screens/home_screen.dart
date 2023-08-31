@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/api/firebase_api.dart';
+import 'package:game_chat_1/screens/widgets/container_with_gradient.dart';
+import 'package:game_chat_1/screens/widgets/custom_app_bar.dart';
 import 'package:game_chat_1/screens/widgets/custom_drawer.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
-import '../api/apis.dart';
 import '../providers/homepage_provider.dart';
 import '../providers/profile_proivder.dart';
 import 'game_rooms.dart';
@@ -21,60 +22,24 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // setupPushNotifications();
     super.initState();
-    APIs.getSelfInfo();
+    // APIs.getSelfInfo();
     FirebaseApi().initNotifications();
   }
-
-  // void setupPushNotifications() async {
-  //   final fcm = FirebaseMessaging.instance;
-  //
-  //   await fcm.requestPermission();
-  //   fcm.subscribeToTopic('chat');
-  //   final token = fcm.getToken();
-  //   print('*****************************************');
-  //   print(token);
-  // }
 
   @override
   Widget build(BuildContext context) {
     Provider.of<ProfileScreenProvider>(context).updateTheImageNow();
     return ConnectionCheck(
       child: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: const Image(
-            image: AssetImage(
-              'assets/images/background.jpg',
-            ),
-            fit: BoxFit.cover,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(120),
+          child: CustomAppBar(
+            title: 'Home Screen',
+            imageUrl: (Provider.of<ProfileScreenProvider>(context).userImage),
           ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: Builder(
-            builder: (context) => CircleAvatar(
-              backgroundImage: NetworkImage(
-                  Provider.of<ProfileScreenProvider>(context).userImage),
-              child: TextButton(
-                child: const Text(''),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
-            ),
-          ),
-          centerTitle: true,
         ),
         drawer: const CustomDrawer(),
-        body: Container(
-          width: double.maxFinite,
-          height: double.maxFinite,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.center,
-                end: Alignment.bottomRight,
-                tileMode: TileMode.mirror,
-                colors: [
-                  Color.fromRGBO(44, 8, 78, 0.8),
-                  Color.fromRGBO(2, 5, 28, 0.8)
-                ]),
-          ),
+        body: ContainerWithGradient(
           child: Consumer<HomePageProvider>(
             builder: (context, provider, child) {
               return SingleChildScrollView(
