@@ -8,7 +8,6 @@ import 'package:game_chat_1/screens/home_screen.dart';
 import '../services/status_service.dart';
 
 class AuthProvider extends ChangeNotifier {
-
   final OnlineStatusService _onlineStatusService = OnlineStatusService();
 
   void signIn() async {
@@ -45,7 +44,7 @@ class AuthProvider extends ChangeNotifier {
         'image_url': "https://picsum.photos/200/300",
       });
 
-      await FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
           .collection('lastDate');
@@ -55,7 +54,7 @@ class AuthProvider extends ChangeNotifier {
           .collection('lastDate')
           .doc(userCredential.user!.uid)
           .delete();
-      await FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
           .collection('pendingRequests');
@@ -65,7 +64,7 @@ class AuthProvider extends ChangeNotifier {
           .collection('pendingRequests')
           .doc(userCredential.user!.uid)
           .delete();
-      await FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
           .collection('friends');

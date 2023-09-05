@@ -5,8 +5,8 @@ class NotificationsScreen extends StatelessWidget {
   static const route = '/notifications-screen';
   @override
   Widget build(BuildContext context) {
-    final message = ModalRoute.of(context)!.settings.arguments;
-    return Scaffold(
+    // final message = ModalRoute.of(context)!.settings.arguments;
+    return const Scaffold(
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

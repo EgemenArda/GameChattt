@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/game_room_provider.dart';
 import 'package:provider/provider.dart';
 
-class myRoomsss extends StatefulWidget {
-  myRoomsss({super.key, required this.username});
+class MyRooms extends StatelessWidget {
+  MyRooms({super.key, required this.username});
 
   String username;
 
-  @override
-  State<myRoomsss> createState() => _myRoomsssState();
-}
-
-class _myRoomsssState extends State<myRoomsss> {
   @override
   Widget build(BuildContext context) {
     return Consumer<GameRoomProvider>(
@@ -20,7 +15,7 @@ class _myRoomsssState extends State<myRoomsss> {
         return Column(
           children: [
             StreamBuilder(
-              stream: provider.getMyRooms(widget.username),
+              stream: provider.getMyRooms(username),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -37,10 +32,9 @@ class _myRoomsssState extends State<myRoomsss> {
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () async {
-                            CollectionReference _roomCollection =
-                            FirebaseFirestore.instance
-                                .collection('rooms');
-                            QuerySnapshot snapshot = await _roomCollection
+                            CollectionReference roomCollection =
+                                FirebaseFirestore.instance.collection('rooms');
+                            QuerySnapshot snapshot = await roomCollection
                                 .doc(rooms[index].documentId)
                                 .collection('roomUser')
                                 .get();
@@ -58,8 +52,8 @@ class _myRoomsssState extends State<myRoomsss> {
                           },
                           child: ListTile(
                             leading: StreamBuilder<int>(
-                              stream: provider.compareAfterDate(
-                                  rooms[index].documentId),
+                              stream: provider
+                                  .compareAfterDate(rooms[index].documentId),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -88,13 +82,12 @@ class _myRoomsssState extends State<myRoomsss> {
                             subtitle: Text(rooms[index].roomDescription),
                             trailing: ElevatedButton(
                               onPressed: () async {
-                                QuerySnapshot snapshot =
-                                await FirebaseFirestore.instance
+                                QuerySnapshot snapshot = await FirebaseFirestore
+                                    .instance
                                     .collection('rooms')
                                     .doc(rooms[index].documentId)
                                     .collection('roomUser')
-                                    .where('username',
-                                    isEqualTo: widget.username)
+                                    .where('username', isEqualTo: username)
                                     .get();
                                 if (snapshot.size > 0) {
                                   String docId = snapshot.docs[0].id;

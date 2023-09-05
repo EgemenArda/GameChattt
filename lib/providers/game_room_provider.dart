@@ -11,6 +11,8 @@ import '../screens/widgets/custom_alert_dialog.dart';
 class GameRoomProvider extends ChangeNotifier {
   final FirestoreService firestoreService = FirestoreService();
 
+  late CurrentUser me;
+
   Stream<List<Rooms>> getRooms(gameName) {
     final stream = FirebaseFirestore.instance
         .collection("rooms")
@@ -152,8 +154,9 @@ class GameRoomProvider extends ChangeNotifier {
                   padding: const EdgeInsets.all(14),
                   child: const Text('Yes')),
               onPressed: () async {
-                firestoreService
-                    .getUserFromUserId(FirebaseAuth.instance.currentUser!.uid);
+                getUserFromUserId(FirebaseAuth.instance.currentUser!.uid);
+                // firestoreService
+                //     .getUserFromUserId(FirebaseAuth.instance.currentUser!.uid);
                 Navigator.of(context).pop();
 
                 var querySnapshot = await FirebaseFirestore.instance
@@ -171,23 +174,18 @@ class GameRoomProvider extends ChangeNotifier {
                     usernames.add(username);
                     if (username == _users.username) {
                       isUsernameAlreadyRegistered = true;
+                      // ignore: use_build_context_synchronously
+                      pushChatScreen(context, roomId, roomName, roomCreator,
+                          roomType, roomCode, usernames);
                     }
                   }
-                }
-                if (!isUsernameAlreadyRegistered) {
-                  firestoreService.addRoomUser(roomId, _users);
-                }
-                if (usernames.contains(_users.username)) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => ChatScreen(
-                      roomId: roomId,
-                      roomName: roomName,
-                      roomCreator: roomCreator,
-                      roomType: roomType,
-                      roomCode: roomCode,
-                      roomUser: usernames,
-                    ),
-                  ));
+                  if (!isUsernameAlreadyRegistered) {
+                    // ignore: use_build_context_synchronously
+                    pushChatScreen(context, roomId, roomName, roomCreator,
+                        roomType, roomCode, usernames);
+
+                    firestoreService.addRoomUser(roomId, _users);
+                  }
                 } else {
                   if (roomUsers.length >= roomSize) {
                     // ignore: use_build_context_synchronously
@@ -233,31 +231,17 @@ class GameRoomProvider extends ChangeNotifier {
 
                       if (enteredPassword == roomCode) {
                         await firestoreService.addRoomUser(roomId, _users);
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => ChatScreen(
-                            roomId: roomId,
-                            roomName: roomName,
-                            roomCreator: roomCreator,
-                            roomType: roomType,
-                            roomCode: roomCode,
-                            roomUser: usernames,
-                          ),
-                        ));
+                        // ignore: use_build_context_synchronously
+                        pushChatScreen(context, roomId, roomName, roomCreator,
+                            roomType, roomCode, usernames);
                       } else {
                         print("Error");
                       }
                     } else {
                       await firestoreService.addRoomUser(roomId, _users);
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => ChatScreen(
-                          roomId: roomId,
-                          roomName: roomName,
-                          roomCreator: roomCreator,
-                          roomType: roomType,
-                          roomCode: roomCode,
-                          roomUser: usernames,
-                        ),
-                      ));
+                      // ignore: use_build_context_synchronously
+                      pushChatScreen(context, roomId, roomName, roomCreator,
+                          roomType, roomCode, usernames);
                     }
                   }
                 }
@@ -276,28 +260,47 @@ class GameRoomProvider extends ChangeNotifier {
   set users(user) {
     _users = user;
   }
-//
-//   Future<void> getUserFromUserId(String userId) async {
-//     userId = FirebaseAuth.instance.currentUser!.uid;
-//     DocumentSnapshot userSnapshot =
-//         await FirebaseFirestore.instance.collection('users').doc(userId).get();
-//
-//     if (userSnapshot.exists) {
-//       Map<String, dynamic>? userData =
-//           userSnapshot.data() as Map<String, dynamic>?;
-//       // print(userData);
-//
-//       if (userData != null) {
-//         CurrentUser user = CurrentUser.fromMap(userData);
-//
-//         users = user;
-//         print(user);
-//       } else {
-//         print('User data is null.');
-//       }
-//     } else {
-//       print('User does not exist.');
-//     }
-//   }
-// }
+
+  Future<void> getUserFromUserId(String userId) async {
+    userId = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (userSnapshot.exists) {
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+      // print(userData);
+
+      if (userData != null) {
+        CurrentUser user = CurrentUser.fromMap(userData);
+
+        users = user;
+        print(user);
+      } else {
+        print('User data is null.');
+      }
+    } else {
+      print('User does not exist.');
+    }
+  }
+}
+
+void pushChatScreen(
+    BuildContext context,
+    String roomId,
+    String roomName,
+    String roomCreator,
+    String roomType,
+    String roomCode,
+    List<String> usernames) {
+  Navigator.of(context).push(MaterialPageRoute(
+    builder: (ctx) => ChatScreen(
+      roomId: roomId,
+      roomName: roomName,
+      roomCreator: roomCreator,
+      roomType: roomType,
+      roomCode: roomCode,
+      roomUser: usernames,
+    ),
+  ));
 }

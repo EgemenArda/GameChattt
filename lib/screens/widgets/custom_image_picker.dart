@@ -22,20 +22,20 @@ class _CustomImagePickerState extends State<CustomImagePicker> {
 
     File imageFile = selectedImagefile;
     var uploadTask = await ref.putFile(imageFile);
-    String ImageUrl = await uploadTask.ref.getDownloadURL();
+    String imageUrl = await uploadTask.ref.getDownloadURL();
 
     User? user = FirebaseAuth.instance.currentUser;
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     return users.doc(user!.uid).update(
       {
-        'image_url': ImageUrl,
+        'image_url': imageUrl,
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    String user = FirebaseAuth.instance.currentUser!.uid;
+    // String user = FirebaseAuth.instance.currentUser!.uid;
 
     return AlertDialog(
       backgroundColor: Colors.white.withOpacity(0.4),

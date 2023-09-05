@@ -33,7 +33,7 @@ class _DmScreenState extends State<DmScreen> {
     setupPushNotifications();
   }
 
-  var ReplyMessage;
+  var replyMessage;
   final focusNode = FocusNode();
 
   @override
@@ -64,7 +64,7 @@ class _DmScreenState extends State<DmScreen> {
             roomId: widget.roomId,
             focusNode: focusNode,
             onCancelReply: cancelReply,
-            replyMessage: ReplyMessage,
+            replyMessage: replyMessage,
           )
         ],
       ),
@@ -73,13 +73,13 @@ class _DmScreenState extends State<DmScreen> {
 
   void replyToMessage(message) {
     setState(() {
-      ReplyMessage = message;
+      replyMessage = message;
     });
   }
 
   void cancelReply() {
     setState(() {
-      ReplyMessage = null;
+      replyMessage = null;
     });
   }
 }

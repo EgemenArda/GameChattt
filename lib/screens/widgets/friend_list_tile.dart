@@ -48,10 +48,10 @@ class FriendListTile extends StatelessWidget {
           ],
         ),
         title: Text(friendsName,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
             )),
-        subtitle: Text('online'),
+        subtitle: const Text('online'),
         onTap: () {},
 
         ///onTab dm göndersin

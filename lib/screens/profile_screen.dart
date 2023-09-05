@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/profile_proivder.dart';
@@ -58,7 +57,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onPressed: () {
                                 showDialog(
                                     context: context,
-                                    builder: (ctx) => CustomImagePicker(username:widget.username,));
+                                    builder: (ctx) => CustomImagePicker(
+                                          username: widget.username,
+                                        ));
                               }),
                         ),
                       ],

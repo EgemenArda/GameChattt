@@ -53,10 +53,10 @@ class _UserImagePickerState extends State<UserImagePicker> {
       children: [
         Center(
           child: CircleAvatar(
-            child: Icon(Icons.photo_camera),
             radius: 40,
             foregroundImage:
                 _pickedImageFile != null ? FileImage(_pickedImageFile!) : null,
+            child: const Icon(Icons.photo_camera),
           ),
         ),
         Row(
@@ -65,7 +65,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
             TextButton.icon(
               onPressed: _pickImageCamera,
               icon: const Icon(Icons.image),
-              label: Text(
+              label: const Text(
                 "Camera",
               ),
             ),

@@ -6,12 +6,14 @@ import 'package:provider/provider.dart';
 
 import '../providers/dm_create_provider.dart';
 
-class myDms extends StatefulWidget {
+class MyDms extends StatefulWidget {
+  const MyDms({super.key});
+
   @override
-  State<myDms> createState() => _myDmsState();
+  State<MyDms> createState() => _MyDmsState();
 }
 
-class _myDmsState extends State<myDms> {
+class _MyDmsState extends State<MyDms> {
   @override
   Widget build(BuildContext context) {
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;
@@ -24,7 +26,7 @@ class _myDmsState extends State<myDms> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
 
         List<String> myFriends =
@@ -49,7 +51,7 @@ class _myDmsState extends State<myDms> {
                   .get(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return SizedBox();
+                  return const SizedBox();
                 }
 
                 String friendUsername = snapshot.data!.get('username');
@@ -78,7 +80,7 @@ class _myDmsState extends State<myDms> {
                       style: const TextStyle(
                         fontSize: 24,
                       )),
-                  subtitle: Text('Son mesaj'),
+                  subtitle: const Text('Son mesaj'),
                   onTap: () async {
                     Future<String> getUsernameFromUserId(String userId) async {
                       DocumentSnapshot userSnapshot = await FirebaseFirestore

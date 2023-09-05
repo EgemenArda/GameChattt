@@ -6,6 +6,7 @@ import 'package:game_chat_1/screens/widgets/container_with_gradient.dart';
 import 'package:game_chat_1/screens/widgets/custom_bottom_navigation_bar_2.dart';
 import 'package:game_chat_1/screens/widgets/custom_elevated_buton.dart';
 import 'package:game_chat_1/services/connection_check.dart';
+import 'package:game_chat_1/services/firestore_services.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/game_room_provider.dart';
@@ -22,6 +23,14 @@ class GameRooms extends StatefulWidget {
 }
 
 class _GameRoomsState extends State<GameRooms> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  FirestoreService firestoreService = FirestoreService();
+
+  @override
   @override
   Widget build(BuildContext context) {
     return ConnectionCheck(
@@ -50,7 +59,7 @@ class _GameRoomsState extends State<GameRooms> {
           centerTitle: true,
           title: Text(widget.gameName),
         ),
-        drawer: CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: Stack(
           children: [
             Consumer<GameRoomProvider>(
@@ -115,8 +124,9 @@ class _GameRoomsState extends State<GameRooms> {
                                         child: ListTile(
                                           leading: rooms[index].roomType ==
                                                   "Private"
-                                              ? Icon(Icons.lock_outline)
-                                              : Icon(Icons.lock_open_outlined),
+                                              ? const Icon(Icons.lock_outline)
+                                              : const Icon(
+                                                  Icons.lock_open_outlined),
                                           title: Text(rooms[index].roomName),
                                           subtitle: Text(
                                               rooms[index].roomDescription),

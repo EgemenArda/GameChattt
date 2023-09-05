@@ -6,6 +6,7 @@ class CreateRoomScreen extends StatefulWidget {
   const CreateRoomScreen({
     super.key,
     required this.gameName,
+    // required this.currentUser,
   });
   final String gameName;
   // final CurrentUser currentUser;

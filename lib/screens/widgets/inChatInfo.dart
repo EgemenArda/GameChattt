@@ -5,17 +5,21 @@ import 'package:provider/provider.dart';
 
 import '../../providers/create_room_provider.dart';
 
-class inChatInfo extends StatefulWidget {
-  const inChatInfo({super.key, required this.owner, required this.roomId, required this.userImage});
+class InChatInfo extends StatefulWidget {
+  const InChatInfo(
+      {super.key,
+      required this.owner,
+      required this.roomId,
+      required this.userImage});
   final String owner;
   final String roomId;
   final String userImage;
 
   @override
-  State<inChatInfo> createState() => _inChatInfoState();
+  State<InChatInfo> createState() => _InChatInfoState();
 }
 
-class _inChatInfoState extends State<inChatInfo> {
+class _InChatInfoState extends State<InChatInfo> {
   @override
   Widget build(BuildContext context) {
     return Consumer<GameRoomProvider>(
@@ -48,8 +52,8 @@ class _inChatInfoState extends State<inChatInfo> {
                             title: Text(usersInRoom[index]),
                             trailing: ElevatedButton(
                               onPressed: () async {
-                                QuerySnapshot snapshot =
-                                await FirebaseFirestore.instance
+                                QuerySnapshot snapshot = await FirebaseFirestore
+                                    .instance
                                     .collection('rooms')
                                     .doc(widget.roomId)
                                     .collection('roomUser')

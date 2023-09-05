@@ -12,11 +12,11 @@ class CustomAlertDialog extends StatelessWidget {
       backgroundColor: Colors.white.withOpacity(0.8),
       title: Text(
         title,
-        style: TextStyle(color: Colors.black87),
+        style: const TextStyle(color: Colors.black87),
       ),
       content: Text(
         content,
-        style: TextStyle(color: Colors.black54),
+        style: const TextStyle(color: Colors.black54),
       ),
       actions: <Widget>[
         TextButton(

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/friend_provider.dart';
 import 'package:provider/provider.dart';
 
-class friendRequests extends StatefulWidget {
-  const friendRequests({super.key});
+class FriendRequests extends StatefulWidget {
+  const FriendRequests({super.key});
 
   @override
-  State<friendRequests> createState() => _friendRequestsState();
+  State<FriendRequests> createState() => _FriendRequestsState();
 }
 
-class _friendRequestsState extends State<friendRequests> {
+class _FriendRequestsState extends State<FriendRequests> {
   @override
   Widget build(BuildContext context) {
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;

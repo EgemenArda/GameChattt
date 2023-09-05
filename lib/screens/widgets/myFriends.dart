@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/widgets/friend_list_tile.dart';
 
-class myFriends extends StatefulWidget {
+class MyFriends extends StatefulWidget {
+  const MyFriends({super.key});
+
   @override
-  State<myFriends> createState() => _myFriendsState();
+  State<MyFriends> createState() => _MyFriendsState();
 }
 
-class _myFriendsState extends State<myFriends> {
+class _MyFriendsState extends State<MyFriends> {
   @override
   Widget build(BuildContext context) {
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;
@@ -21,7 +23,7 @@ class _myFriendsState extends State<myFriends> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
 
         List<String> myFriends =
@@ -46,7 +48,7 @@ class _myFriendsState extends State<myFriends> {
                   .get(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return SizedBox();
+                  return const SizedBox();
                 }
 
                 String friendUsername = snapshot.data!.get('username');
@@ -54,7 +56,8 @@ class _myFriendsState extends State<myFriends> {
 
                 return FriendListTile(
                   friendsName: friendUsername,
-                  friendsImage: friendImage, index: index,
+                  friendsImage: friendImage,
+                  index: index,
                 );
               },
             );

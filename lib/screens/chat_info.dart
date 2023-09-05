@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:game_chat_1/providers/create_room_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:game_chat_1/providers/game_room_provider.dart';
 import 'package:game_chat_1/screens/widgets/chatJoinRequests.dart';
 import 'package:game_chat_1/screens/widgets/inChatInfo.dart';
@@ -58,15 +57,14 @@ class _ChatInfoState extends State<ChatInfo> {
                     return const CircularProgressIndicator();
                   }
                   List<String> joinRequests =
-                  List.from(snapshot.data!.docs.map((doc) => doc.id));
+                      List.from(snapshot.data!.docs.map((doc) => doc.id));
                   if (joinRequests.isEmpty) {
-                    return Text('0');
+                    return const Text('0');
                   }
                   return Text(joinRequests.length.toString());
                 },
               ),
-
-              child: Icon(Icons.local_post_office_rounded),
+              child: const Icon(Icons.local_post_office_rounded),
             ),
             label: 'Join Requests',
           )
@@ -83,7 +81,12 @@ class _ChatInfoState extends State<ChatInfo> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      whichInfoScreen == 0 ? inChatInfo(owner: widget.owner, roomId: widget.roomId, userImage: widget.userImage) : chatJoinRequests(roomId: widget.roomId),
+                      whichInfoScreen == 0
+                          ? InChatInfo(
+                              owner: widget.owner,
+                              roomId: widget.roomId,
+                              userImage: widget.userImage)
+                          : chatJoinRequests(roomId: widget.roomId),
                     ],
                   ),
                 ),

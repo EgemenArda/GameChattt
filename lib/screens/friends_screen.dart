@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:game_chat_1/providers/friend_provider.dart';
 import 'package:game_chat_1/screens/widgets/friendRequests.dart';
 import 'package:game_chat_1/screens/widgets/myFriends.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
-import 'package:game_chat_1/providers/friend_provider.dart';
 
 class FriendsScreen extends StatefulWidget {
   const FriendsScreen({super.key});
@@ -46,15 +46,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       return const CircularProgressIndicator();
                     }
                     List<String> pendingRequests =
-                    List.from(snapshot.data!.docs.map((doc) => doc.id));
+                        List.from(snapshot.data!.docs.map((doc) => doc.id));
                     if (pendingRequests.isEmpty) {
-                      return Text('0');
+                      return const Text('0');
                     }
                     return Text(pendingRequests.length.toString());
                   },
                 ),
-
-                child: Icon(Icons.person_add),
+                child: const Icon(Icons.person_add),
               ),
               label: 'Friend Requests',
             )
@@ -80,8 +79,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                   child: Column(
                     children: [
                       whichFriendScreen == 1
-                          ? const friendRequests()
-                          : myFriends(),
+                          ? const FriendRequests()
+                          : const MyFriends(),
                     ],
                   ),
                 ),
@@ -89,7 +88,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                   onPressed: () {
                     provider.showFriendsDialog(context);
                   },
-                  child: Icon(Icons.add),
+                  child: const Icon(Icons.add),
                 ),
               ],
             );

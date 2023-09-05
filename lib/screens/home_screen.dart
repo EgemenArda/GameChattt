@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:game_chat_1/api/firebase_api.dart';
 import 'package:game_chat_1/screens/widgets/container_with_gradient.dart';
 import 'package:game_chat_1/screens/widgets/custom_app_bar.dart';
 import 'package:game_chat_1/screens/widgets/custom_drawer.dart';
 import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
+import '../api/apis.dart';
 import '../providers/homepage_provider.dart';
 import '../providers/profile_proivder.dart';
 import 'game_rooms.dart';
@@ -20,10 +20,10 @@ class HomeScreen extends StatefulWidget with WidgetsBindingObserver {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    // setupPushNotifications();
     super.initState();
-    // APIs.getSelfInfo();
-    FirebaseApi().initNotifications();
+    APIs.getSelfInfo();
+    APIs.getFirebaseMessagingToken();
+    // FirebaseApi().initNotifications();
   }
 
   @override
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return ConnectionCheck(
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
+          preferredSize: const Size.fromHeight(120),
           child: CustomAppBar(
             title: 'Home Screen',
             imageUrl: (Provider.of<ProfileScreenProvider>(context).userImage),
@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ));
                         },
                         child: Card(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           borderOnForeground: true,
                           color: Colors.transparent,
                           child: Padding(

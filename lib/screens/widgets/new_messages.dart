@@ -56,7 +56,7 @@ class _NewMessageState extends State<NewMessage> {
 
   @override
   Widget build(BuildContext context) {
-    final isReplying = widget.replyMessage != null;
+    // final isReplying = widget.replyMessage != null;
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 1, bottom: 14),
       child: Row(

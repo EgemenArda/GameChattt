@@ -42,10 +42,10 @@ class _MyRoomsScreenState extends State<MyRoomsScreen> {
           return SingleChildScrollView(
             child: Center(
               child: inWhichRooms == 0
-                  ? myRoomsss(
+                  ? MyRooms(
                       username: widget.username,
                     )
-                  : myDms(),
+                  : const MyDms(),
             ),
           );
         },

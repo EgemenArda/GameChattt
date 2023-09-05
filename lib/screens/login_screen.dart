@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_chat_1/screens/register_screen.dart';
 import 'package:game_chat_1/screens/widgets/custom_alert_dialog.dart';
@@ -6,8 +5,6 @@ import 'package:game_chat_1/services/connection_check.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
-
-final _firebase = FirebaseAuth.instance;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

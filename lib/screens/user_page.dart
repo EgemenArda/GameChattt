@@ -22,7 +22,7 @@ class UserPageScreen extends StatelessWidget {
           return Center(
             child: Column(
               children: [
-                Container(
+                SizedBox(
                   width: 100,
                   height: 100,
                   child: CircleAvatar(
@@ -30,7 +30,7 @@ class UserPageScreen extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                   ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Container(
                   child: StreamBuilder<String>(
                     stream: _onlineStatusService.onlineStatusStream(),
@@ -39,12 +39,12 @@ class UserPageScreen extends StatelessWidget {
                         String isOnline = snapshot.data!;
                         return Text(isOnline == 'false' ? 'Offline' : 'Online');
                       } else {
-                        return Text('...');
+                        return const Text('...');
                       }
                     },
                   ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: () {
                     provider.sendFriendRequestWithButton(context, username);
